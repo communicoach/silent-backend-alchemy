@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Advice Column - CommuniCoach</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2D4A3E;
+            --secondary-color: #1b4072;
+            --accent-color: #A1CE3E;
+            --highlight-color: #DCEFC6;
+            --energy-color: #74B49B;
+            --error-color: #FF6B6B;
+            --shadow-color: rgba(45, 74, 62, 0.15);
+            --badge-color: #136f6f;
+            --gradient-bg: linear-gradient(135deg, rgba(45, 74, 62, 0.05), rgba(161, 206, 62, 0.07));
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-image: url('.vscode/Images/pattern-bg5.png');
+            background-size: cover;
+            background-attachment: fixed;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: -1;
+        }
+
+        /* Header and Navigation */
+        .header-wrapper {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px var(--shadow-color);
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 0;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        .top-nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            position: absolute;
+            left: 20px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .top-nav a:hover {
+            background: var(--highlight-color);
+        }
+
+        .top-nav a.current {
+            background: #136f6f;
+            color: white;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .progress-bar {
+            width: 80%;
+            margin: 0 auto;
+            height: 8px;
+            background: #7cbcca;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar .progress {
+            width: 80%; /* Updated for action arena page */
+            height: 100%;
+            background: linear-gradient(90deg, #136f6f, #136f6f);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-button {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+            position: absolute;
+            right: 20px;
+            top: 15px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            margin-top: 100px;
+            padding: 3rem 0;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .hero-text {
+            flex: 1.2;
+        }
+
+        .hero-image {
+            flex: 1;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .content-card {
+            background-color: var(--highlight-color);
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+
+        .content-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-icon {
+            color: #ff221f;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+            text-align: center;
+        }
+
+        .hero-text h1 {
+            font-size: 1.75em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .hero-text p {
+            font-size: 1.1em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .italic-text {
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0 4rem;
+        }
+        
+        .advice-section {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* Advice Column Look */
+        .advice-column {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .advice-column::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--accent-color), var(--energy-color));
+        }
+
+        .advice-header {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .advice-column-title {
+            flex: 1;
+            font-family: 'Georgia', serif;
+            color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .advice-column-date {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .advice-letter {
+            padding: 1.5rem;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-style: italic;
+            position: relative;
+        }
+
+        .advice-letter::before {
+            content: '"';
+            font-family: 'Georgia', serif;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 4rem;
+            color: #ddd;
+            line-height: 1;
+        }
+
+        .advice-letter-content {
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .advice-letter-signature {
+            font-weight: bold;
+            display: block;
+            margin-top: 1rem;
+            text-align: right;
+        }
+
+        .advice-response {
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .advice-response h3 {
+            font-family: 'Georgia', serif;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .advice-response-content {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #333;
+        }
+
+        .advice-response-signature {
+            font-weight: bold;
+            font-family: 'Georgia', serif;
+            display: block;
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        /* Create Letter Section */
+        .letter-creation {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .letter-creation h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .letter-intro {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+        }
+
+        .pen-name-input {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .pen-name-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .pen-name-input input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+        }
+        
+        .checkbox-group {
+            margin-top: 1.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 0.5rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-color);
+        }
+
+        .checkbox-item label {
+            font-weight: normal;
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(45, 74, 62, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 1rem;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Action Buttons */
+        button[onclick="generatePenName()"] {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 0.7rem 1.2rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+button[onclick="generatePenName()"]::before {
+  content: "\f0eb"; /* Lightbulb icon */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+}
+
+button[onclick="generatePenName()"]:hover {
+  background-color: var(--energy-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+button[onclick="generatePenName()"]:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button[onclick="generatePenName()"].loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #5885bd, #1b4072, #011f46);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-outline {
+            background: none;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--highlight-color);
+            transform: translateY(-3px);
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-center {
+            margin: 2rem auto;
+            display: block;
+        }
+
+        /* Share Options */
+        .share-options {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .share-options.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .share-options h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .share-btn {
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .share-btn.facebook {
+            background: #3b5998;
+            color: white;
+        }
+
+        .share-btn.twitter {
+            background: #1da1f2;
+            color: white;
+        }
+
+        .share-btn.email {
+            background: #ea4335;
+            color: white;
+        }
+
+        .share-btn.copy {
+            background: #f1f1f1;
+            color: #333;
+        }
+
+        /* Community Submissions */
+        .community-submissions {
+            margin-top: 3rem;
+            display: none;
+        }
+
+        .community-submissions.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .community-submissions h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .submission-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .submission-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .submission-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .submission-title {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 0.8rem;
+        }
+
+        .submission-preview {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .submission-footer {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        .submission-likes {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .submission-date {
+            font-style: italic;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: var(--highlight-color);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem auto;
+            max-width: 800px;
+            display: none;
+        }
+
+        .success-message.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .success-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .success-description {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        .footer-nav {
+            width: 100%;
+            margin-top: auto;
+            color: #ffffff;
+            background: url('.vscode/Images/situationfooter.png') no-repeat center center;
+            background-size: cover;
+            min-height: 60px;
+            padding: 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-nav p {
+            margin: 0;
+        }
+
+        .footer-nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .top-nav {
+                flex-direction: column;
+                padding: 10px 0;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                padding-top: 10px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .logo {
+                position: static;
+                margin-bottom: 10px;
+            }
+
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .hero-content {
+                flex-direction: column-reverse;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 1.6rem;
+            }
+
+            .hero-text p {
+                font-size: 0.95rem;
+            }
+
+            .advice-column-title {
+                font-size: 1.5rem;
+            }
+
+            .advice-letter-content,
+            .advice-response-content {
+                font-size: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .share-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .footer-nav {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px 0;
+                gap: 10px;
+            }
+            
+            .pen-name-input {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+            
+            .submission-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Transforming your narrative...</div>
+    </div>
+
+    <!-- Header and Progress Indicator -->
+    <div class="header-wrapper">
+        <div class="top-nav">
+            <a href="#" class="logo">
+                <img src=".vscode/Images/CClogo.png" alt="CommuniCoach">
+            </a>
+            <button class="mobile-menu-button" onclick="toggleMenu()">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="welcome.html">Welcome</a>
+                <a href="tone-selection.html">Tone Selection</a>
+                <a href="situation-room.html">Situation Room</a>
+                <a href="refined-narrative.html">Refined Narrative</a>
+                <a href="action-arena.html">Action Arena</a>
+                <a href="advice-column.html" class="current">Advice Column</a>
+            </div>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text fade-in">
+                    <div class="content-card">
+                        <i class="fa-solid fa-newspaper section-icon"></i>
+                        <h1>Dear CommuniCoach Advice Column</h1>
+                        <p>Transform your refined narrative into an advice column format, similar to "Dear Abby" or "Ask Amy." Get personalized advice from your AI coach in the style of a traditional newspaper advice column.</p>
+                        <p>You can also anonymously share your letter and the advice you receive with the CommuniCoach community to gain additional perspectives and help others facing similar challenges.</p>
+                    </div>
+                </div>
+                <div class="hero-image fade-in delay-1">
+                    <img src=".vscode/Images/hook.png" alt="Advice Column">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <div class="advice-section">
+                <!-- Letter Creation -->
+                <div class="letter-creation fade-in">
+                    <h2>Create Your Advice Column Letter</h2>
+                    <p class="letter-intro">We'll transform your situation into an advice column letter. You can customize a few aspects to make it feel more personal.</p>
+                    
+                    <form id="letterForm">
+                        <div class="form-group">
+                            <label for="penName">Choose a pen name:</label>
+                            <div class="pen-name-input">
+                                <input type="text" id="penName" placeholder="e.g., Concerned in California">
+                                <button type="button" onclick="generatePenName()">Generate Pen Name</button>
+
+
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="adviceGoal">What kind of advice are you seeking?</label>
+                            <select id="adviceGoal">
+                                <option value="">Select a focus for the advice...</option>
+                                <option value="coach-decide">Let my coach decide what I need most</option>
+                                <option value="practical">Practical next steps</option>
+                                <option value="emotional">Emotional support and validation</option>
+                                <option value="perspective">A fresh perspective on the situation</option>
+                                <option value="communication">How to communicate effectively</option>
+                                <option value="boundaries">Setting healthy boundaries</option>
+                                <option value="conflict">Resolving conflict</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="additionalContext">Any additional context for your letter? (optional)</label>
+                            <textarea id="additionalContext" placeholder="Add any details that weren't in your refined narrative but would be helpful for the advice columnist to know..."></textarea>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="communityShare">
+                                <label for="communityShare">Share anonymously with the CommuniCoach community</label>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button type="button" class="btn btn-outline" onclick="backToArena()">
+                                <i class="fa-solid fa-arrow-left"></i> Back to Arena
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="generateAdviceColumn()">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Advice Column
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            
+                <!-- Advice Column Result (initially hidden) -->
+                <div class="advice-column fade-in" id="adviceColumn" style="display: none;">
+                    <div class="advice-header">
+                        <h2 class="advice-column-title">Dear CommuniCoach</h2>
+                        <span class="advice-column-date" id="currentDate"></span>
+                    </div>
+                    
+                    <div class="advice-letter">
+                        <div class="advice-letter-content" id="letterContent">
+                            <!-- Letter content will be inserted here -->
+                        </div>
+                        <span class="advice-letter-signature" id="letterSignature">
+                            <!-- Signature will be inserted here -->
+                        </span>
+                    </div>
+                    
+                    <div class="advice-response">
+                        <h3>Dear <span id="responseNamePlaceholder">Reader</span>,</h3>
+                        <div class="advice-response-content" id="responseContent">
+                            <!-- Response content will be inserted here -->
+                        </div>
+                        <span class="advice-response-signature">CommuniCoach</span>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="button" class="btn btn-outline" onclick="backToLetterCreation()">
+                            <i class="fa-solid fa-arrow-left"></i> Edit Letter
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="saveAdviceColumn()">
+                            <i class="fa-solid fa-check"></i> Complete Experience
+                        </button>
+                    </div>
+                    
+                    <!-- Share Options -->
+                    <div class="share-options" id="shareOptions">
+                        <h3>Share Your Advice Column</h3>
+                        <p>Help others by sharing your experience anonymously with the CommuniCoach community.</p>
+                        
+                        <div class="share-buttons">
+                            <button class="share-btn facebook" onclick="shareToFacebook()">
+                                <i class="fa-brands fa-facebook-f"></i> Share
+                            </button>
+                            <button class="share-btn twitter" onclick="shareToTwitter()">
+                                <i class="fa-brands fa-twitter"></i> Tweet
+                            </button>
+                            <button class="share-btn email" onclick="shareViaEmail()">
+                                <i class="fa-solid fa-envelope"></i> Email
+                            </button>
+                            <button class="share-btn copy" onclick="copyToClipboard()">
+                                <i class="fa-solid fa-copy"></i> Copy Link
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Community Submissions -->
+                <div class="community-submissions" id="communitySubmissions">
+                    <h2>Community Submissions</h2>
+                    <p>Browse advice columns shared by other CommuniCoach users. You might find insights from similar situations.</p>
+                    
+                    <div class="submission-cards">
+                        <!-- Examples of community submissions -->
+                        <div class="submission-card" onclick="viewCommunitySubmission(1)">
+                            <div class="submission-title">Navigating Workplace Conflict</div>
+                            <div class="submission-preview">I've been dealing with a coworker who constantly undermines me in meetings. Every time I present an idea...</div>
+                            <div class="submission-footer">
+                                <div class="submission-likes">
+                                    <i class="fa-solid fa-heart"></i> 24
+                                </div>
+                                <div class="submission-date">3 days ago</div>
+                            </div>
+                        </div>
+                        
+                        <div class="submission-card" onclick="viewCommunitySubmission(2)">
+                            <div class="submission-title">Family Boundaries During Holidays</div>
+                            <div class="submission-preview">My in-laws always expect us to spend every holiday at their house, even though my family lives just as close...</div>
+                            <div class="submission-footer">
+                                <div class="submission-likes">
+                                    <i class="fa-solid fa-heart"></i> 42
+                                </div>
+                                <div class="submission-date">1 week ago</div>
+                            </div>
+                        </div>
+                        
+                        <div class="submission-card" onclick="viewCommunitySubmission(3)">
+                            <div class="submission-title">Asking for a Promotion</div>
+                            <div class="submission-preview">I've been in my current role for three years and have consistently exceeded expectations. I believe I'm ready...</div>
+                            <div class="submission-footer">
+                                <div class="submission-likes">
+                                    <i class="fa-solid fa-heart"></i> 36
+                                </div>
+                                <div class="submission-date">2 weeks ago</div>
+                            </div>
+                        </div>
+                        
+                        <div class="submission-card" onclick="viewCommunitySubmission(4)">
+                            <div class="submission-title">Friend Borrowing Money</div>
+                            <div class="submission-preview">A close friend has asked to borrow a significant amount of money. We've been friends for years, but I'm uncomfortable...</div>
+                            <div class="submission-footer">
+                                <div class="submission-likes">
+                                    <i class="fa-solid fa-heart"></i> 19
+                                </div>
+                                <div class="submission-date">3 weeks ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <div class="success-icon">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h2 class="success-title">Experience Completed!</h2>
+                    <p class="success-description">You've successfully transformed your narrative into an advice column format and received personalized guidance. This perspective offers you a fresh way to think about your situation.</p>
+                    <button class="btn btn-primary btn-large" onclick="returnToArena()">
+                        Return to Action Arena <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer-nav">
+        <p>&copy; 2024 CommuniCoach. All rights reserved.</p>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+    </footer>
+
+    <script>
+// CommuniCoach - Advice Column Experience
+// Main JavaScript Controller
+
+// ================ STATE & CONFIGURATION ================
+const state = {
+    apiEndpoint: 'http://localhost:5506/api/chatgpt',
+    narrative: '',
+    goal: '',
+    penName: '',
+    adviceGoal: '',
+    additionalContext: '',
+    communityShare: false,
+    letter: '',
+    advice: '',
+    isLoading: false
+};
+
+// ================ INITIALIZATION & SETUP ================
+document.addEventListener('DOMContentLoaded', () => {
+    // Set current date in advice column
+    setCurrentDate();
+    
+    // Load narrative and goal from localStorage
+    loadUserData();
+    
+    // Set initial progress
+    setProgress(20);
+    
+    // Check if returning from completion
+    checkReturnStatus();
+    
+    // Set up event listeners
+    setupEventListeners();
+    
+    // Hide sections that shouldn't be visible initially
+    hideAllSections();
+    document.querySelector('.letter-creation').style.display = 'block';
+});
+
+function setCurrentDate() {
+    const dateElement = document.getElementById('currentDate');
+    if (dateElement) {
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const today = new Date();
+        dateElement.textContent = today.toLocaleDateString('en-US', options);
+    }
+}
+
+function loadUserData() {
+    // Get user's narrative and goal
+    state.narrative = localStorage.getItem('refinedNarrative') || '';
+    state.goal = localStorage.getItem('communicationGoal') || '';
+    
+    // Display narrative in the summary
+    const situationSummary = document.getElementById('situationSummary');
+    if (situationSummary && state.narrative) {
+        situationSummary.textContent = state.narrative;
+    } else if (situationSummary) {
+        situationSummary.textContent = 'No narrative found. Please return to the Situation Room to describe your situation.';
+    }
+    
+    // Display goal in the summary
+    const goalSummary = document.getElementById('goalSummary');
+    if (goalSummary && state.goal) {
+        goalSummary.textContent = state.goal;
+    } else if (goalSummary) {
+        goalSummary.textContent = 'No communication goal specified.';
+    }
+}
+
+function checkReturnStatus() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('completed') === 'true') {
+        showSuccessMessage();
+    }
+}
+
+function setupEventListeners() {
+    // Navigation
+    const mobileMenuButton = document.querySelector('.mobile-menu-button');
+    if (mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', toggleMenu);
+    }
+    
+    // Form elements
+    document.getElementById('penName')?.addEventListener('input', e => state.penName = e.target.value.trim());
+    document.getElementById('adviceGoal')?.addEventListener('change', e => state.adviceGoal = e.target.value);
+    document.getElementById('additionalContext')?.addEventListener('input', e => state.additionalContext = e.target.value.trim());
+    document.getElementById('communityShare')?.addEventListener('change', e => state.communityShare = e.target.checked);
+    
+    // Buttons
+    const btnMap = {
+        'button[onclick="generateSymbolicPenName()"]': generatePenName,
+        'button[onclick="generateAdviceColumn()"]': generateAdviceColumn,
+        'button[onclick="backToLetterCreation()"]': backToLetterCreation,
+        'button[onclick="saveAdviceColumn()"]': saveAdviceColumn,
+        'button[onclick="backToArena()"]': backToArena,
+        'button[onclick="returnToArena()"]': returnToArena,
+        'button[onclick="shareToFacebook()"]': shareToFacebook,
+        'button[onclick="shareToTwitter()"]': shareToTwitter,
+        'button[onclick="shareViaEmail()"]': shareViaEmail,
+        'button[onclick="copyToClipboard()"]': copyToClipboard
+    };
+    
+    // Set up all button listeners
+    Object.entries(btnMap).forEach(([selector, handler]) => {
+        const button = document.querySelector(selector);
+        if (button) {
+            // Remove the inline onclick attribute
+            button.removeAttribute('onclick');
+            // Add event listener
+            button.addEventListener('click', handler);
+        }
+    });
+    
+    // Community submission cards
+    const submissionCards = document.querySelectorAll('.submission-card');
+    submissionCards.forEach((card, index) => {
+        card.addEventListener('click', () => viewCommunitySubmission(index + 1));
+    });
+}
+
+function hideAllSections() {
+    // Hide sections that should be initially hidden
+    const sectionsToHide = [
+        '#adviceColumn',
+        '#shareOptions',
+        '#communitySubmissions',
+        '#successMessage'
+    ];
+    
+    sectionsToHide.forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.style.display = 'none';
+        }
+    });
+}
+
+// ================ CORE FUNCTIONALITY ================
+
+function toggleMenu() {
+    const navLinks = document.getElementById('navLinks');
+    if (navLinks) {
+        navLinks.classList.toggle('active');
+    }
+}
+
+
+    async function generatePenName() {
+    if (state.isLoading) return;
+    if (!state.narrative) {
+        showToast('Error: No narrative found. Please return to the Situation Room to create one.', 5000);
+        return;
+    }
+
+    state.isLoading = true;
+    const button = document.querySelector('button[onclick="generatePenName()"]');
+    if (button) {
+        button.disabled = true;
+        button.classList.add('loading');
+    }
+
+    showToast('Generating pen name options...', 8000);
+
+    try {
+        const prompt = `
+You are a clever and emotionally perceptive writer helping advice-seekers create pen names for their letters.
+
+Given the following personal narrative, generate three distinct pen name options the user could plausibly use to sign an advice column letter. Each pen name should reflect:
+- The emotional tone or identity in the situation
+- A blend of vulnerability, cleverness, or truth (as appropriate)
+- No fictional names unless metaphorically justified
+
+Avoid alliteration unless it adds meaning. Don’t include quotes, and don’t explain the names.
+
+NARRATIVE:
+"${state.narrative}"
+
+Return just the 3 pen names, one per line. No extra text.
+`;
+
+        const response = await fetch(state.apiEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt })
+        });
+
+        const data = await response.json();
+        if (!data || !data.response) throw new Error('No pen names returned.');
+
+        const names = data.response
+            .trim()
+            .split('\n')
+            .map(n => n.trim().replace(/^[-*\d.]+\s*/, ''))
+            .filter(n => n.length > 2)
+            .slice(0, 3);
+
+        if (names.length === 0) throw new Error('Response parsing failed.');
+
+        // Show name options in a prompt
+        const selected = window.prompt(`Choose a pen name or copy one:\n\n${names.join('\n')}`, names[0]);
+        if (selected) {
+            document.getElementById('penName').value = selected;
+            state.penName = selected;
+        }
+
+        showToast('Pen name options loaded.');
+    } catch (err) {
+        console.error('Error generating pen name options:', err);
+        showToast('Could not generate pen names. Try again or enter one manually.', 5000);
+    } finally {
+        state.isLoading = false;
+        if (button) {
+            button.disabled = false;
+            button.classList.remove('loading');
+        }
+    }
+}
+
+async function generateAdviceColumn() {
+    // Validate inputs
+    state.penName = document.getElementById('penName').value.trim();
+    state.adviceGoal = document.getElementById('adviceGoal').value;
+    state.additionalContext = document.getElementById('additionalContext').value.trim();
+    state.communityShare = document.getElementById('communityShare').checked;
+    
+    if (!state.penName) {
+        showToast('Please enter a pen name or generate one.', 3000);
+        return;
+    }
+    
+    if (!state.adviceGoal) {
+        showToast('Please select what kind of advice you are seeking.', 3000);
+        return;
+    }
+    
+    if (!state.narrative) {
+        showToast('No narrative found. Please return to the Situation Room.', 3000);
+        return;
+    }
+    
+    // Show loading overlay
+    state.isLoading = true;
+    document.getElementById('loadingOverlay').classList.add('active');
+    
+    try {
+        // Create the prompt for the API
+        const prompt = createAdviceColumnPrompt();
+        
+        // Call the API
+        const response = await fetch(state.apiEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data || !data.response) {
+            throw new Error('Invalid response from API');
+        }
+        
+        // Parse the API response to extract letter and advice
+        const result = parseAdviceResponse(data.response);
+        state.letter = result.letter;
+        state.advice = result.advice;
+        
+        // Update the UI with the generated content
+        document.getElementById('letterContent').innerHTML = state.letter.replace(/\n/g, '<br>');
+   
+        
+        document.getElementById('responseContent').innerHTML = state.advice.replace(/\n/g, '<br>');
+        
+        // Show advice column and hide letter creation
+        document.querySelector('.letter-creation').style.display = 'none';
+        document.getElementById('adviceColumn').style.display = 'block';
+        
+        // If user chose to share with community, show share options
+        if (state.communityShare) {
+            document.getElementById('shareOptions').style.display = 'block';
+            document.getElementById('shareOptions').classList.add('visible');
+            document.getElementById('communitySubmissions').style.display = 'block';
+            document.getElementById('communitySubmissions').classList.add('visible');
+        }
+        
+        // Scroll to advice column
+        document.getElementById('adviceColumn').scrollIntoView({ behavior: 'smooth' });
+        
+        // Update progress
+        setProgress(60);
+        
+    } catch (error) {
+        console.error('Error generating advice column:', error);
+        showToast(`Error: ${error.message || 'Failed to generate advice column'}. Please try again.`, 5000);
+    } finally {
+        // Hide loading overlay
+        state.isLoading = false;
+        document.getElementById('loadingOverlay').classList.remove('active');
+    }
+}
+
+function createAdviceColumnPrompt() {
+    let prompt = `
+You are CommuniCoach, a clever and emotionally perceptive advice columnist in the spirit of Cheryl Strayed ("Dear Sugar"), Heather Havrilesky ("Ask Polly"), or Carolyn Hax.
+
+Your job is to write an advice column with two parts:
+1. A **reader letter** based on the user's narrative
+2. A **response** that blends insight, empathy, and bold honesty
+
+--
+
+NARRATIVE:
+${state.narrative}
+
+COMMUNICATION GOAL:
+${state.goal || "Not specified"}
+
+${state.additionalContext ? `ADDITIONAL CONTEXT:\n${state.additionalContext}\n` : ''}
+
+ADVICE FOCUS:
+${state.adviceGoal === 'coach-decide'
+        ? `You decide what kind of advice will be most impactful for this person. Consider their tone, needs, and emotional patterns.`
+        : `Focus primarily on: ${state.adviceGoal}, but feel free to blend in any advice that would deepen clarity or insight.`}
+
+--
+
+STYLE GUIDANCE:
+• Write the letter in first person, signed "${state.penName}"
+• Make it emotionally real, clever, or even conflicted
+• Write the advice with warmth, sophistication, and clarity
+• Provide at least 1 meaningful insight and 1 practical suggestion
+• Avoid clichés and don’t sugarcoat if truth helps more than comfort
+• it may be necessary to be blunt. tough love is okay. sometimes users need to hear the truth, even if it’s hard to hear.
+• You may use metaphor, literary references, or tough love when helpful
+• End with encouragement that leaves the reader feeling seen
+
+--
+
+FORMAT:
+LETTER:
+Dear CommuniCoach,
+
+[Insert letter content]
+
+Sincerely,
+${state.penName || 'Anonymous'}
+
+ADVICE:
+Dear ${state.penName || 'Reader'},
+
+[Insert advice content]
+`;
+
+    return prompt;
+}
+
+
+function parseAdviceResponse(response) {
+    const letterMatch = response.match(/LETTER:([\s\S]+?)(?=ADVICE:|$)/i);
+    const adviceMatch = response.match(/ADVICE:([\s\S]+)/i);
+    
+    let letter = 'Dear CommuniCoach,\n\nLetter content unavailable. Please try again.';
+    let advice = 'Advice content unavailable. Please try again.';
+    
+    if (letterMatch && letterMatch[1]) {
+        letter = letterMatch[1].trim();
+        // Remove any "Dear CommuniCoach" if it's already in the letter
+        letter = letter.replace(/^Dear\s+CommuniCoach,?\s*/i, '');
+        letter = "Dear CommuniCoach,\n\n" + letter;
+    }
+    
+    if (adviceMatch && adviceMatch[1]) {
+        advice = adviceMatch[1].trim();
+    }
+    
+    return { letter, advice };
+}
+
+function backToLetterCreation() {
+    document.querySelector('.letter-creation').style.display = 'block';
+    document.getElementById('adviceColumn').style.display = 'none';
+    document.getElementById('communitySubmissions').style.display = 'none';
+    document.getElementById('shareOptions').style.display = 'none';
+    setProgress(20);
+}
+
+function saveAdviceColumn() {
+    // Store completion in localStorage
+    const completedExperiences = JSON.parse(localStorage.getItem('completedExperiences') || '[]');
+    if (!completedExperiences.includes('advice-column')) {
+        completedExperiences.push('advice-column');
+        localStorage.setItem('completedExperiences', JSON.stringify(completedExperiences));
+    }
+    
+    // Show success message
+    showSuccessMessage();
+    
+    // Update progress
+    setProgress(100);
+}
+
+function showSuccessMessage() {
+    // Hide all other sections
+    document.querySelector('.letter-creation').style.display = 'none';
+    document.getElementById('adviceColumn').style.display = 'none';
+    document.getElementById('communitySubmissions').style.display = 'none';
+    document.getElementById('shareOptions').style.display = 'none';
+    
+    // Show success message
+    const successMessage = document.getElementById('successMessage');
+    successMessage.style.display = 'block';
+    successMessage.classList.add('visible');
+    
+    // Scroll to success message
+    successMessage.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ================ NAVIGATION ================
+
+function returnToArena() {
+    window.location.href = 'action-arena.html';
+}
+
+function backToArena() {
+    window.location.href = 'action-arena.html';
+}
+
+// ================ SHARING ================
+
+function shareToFacebook() {
+    showToast('Facebook sharing would be implemented in production', 3000);
+}
+
+function shareToTwitter() {
+    showToast('Twitter sharing would be implemented in production', 3000);
+}
+
+function shareViaEmail() {
+    showToast('Email sharing would be implemented in production', 3000);
+}
+
+function copyToClipboard() {
+    // Compile the content to copy
+    const letterContent = document.getElementById('letterContent').innerText;
+    const responseContent = document.getElementById('responseContent').innerText;
+    const contentToCopy = `LETTER:\n${letterContent}\n\nRESPONSE:\n${responseContent}`;
+    
+    // Use the clipboard API
+    navigator.clipboard.writeText(contentToCopy)
+        .then(() => {
+            showToast('Advice column copied to clipboard!', 3000);
+        })
+        .catch(err => {
+            console.error('Failed to copy text: ', err);
+            showToast('Failed to copy to clipboard. Please try again.', 3000);
+        });
+}
+
+function viewCommunitySubmission(id) {
+    showToast(`Viewing community submission #${id} (would be implemented in production)`, 3000);
+}
+
+// ================ UTILITIES ================
+
+function showToast(message, duration = 3000) {
+    // Remove any existing toast
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Create new toast
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    
+    // Add to body
+    document.body.appendChild(toast);
+    
+    // Remove after specified duration
+    setTimeout(() => {
+        if (document.body.contains(toast)) {
+            toast.remove();
+        }
+    }, duration);
+}
+
+function setProgress(percent) {
+    const progressBar = document.querySelector('.progress-bar .progress');
+    if (progressBar) {
+        progressBar.style.width = percent + '%';
+    }
+}
+
+// ================ GLOBAL EXPORTS ================
+
+// Make functions globally accessible for direct HTML button calls
+window.toggleMenu = toggleMenu;
+window.generateSymbolicPenName = generatePenName;
+window.generateAdviceColumn = generateAdviceColumn;
+window.backToLetterCreation = backToLetterCreation;
+window.saveAdviceColumn = saveAdviceColumn;
+window.returnToArena = returnToArena;
+window.backToArena = backToArena;
+window.shareToFacebook = shareToFacebook;
+window.shareToTwitter = shareToTwitter;
+window.shareViaEmail = shareViaEmail;
+window.copyToClipboard = copyToClipboard;
+window.viewCommunitySubmission = viewCommunitySubmission;
+    </script>
+</body>
+</html>  

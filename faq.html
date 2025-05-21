@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Frequently Asked Questions - CommuniCoach</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2D4A3E;
+            --secondary-color: #1b4072;
+            --accent-color: #A1CE3E;
+            --highlight-color: #DCEFC6;
+            --energy-color: #74B49B;
+            --error-color: #FF6B6B;
+            --shadow-color: rgba(45, 74, 62, 0.15);
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+            --gradient-bg: linear-gradient(135deg, rgba(45, 74, 62, 0.05), rgba(161, 206, 62, 0.07));
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-image: url('.vscode/Images/pattern-bg5.png');
+            background-size: cover;
+            background-attachment: fixed;
+            overflow-x: hidden;
+            position: relative;
+            color: var(--text-color);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: -1;
+        }
+
+        /* Header and Navigation */
+        .header-wrapper {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px var(--shadow-color);
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 0;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        .top-nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            position: absolute;
+            left: 20px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .top-nav a:hover {
+            background: var(--highlight-color);
+        }
+
+        .top-nav a.current {
+            background: #136f6f;
+            color: white;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-button {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+            position: absolute;
+            right: 20px;
+            top: 15px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem 0 4rem;
+            min-height: calc(100vh - 180px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-color: var(--highlight-color);
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .hero-title {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .hero-subtitle {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .search-bar {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .search-input:focus {
+            outline: none;
+        }
+
+        .search-button {
+            background: var(--accent-color);
+            border: none;
+            color: white;
+            padding: 0 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            background: var(--energy-color);
+        }
+
+        /* FAQ Categories */
+        .faq-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            justify-content: center;
+        }
+
+        .category-button {
+            background: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.8rem 1.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+
+        .category-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px var(--shadow-color);
+        }
+
+        .category-button.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .category-button i {
+            margin-right: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px var(--shadow-color);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-color);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--highlight-color);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 1.5rem;
+        }
+
+        .faq-answer-content {
+            padding-bottom: 1.5rem;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-question {
+            background: var(--highlight-color);
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 1000px;
+        }
+
+        /* Still Have Questions Section */
+        .questions-section {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 4rem;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .questions-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .questions-section p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: var(--text-color);
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-method {
+            background: var(--highlight-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            width: 200px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-method:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .contact-method i {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .contact-method h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-method p {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-method a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .contact-method a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            background: var(--energy-color);
+        }
+
+        /* Footer */
+        .footer-nav {
+            width: 100%;
+            color: #ffffff;
+            background: url('.vscode/Images/situationfooter.png') no-repeat center center;
+            background-size: cover;
+            min-height: 60px;
+            padding: 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-nav p {
+            margin: 0;
+        }
+
+        .footer-nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .top-nav {
+                flex-direction: column;
+                padding: 10px 0;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                padding-top: 10px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .logo {
+                position: static;
+                margin-bottom: 10px;
+            }
+
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .search-bar {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+
+            .search-input {
+                width: 100%;
+                border-radius: 10px 10px 0 0;
+            }
+
+            .search-button {
+                width: 100%;
+                padding: 15px 0;
+                border-radius: 0 0 10px 10px;
+            }
+
+            .faq-categories {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .category-button {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .contact-methods {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .contact-method {
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .questions-section {
+                padding: 2rem 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .footer-nav {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px 0;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header and Navigation -->
+    <div class="header-wrapper">
+        <div class="top-nav">
+            <a href="#" class="logo">
+                <img src=".vscode/Images/CClogo.png" alt="CommuniCoach">
+            </a>
+            <button class="mobile-menu-button" onclick="toggleMenu()">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="welcome.html">Welcome</a>
+                <a href="faq.html" class="current">FAQs</a>
+                <a href="about.html">About</a>
+                <a href="user-account.html">Account</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <div class="hero-section fade-in">
+                <h1 class="hero-title">Frequently Asked Questions</h1>
+                <p class="hero-subtitle">Find answers to common questions about CommuniCoach and how it can help you communicate more effectively.</p>
+                
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search for questions..." id="faqSearch">
+                    <button class="search-button" onclick="searchFAQ()">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- FAQ Categories -->
+            <div class="faq-categories fade-in">
+                <button class="category-button active" data-category="all">
+                    <i class="fa-solid fa-th-large"></i> All Questions
+                </button>
+                <button class="category-button" data-category="getting-started">
+                    <i class="fa-solid fa-rocket"></i> Getting Started
+                </button>
+                <button class="category-button" data-category="features">
+                    <i class="fa-solid fa-star"></i> Features & Tools
+                </button>
+                <button class="category-button" data-category="account">
+                    <i class="fa-solid fa-user"></i> Account & Settings
+                </button>
+                <button class="category-button" data-category="privacy">
+                    <i class="fa-solid fa-lock"></i> Privacy & Security
+                </button>
+                <button class="category-button" data-category="troubleshooting">
+                    <i class="fa-solid fa-tools"></i> Troubleshooting
+                </button>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section fade-in">
+                <h2 class="section-title">Popular Questions</h2>
+                
+                <div class="faq-container" id="faqContainer">
+                    <!-- Getting Started FAQs -->
+                    <div class="faq-item" data-category="getting-started">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>What is CommuniCoach and how does it work?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>CommuniCoach is an AI-powered communication coach that helps you improve your communication skills through personalized guidance. It works in three key steps:</p>
+                                <ol>
+                                    <li><strong>Express Your Situation</strong>: Share your communication challenge or situation in the Session Space. You can type or speak freely without worrying about grammar or organization.</li>
+                                    <li><strong>Refine Your Narrative</strong>: Your thoughts are transformed into a clear, well-structured narrative that captures your situation accurately.</li>
+                                    <li><strong>Practice in the Action Arena</strong>: Engage with interactive exercises tailored to your situation, helping you develop effective communication strategies through role-playing, perspective-taking, and other practical tools.</li>
+                                </ol>
+                                <p>The AI coach guides you through each step, providing personalized feedback and suggestions to help you communicate more effectively in real-life situations.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-category="getting-started">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>Do I need to create an account to use CommuniCoach?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>For basic usage, you don't need to create an account. You can start using CommuniCoach immediately to explore its features and even complete a few exercises.</p>
+                                <p>However, after completing your third Action Arena experience, you'll be prompted to create an account. Creating an account allows you to:</p>
+                                <ul>
+                                    <li>Save your progress and return to it later</li>
+                                    <li>Access your history of communication scenarios</li>
+                                    <li>Set preferences for a more personalized experience</li>
+                                    <li>Track your improvement over time</li>
+                                </ul>
+                                <p>Account creation is simple and only requires a name and email address to get started. We prioritize your privacy and don't share your information with third parties.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-category="getting-started">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>What types of communication situations can CommuniCoach help with?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>CommuniCoach can help with a wide range of personal and professional communication scenarios, including:</p>
+                                <ul>
+                                    <li><strong>Workplace Communication:</strong> Difficult conversations with colleagues, providing feedback, negotiating salary, presenting ideas to teams, and addressing conflicts.</li>
+                                    <li><strong>Personal Relationships:</strong> Setting boundaries with friends or family, addressing sensitive topics, resolving misunderstandings, and expressing needs clearly.</li>
+                                    <li><strong>Difficult Conversations:</strong> Navigating emotionally charged discussions, delivering bad news, and handling criticism or rejection.</li>
+                                    <li><strong>Public Speaking:</strong> Preparing for presentations, speeches, or important meetings.</li>
+                                    <li><strong>Everyday Interactions:</strong> Improving day-to-day communications, from emails to casual conversations.</li>
+                                </ul>
+                                <p>The platform adapts to your specific situation, providing relevant exercises and strategies tailored to your unique communication challenge.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Features FAQs -->
+                    <div class="faq-item" data-category="features">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>What exercises are available in the Action Arena?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>The Action Arena offers several interactive exercises to help you practice and improve your communication skills:</p>
+                                <ul>
+                                    <li><strong>Role Play:</strong> Practice conversations with an AI that takes on various roles relevant to your scenario, receiving real-time feedback.</li>
+                                    <li><strong>Perspective Taking:</strong> Experience your situation from another's viewpoint to gain deeper insights into their feelings and motivations.</li>
+                                    <li><strong>Conversation Pathways:</strong> Explore different communication paths using an interactive flowchart that shows how different approaches lead to various outcomes.</li>
+                                    <li><strong>Script Creator:</strong> Develop a practical, ready-to-use script tailored to your specific situation and communication medium.</li>
+                                    <li><strong>Advice Column:</strong> Transform your narrative into an advice column format and receive tailored guidance from your AI coach.</li>
+                                    <li><strong>Persuasion Puzzles:</strong> Master the art of influence through engaging scenarios that challenge you to apply persuasive techniques.</li>
+                                </ul>
+                                <p>Each exercise is tailored to your specific situation and communication goals, providing a personalized learning experience.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-category="features">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>Can I use voice input instead of typing?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes! CommuniCoach offers voice input functionality, allowing you to speak your thoughts instead of typing them. This feature is available in several parts of the application:</p>
+                                <ul>
+                                    <li>In the Situation Room, you can use the microphone icon to verbally describe your communication challenge.</li>
+                                    <li>During certain Action Arena exercises, you can use voice input to practice your responses in a more natural way.</li>
+                                    <li>When providing feedback or refining your narrative, you can speak rather than type.</li>
+                                </ul>
+                                <p>Voice input is particularly useful for:</p>
+                                <ul>
+                                    <li>Capturing the emotional nuances of your situation</li>
+                                    <li>Practicing how you'll actually sound in a real conversation</li>
+                                    <li>Allowing for a more natural flow of thoughts when venting or brainstorming</li>
+                                </ul>
+                                <p>Note that voice input requires browser permission to access your microphone. CommuniCoach respects your privacy and does not permanently store any voice recordings.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-category="features">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>What tone options are available, and why do they matter?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>CommuniCoach offers several tone options to help customize how your message is conveyed:</p>
+                                <ul>
+                                    <li><strong>Empathetic:</strong> Focuses on building understanding and finding common ground. Ideal for sensitive conversations where emotional connection is important.</li>
+                                    <li><strong>Clear:</strong> Emphasizes direct, straightforward expression. Perfect for situations requiring precision and avoiding misunderstandings.</li>
+                                    <li><strong>Balanced:</strong> Aims for a middle ground that considers all perspectives. Great for negotiations or when seeking compromise.</li>
+                                    <li><strong>Authentic:</strong> Preserves your genuine voice while ensuring constructive communication. Ideal when you want to be true to yourself while still being effective.</li>
+                                    <li><strong>Structured:</strong> Organizes your thoughts in a logical, methodical way. Excellent for complex discussions that require clear organization.</li>
+                                </ul>
+                                <p>Tone matters because the same message can be received very differently depending on how it's presented. By selecting a tone that matches your intention and the context of your conversation, you increase the likelihood that your message will be understood as intended.</p>
+                                <p>You can combine up to two tones for a more nuanced approach, and you can set a default tone in your account preferences.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account FAQs -->
+                    <div class="faq-item" data-category="account">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>How do I save and access my previous sessions?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Saving and accessing your previous sessions is easy with CommuniCoach:</p>
+                                <p><strong>Auto-Save:</strong> By default, CommuniCoach automatically saves your progress as you work through a session. This feature can be toggled on/off in your account preferences.</p>
+                                <p><strong>Accessing Previous Sessions:</strong></p>
+                                <ol>
+                                    <li>Navigate to the "My Account" page by clicking on "Account" in the navigation menu.</li>
+                                    <li>Select the "My Sessions" tab in your account dashboard.</li>
+                                    <li>You'll see a list of all your saved sessions, showing the title, date, and completion status.</li>
+                                    <li>Click the "Resume" button (play icon) next to any session to continue where you left off.</li>
+                                </ol>
+                                <p><strong>Managing Sessions:</strong></p>
+                                <ul>
+                                    <li>You can rename sessions by clicking the edit icon next to the session name.</li>
+                                    <li>To delete a session, click the trash icon and confirm your choice.</li>
+                                    <li>Sessions are categorized as "Complete" or "In Progress" for easy reference.</li>
+                                </ul>
+                                <p>Note: You need to have an account to save and access sessions across different devices or browsers. If you're using CommuniCoach without an account, your sessions will be saved in your current browser only.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-category="account">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>Can I customize my CommuniCoach experience?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes, CommuniCoach offers several customization options to tailor the experience to your preferences:</p>
+                                <p><strong>From your Account page, you can customize:</strong></p>
+                                <ul>
+                                    <li><strong>Dark Mode:</strong> Toggle between light and dark themes for comfortable viewing in different environments.</li>
+                                    <li><strong>Auto-Save:</strong> Choose whether your progress is automatically saved as you work.</li>
+                                    <li><strong>Default Tone:</strong> Set your preferred communication tone (Empathetic, Clear, Balanced, Authentic, or Structured) as the default for new sessions.</li>
+                                    <li><strong>Profile Information:</strong> Update your name, email, and profile picture.</li>
+                                </ul>
+                                <p><strong>Within exercises, you can customize:</strong></p>
+                                <ul>
+                                    <li><strong>Exercise Selection:</strong> Choose which Action Arena exercises best fit your needs.</li>
+                                    <li><strong>Input Method:</strong> Switch between typing and voice input based on your preference.</li>
+                                    <li><strong>Script Format:</strong> Select your preferred communication format (face-to-face, email, phone call, etc.) when creating scripts.</li>
+                                </ul>
+                                <p>We're continuously adding more customization options based on user feedback to make your CommuniCoach experience as personalized as possible.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-category="account">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>Is there a limit to how many sessions I can create?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Currently, there is no set limit to the number of sessions you can create with CommuniCoach. You can work on as many different communication situations as you need.</p>
+                                <p>However, for optimal organization and ease of use, we recommend:</p>
+                                <ul>
+                                    <li>Focusing on one or two key communication challenges at a time</li>
+                                    <li>Completing the full process (from Situation Room through Action Arena exercises) for each situation</li>
+                                    <li>Archiving or deleting older sessions that are no longer relevant to keep your dashboard organized</li>
+                                </ul>
+                                <p>As we continue to develop CommuniCoach, we may introduce tiered plans with different storage capacities, but our goal is always to ensure you have access to the help you need for your most important communication challenges.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy FAQs -->
+                    <div class="faq-item" data-category="privacy">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>How is my data protected and who can see my personal information?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>At CommuniCoach, we take your privacy very seriously. Here's how we protect your data:</p>
+                                <p><strong>Data Protection:</strong></p>
+                                <ul>
+                                    <li>All data is encrypted in transit and at rest using industry-standard encryption protocols.</li>
+                                    <li>Your personal information (name, email) is stored separately from your session content.</li>
+                                    <li>Voice inputs are processed in real-time and are not stored as audio recordings.</li>
+                                    <li>We implement strict access controls, ensuring only essential personnel can access systems containing user data.</li>
+                                </ul>
+                                <p><strong>Who Can See Your Information:</strong></p>
+                                <ul>
+                                    <li>Your personal information and session content are private by default and visible only to you.</li>
+                                    <li>Our AI system processes your content to provide coaching, but this is automated and not reviewed by humans.</li>
+                                    <li>In rare cases, aggregated and anonymized data may be used to improve our services, but this never includes personally identifiable information.</li>
+                                </ul>
+                                <p><strong>Your Control:</strong></p>
+                                <ul>
+                                    <li>You can delete your account and associated data at any time.</li>
+                                    <li>You can export your personal data if desired.</li>
+                                    <li>We do not sell or share your personal information with third parties.</li>
+                                </ul>
+                                <p>For more detailed information, please review our <a href="privacy-policy.html">Privacy Policy</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-category="privacy">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>Can I use CommuniCoach anonymously?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes, you can use CommuniCoach with minimal personal information:</p>
+                                <p><strong>Without an Account:</strong></p>
+                                <ul>
+                                    <li>You can use CommuniCoach for up to three completed Action Arena experiences without creating an account.</li>
+                                    <li>During this time, your data is stored only in your local browser storage and not on our servers.</li>
+                                    <li>No personal information is collected beyond what's necessary for the service to function.</li>
+                                </ul>
+                                <p><strong>With a Basic Account:</strong></p>
+                                <ul>
+                                    <li>After three experiences, you'll need to create a basic account, but this requires minimal information (just a name and email).</li>
+                                    <li>You can use a pseudonym instead of your real name if you prefer.</li>
+                                    <li>We only use your email for account-related communications, not for marketing (unless you explicitly opt in).</li>
+                                </ul>
+                                <p>We've designed CommuniCoach to collect only the information necessary to provide you with a personalized coaching experience. Our goal is to help you improve your communication skills while respecting your privacy preferences.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Troubleshooting FAQs -->
+                    <div class="faq-item" data-category="troubleshooting">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>The voice input feature isn't working. What should I do?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>If you're experiencing issues with the voice input feature, try these troubleshooting steps:</p>
+                                <ol>
+                                    <li><strong>Check Browser Permissions:</strong>
+                                        <ul>
+                                            <li>Ensure you've allowed microphone access when prompted.</li>
+                                            <li>Check your browser settings to confirm microphone permissions for CommuniCoach.</li>
+                                            <li>In Chrome: Click the lock icon in the address bar → Site Settings → Microphone</li>
+                                            <li>In Firefox: Click the shield icon in the address bar → Connection secure → Permissions → Use the Microphone</li>
+                                            <li>In Safari: Preferences → Websites → Microphone</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Check Your Microphone:</strong>
+                                        <ul>
+                                            <li>Ensure your device's microphone is properly connected and not muted.</li>
+                                            <li>Try testing your microphone in another application to confirm it's working.</li>
+                                            <li>If using external microphones, try switching to your device's built-in microphone.</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Browser Compatibility:</strong>
+                                        <ul>
+                                            <li>Speech recognition works best in Chrome, Edge, and Safari.</li>
+                                            <li>Try updating your browser to the latest version.</li>
+                                            <li>If using Firefox or another browser with limited speech support, consider switching to Chrome for voice input features.</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Refresh the Page:</strong>
+                                        <ul>
+                                            <li>Sometimes simply refreshing the page can resolve temporary issues.</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                                <p>If you've tried these steps and still experience issues, please contact our support team at support@communicoach.com with details about your device, browser, and the specific problem you're encountering.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-category="troubleshooting">
+                        <div class="faq-question" onclick="toggleFAQ(this.parentElement)">
+                            <div>I'm experiencing technical issues. How can I get help?</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>If you're experiencing technical issues with CommuniCoach, here are several ways to get assistance:</p>
+                                <ol>
+                                    <li><strong>Basic Troubleshooting:</strong>
+                                        <ul>
+                                            <li>Clear your browser cache and cookies.</li>
+                                            <li>Try using a different browser (Chrome typically works best).</li>
+                                            <li>Check your internet connection.</li>
+                                            <li>Disable browser extensions that might interfere with the application.</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Contact Support:</strong>
+                                        <ul>
+                                            <li>Email: support@communicoach.com</li>
+                                            <li>Include details about your issue, your device, browser, and steps to reproduce the problem.</li>
+                                            <li>Screenshots or screen recordings can be helpful for visual issues.</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Check System Status:</strong>
+                                        <ul>
+                                            <li>Visit our status page at status.communicoach.com to check if there are any known service disruptions.</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                                <p>Our support team typically responds within 24 hours on business days. For urgent issues, please include "URGENT" in your email subject line.</p>
+                                <p>We're constantly working to improve CommuniCoach, and your feedback helps us identify and fix issues. Thank you for your patience and for helping us make the platform better for everyone.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Still Have Questions Section -->
+            <div class="questions-section fade-in">
+                <h2>Still Have Questions?</h2>
+                <p>Can't find the answer you're looking for? We're here to help! Choose the option that works best for you.</p>
+                
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <i class="fa-solid fa-envelope"></i>
+                        <h3>Email Support</h3>
+                        <p>Get a detailed response from our team within 24 hours.</p>
+                        <a href="mailto:support@communicoach.com">Contact Support</a>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <i class="fa-solid fa-comment-dots"></i>
+                        <h3>Live Chat</h3>
+                        <p>Chat with our support team during business hours.</p>
+                        <a href="#" onclick="openLiveChat()">Start Chat</a>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <i class="fa-solid fa-book-open"></i>
+                        <h3>Help Center</h3>
+                        <p>Browse our in-depth guides and tutorials.</p>
+                        <a href="help-center.html">Visit Help Center</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop" onclick="scrollToTop()">
+        <i class="fa-solid fa-arrow-up"></i>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer-nav">
+        <p>&copy; 2024 CommuniCoach. All rights reserved.</p>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+    </footer>
+
+    <script>
+        // Toggle mobile menu
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+        
+        // Toggle FAQ items
+        function toggleFAQ(faqItem) {
+            faqItem.classList.toggle('active');
+        }
+        
+        // Category filtering
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryButtons = document.querySelectorAll('.category-button');
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    
+                    // Update active button
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Filter FAQ items
+                    faqItems.forEach(item => {
+                        if (category === 'all' || item.getAttribute('data-category') === category) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Search functionality
+            const searchInput = document.getElementById('faqSearch');
+            const searchButton = document.querySelector('.search-button');
+            
+            searchButton.addEventListener('click', function() {
+                searchFAQ();
+            });
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchFAQ();
+                }
+            });
+            
+            // Back to top button
+            window.addEventListener('scroll', function() {
+                const backToTopButton = document.getElementById('backToTop');
+                
+                if (window.scrollY > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+        });
+        
+        // Search FAQ function
+        function searchFAQ() {
+            const searchInput = document.getElementById('faqSearch');
+            const searchTerm = searchInput.value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            const categoryButtons = document.querySelectorAll('.category-button');
+            
+            // Reset category buttons
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            document.querySelector('[data-category="all"]').classList.add('active');
+            
+            if (searchTerm.trim() === '') {
+                // If search is empty, show all items
+                faqItems.forEach(item => {
+                    item.style.display = 'block';
+                });
+                return;
+            }
+            
+            // Filter items based on search
+            let hasResults = false;
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question div').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer-content').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                    hasResults = true;
+                    
+                    // Open items that match search
+                    item.classList.add('active');
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            if (!hasResults) {
+                // Show message when no results found
+                alert('No results found for "' + searchTerm + '". Please try a different search term.');
+            }
+        }
+        
+        // Scroll to top function
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // Open live chat function (placeholder)
+        function openLiveChat() {
+            alert('Live chat would open here. This feature is coming soon!');
+        }
+    </script>
+</body>
+</html>

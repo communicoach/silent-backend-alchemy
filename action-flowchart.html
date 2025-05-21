@@ -1,0 +1,2590 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Conversation Pathways - CommuniCoach</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+/* Conversation Pathways CSS */
+
+:root {
+    /* Light Mode Colors */
+    --primary-color: #2D4A3E;
+    --secondary-color: #1b4072;
+    --accent-color: #A1CE3E;
+    --highlight-color: #DCEFC6;
+    --energy-color: #74B49B;
+    --error-color: #FF6B6B;
+    --shadow-color: rgba(45, 74, 62, 0.15);
+    --positive-color: #4caf50;
+    --warning-color: #ff9800;
+    --negative-color: #f44336;
+    
+    /* Background Colors */
+    --bg-color: #ffffff;
+    --bg-secondary: #f9fef3;
+    --bg-card: #ffffff;
+    
+    /* Text Colors */
+    --text-primary: #2D4A3E;
+    --text-secondary: #555555;
+    --text-light: #ffffff;
+    
+    /* Conversation Bubbles */
+    --user-bubble-bg: #e8f4f8;
+    --partner-bubble-bg: #f0f0f0;
+    
+    /* Functional Colors */
+    --gradient-bg: linear-gradient(135deg, rgba(45, 74, 62, 0.05), rgba(161, 206, 62, 0.07));
+    --border-color: #e0e0e0;
+    --input-bg: #ffffff;
+    --footer-bg: url('.vscode/Images/situationfooter.png');
+    
+    /* Node Colors for Flowchart */
+    --node-user: #e8f4f8;
+    --node-partner: #f0f0f0;
+    --node-positive: rgba(76, 175, 80, 0.2);
+    --node-neutral: rgba(255, 152, 0, 0.2);
+    --node-negative: rgba(244, 67, 54, 0.2);
+    
+    /* Progress Bar Colors */
+    --progress-bg: #e0e0e0;
+    --progress-fill: #136f6f;
+} /* End of :root */
+
+/* Dark Mode Colors */
+[data-theme="dark"] {
+    --primary-color: #78a891;
+    --secondary-color: #60a3d9;
+    --highlight-color: #314a2e;
+    --shadow-color: rgba(0, 0, 0, 0.25);
+    
+    /* Background Colors */
+    --bg-color: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-card: #242424;
+    
+    /* Text Colors */
+    --text-primary: #e0e0e0;
+    --text-secondary: #aaaaaa;
+    
+    /* Conversation Bubbles */
+    --user-bubble-bg: #2d4a3e;
+    --partner-bubble-bg: #333333;
+    
+    /* Functional Colors */
+    --gradient-bg: linear-gradient(135deg, rgba(45, 74, 62, 0.15), rgba(161, 206, 62, 0.17));
+    --border-color: #444444;
+    --input-bg: #333333;
+    
+    /* Node Colors for Flowchart */
+    --node-user: #2d4a3e;
+    --node-partner: #333333;
+    --node-positive: rgba(76, 175, 80, 0.3);
+    --node-neutral: rgba(255, 152, 0, 0.3);
+    --node-negative: rgba(244, 67, 54, 0.3);
+    
+    /* Progress Bar Colors */
+    --progress-bg: #444444;
+    --progress-fill: #78C7BA;
+} /* End of [data-theme="dark"] */
+
+/* General Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    background-image: url('.vscode/Images/pattern-bg5.png');
+    background-size: cover;
+    background-attachment: fixed;
+    overflow-x: hidden;
+    position: relative;
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-secondary);
+    opacity: 0.8;
+    z-index: -1;
+}
+
+/* Header and Navigation */
+.header-wrapper {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    box-shadow: 0 2px 20px var(--shadow-color);
+}
+
+.top-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 0;
+    color: var(--text-primary);
+    position: relative;
+}
+
+.top-nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.logo {
+    position: absolute;
+    left: 20px;
+}
+
+.logo img {
+    height: 40px;
+}
+
+.top-nav a:hover {
+    background: var(--highlight-color);
+}
+
+.top-nav a.current {
+    background: #136f6f;
+    color: var(--text-light);
+}
+
+/* Progress Bar */
+.progress-bar-container {
+    width: 100%;
+    padding: 10px 0;
+    background: rgba(255, 255, 255, 0.8);
+    background: var(--bg-secondary);
+}
+
+.progress-bar {
+    width: 80%;
+    margin: 0 auto;
+    height: 8px;
+    background: var(--progress-bg);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar .progress {
+    width: 80%; /* Will be updated via JS */
+    height: 100%;
+    background: var(--progress-fill);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+    position: absolute;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-label {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--accent-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Mobile Menu */
+.mobile-menu-button {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    position: absolute;
+    right: 20px;
+    top: 15px;
+}
+
+/* Hero Section */
+.hero-section {
+    margin-top: 100px;
+    padding: 4rem 0;
+    background-color: var(--bg-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.hero-text {
+    flex: 1.2;
+}
+
+.hero-image {
+    flex: 1;
+}
+
+.hero-image img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.content-card {
+    background-color: var(--highlight-color);
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.content-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 0;
+}
+
+.content-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.section-icon {
+    color: #ff221f;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+    text-align: center;
+}
+
+.hero-text h1 {
+    font-size: 1.75em;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.hero-text p {
+    font-size: 1.1em;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+}
+
+/* Situation Review Section */
+.situation-review-section {
+    padding: 2rem 0;
+}
+
+.situation-card {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px var(--shadow-color);
+    margin-bottom: 2rem;
+}
+
+.situation-card h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4em;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.situation-card h2 i {
+    color: #ff221f;
+}
+
+.situation-content {
+    padding: 1.5rem;
+    border: 2px solid var(--accent-color);
+    border-radius: 10px;
+    background: var(--highlight-color);
+    color: var(--text-primary);
+    font-size: 0.95em;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.goal-summary {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.goal-summary p {
+    margin: 0;
+    font-size: 1em;
+    color: var(--text-primary);
+}
+
+/* Exercise Setup Section */
+.exercise-setup-section {
+    padding: 2rem 0;
+}
+
+.setup-card {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.setup-card h2 {
+    font-size: 1.5em;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.setup-card p {
+    font-size: 1.1em;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+/* Conversation Exercise Section */
+.conversation-exercise-section {
+    padding: 2rem 0 4rem;
+}
+
+.progress-tracking {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.goal-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.progress-meter {
+    width: 200px;
+    height: 10px;
+    background: var(--progress-bg);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar-value {
+    height: 100%;
+    background: var(--accent-color);
+    transition: width 0.5s ease;
+}
+
+.progress-percentage {
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.conversation-step {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.conversation-flow {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.conversation-display {
+    margin-bottom: 2rem;
+}
+
+.conversation-bubble {
+    max-width: 80%;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-radius: 15px;
+    position: relative;
+}
+
+.conversation-bubble.user {
+    background: var(--user-bubble-bg);
+    align-self: flex-end;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+
+.conversation-bubble.partner {
+    background: var(--partner-bubble-bg);
+    align-self: flex-start;
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+}
+
+.bubble-header {
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.speaker-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.speaker-mood {
+    font-style: italic;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+.bubble-content {
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.response-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.response-option {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    padding: 1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.response-option:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px var(--shadow-color);
+    border-color: var(--accent-color);
+}
+
+.option-approach {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+}
+
+.option-text {
+    font-size: 1.1em;
+    color: var(--text-primary);
+}
+
+.option-preview {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.conversation-navigation {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flowchart-container {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.flowchart-container h3 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.flowchart-visualization {
+    min-height: 300px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    overflow: auto;
+    padding: 1rem;
+    position: relative;
+}
+
+.flowchart-node {
+    position: absolute;
+    padding: 0.8rem;
+    border-radius: 10px;
+    background: var(--node-user);
+    border: 1px solid var(--border-color);
+    max-width: 150px;
+    font-size: 0.9em;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.flowchart-node.user {
+    background: var(--node-user);
+}
+
+.flowchart-node.partner {
+    background: var(--node-partner);
+}
+
+.flowchart-node.positive {
+    background: var(--node-positive);
+}
+
+.flowchart-node.neutral {
+    background: var(--node-neutral);
+}
+
+.flowchart-node.negative {
+    background: var(--node-negative);
+}
+
+.node-content {
+    font-size: 0.9em;
+    color: var(--text-primary);
+}
+
+.node-connections {
+    position: absolute;
+    pointer-events: none;
+}
+
+/* Completion Section */
+.completion-section {
+    padding: 3rem 0;
+}
+
+.completion-card {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px var(--shadow-color);
+    text-align: center;
+}
+
+.completion-icon {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+}
+
+.completion-card h2 {
+    font-size: 1.8em;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.completion-description {
+    font-size: 1.1em;
+    color: var(--text-primary);
+    max-width: 800px;
+    margin: 0 auto 2rem;
+}
+
+.insights-summary {
+    margin-bottom: 2rem;
+}
+
+.insight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.insight-icon {
+    font-size: 1.5rem;
+    color: var(--accent-color);
+}
+
+.insight-content {
+    flex: 1;
+    color: var(--text-primary);
+}
+
+.recommended-path-card {
+    background: var(--highlight-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.recommended-path-card h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.recommended-path {
+    text-align: left;
+    color: var(--text-primary);
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Button Styles */
+.btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #5885bd, #1b4072, #011f46);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.btn-outline {
+    background: none;
+    color: var(--text-primary);
+    border: 2px solid var(--text-primary);
+}
+
+.btn-outline:hover {
+    background: var(--highlight-color);
+    transform: translateY(-3px);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Spinner for Loading State */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Footer */
+.footer-nav {
+    width: 100%;
+    margin-top: auto;
+    color: #ffffff;
+    background: var(--footer-bg) no-repeat center center;
+    background-size: cover;
+    min-height: 60px;
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-nav p {
+    margin: 0;
+}
+
+.footer-nav a {
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.footer-nav a:hover {
+    opacity: 0.8;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards;
+}
+
+.delay-1 {
+    animation-delay: 0.2s;
+}
+
+.delay-2 {
+    animation-delay: 0.4s;
+}
+
+.delay-3 {
+    animation-delay: 0.6s;
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary-color);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .top-nav {
+        flex-direction: column;
+        padding: 10px 0;
+    }
+
+    .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding-top: 10px;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .logo {
+        position: static;
+        margin-bottom: 10px;
+    }
+
+    .mobile-menu-button {
+        display: block;
+    }
+
+    .dark-mode-toggle {
+        position: static;
+        margin-top: 10px;
+        justify-content: center;
+    }
+
+    .hero-content {
+        flex-direction: column-reverse;
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .hero-text h1 {
+        font-size: 1.5em;
+    }
+
+    .hero-text p {
+        font-size: 0.95em;
+    }
+
+    .progress-tracking {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .conversation-bubble {
+        max-width: 90%;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .footer-nav {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 0;
+        gap: 10px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 0 1.5rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Header and Progress Indicator -->
+    <div class="header-wrapper">
+        <div class="top-nav">
+            <a href="#" class="logo">
+                <img src=".vscode/Images/CClogo.png" alt="CommuniCoach">
+            </a>
+            <button class="mobile-menu-button" onclick="toggleMenu()">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="welcome.html">Welcome</a>
+                <a href="tone-selection.html">Tone Selection</a>
+                <a href="situation-room.html">Situation Room</a>
+                <a href="refined-narrative.html">Refined Narrative</a>
+                <a href="action-arena.html">Action Arena</a>
+                <a href="action-flowchart.html" class="current">Conversation Pathways</a>
+            </div>
+            <!-- Load Mermaid.js -->
+            <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+            
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    if (typeof mermaid === "undefined") {
+        const script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js";
+        script.onload = () => {
+            console.log("Mermaid.js loaded successfully.");
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: localStorage.getItem('darkMode') === 'enabled' ? 'dark' : 'default',
+                flowchart: {
+                    useMaxWidth: true,
+                    htmlLabels: true,
+                    curve: 'cardinal'
+                }
+            });
+        };
+        script.onerror = () => {
+            console.error("Mermaid.js failed to load. Retrying...");
+            setTimeout(() => document.head.appendChild(script), 2000);
+        };
+        document.head.appendChild(script);
+    } else {
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: localStorage.getItem('darkMode') === 'enabled' ? 'dark' : 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'cardinal'
+            }
+        });
+    }
+    initializeAnimations();
+});
+</script>   
+            <!-- Dark Mode Toggle -->
+            <div class="dark-mode-toggle">
+                <span class="toggle-label">Dark Mode</span>
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text fade-in">
+                    <div class="content-card">
+                        <i class="fa-solid fa-diagram-project section-icon"></i>
+                        <h1>Conversation Pathways</h1>
+                        <p>Explore different communication approaches and see how they unfold. This interactive exercise helps you discover which strategies best align with your communication goals, allowing you to practice and refine your approach before the actual conversation.</p>
+                    </div>
+                </div>
+                <div class="hero-image fade-in delay-1">
+                    <img src=".vscode/Images/conversation.png" alt="Conversation Pathways">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Situation and Goal Review -->
+    <section class="situation-review-section">
+        <div class="container">
+            <div class="situation-card fade-in delay-1">
+                <h2><i class="fa-solid fa-file-lines"></i> Your Current Situation</h2>
+                <div class="situation-content" id="situationSummary">
+                    <!-- Dynamic content loaded from localStorage -->
+                </div>
+                <div class="goal-summary">
+                    <p><strong>Your Communication Goal:</strong> <span id="goalSummary"><!-- Dynamic content --></span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exercise Setup Section -->
+    <section class="exercise-setup-section" id="exerciseSetupSection">
+        <div class="container">
+            <div class="setup-card fade-in delay-2">
+                <h2>Set the Stage for Your Conversation</h2>
+                <p>Let's define the specifics of your conversation scenario to make this exercise more relevant to your situation.</p>
+                
+                <form id="setupForm">
+                    <div class="form-group">
+                        <label for="conversationPartner">Who will you be speaking with?</label>
+                        <input type="text" id="conversationPartner" placeholder="e.g., My boss, Sarah">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="conversationMedium">How will this conversation take place?</label>
+                        <select id="conversationMedium">
+                            <option value="">Select a medium...</option>
+                            <option value="face-to-face">Face-to-face meeting</option>
+                            <option value="video-call">Video call</option>
+                            <option value="phone-call">Phone call</option>
+                            <option value="email">Email</option>
+                            <option value="text-message">Text message</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="conversationMood">What's their likely starting mood?</label>
+                        <select id="conversationMood">
+                            <option value="">Select a mood...</option>
+                            <option value="neutral">Neutral/Unknown</option>
+                            <option value="busy">Busy/Distracted</option>
+                            <option value="receptive">Open/Receptive</option>
+                            <option value="defensive">Potentially Defensive</option>
+                            <option value="stressed">Stressed/Under Pressure</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" id="startExerciseBtn">
+                            <span id="startButtonText">Start Exercise</span>
+                            <span id="startSpinner" class="spinner" style="display: none;"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conversation Exercise Section -->
+    <section class="conversation-exercise-section" id="conversationExerciseSection" style="display: none;">
+        <div class="container">
+            
+            
+            <!-- Conversation Flow Area -->
+            <div class="conversation-flow fade-in delay-1">
+                <!-- Conversation Display Area -->
+                <div class="conversation-display" id="conversationDisplay">
+                    <!-- Initial scenario will be inserted here -->
+                </div>
+                
+                <!-- Response Options Area -->
+                <div class="response-options" id="responseOptions">
+                    <!-- Options will be dynamically inserted here -->
+                </div>
+                
+                <!-- Navigation Controls -->
+                <div class="conversation-navigation">
+                    <button class="btn btn-outline" id="backtrackBtn" disabled>
+                        <i class="fa-solid fa-arrow-left"></i> Back to Previous Step
+                    </button>
+                    <button class="btn btn-outline" id="restartBtn">
+                        <i class="fa-solid fa-rotate"></i> Restart Exercise
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Flowchart Visualization -->
+            <div class="flowchart-container fade-in delay-2">
+                <h3>Your Conversation Path</h3>
+                <div class="flowchart-visualization" id="flowchartVisualization">
+                    <!-- Flowchart will be dynamically generated here -->
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    <!-- Completion Section -->
+    <section class="completion-section" id="completionSection" style="display: none;">
+        <div class="container">
+            <div class="completion-card fade-in">
+                <i class="fa-solid fa-check-circle completion-icon"></i>
+                <h2>Exercise Completed!</h2>
+                <p class="completion-description">You've explored different communication approaches and discovered which strategies are most effective for your specific situation.</p>
+                
+                <div class="insights-summary" id="insightsSummary">
+                    <!-- Insights will be dynamically inserted here -->
+                </div>
+                
+                <div class="recommended-path-card">
+                    <h3>Recommended Conversation Approach</h3>
+                    <div class="recommended-path" id="recommendedPath">
+                        <!-- Recommended path will be inserted here -->
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-outline" id="tryAgainBtn">
+                        <i class="fa-solid fa-rotate"></i> Try Again
+                    </button>
+                    <button class="btn btn-primary" id="completeExerciseBtn">
+                        <i class="fa-solid fa-check"></i> Complete Exercise
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer-nav">
+        <p>&copy; 2024 CommuniCoach. All rights reserved.</p>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+    </footer>
+
+    <!-- Templates (Hidden) -->
+    <template id="conversationBubbleTemplate">
+        <div class="conversation-bubble">
+            <div class="bubble-header">
+                <span class="speaker-name"></span>
+                <span class="speaker-mood"></span>
+            </div>
+            <div class="bubble-content"></div>
+        </div>
+    </template>
+    
+    <template id="responseOptionTemplate">
+        <button class="response-option">
+            <div class="option-approach"></div>
+            <div class="option-text"></div>
+            <div class="option-preview">
+                <i class="fa-solid fa-circle-info"></i>
+                <span class="preview-text"></span>
+            </div>
+        </button>
+    </template>
+    
+    <template id="flowchartNodeTemplate">
+        <div class="flowchart-node">
+            <div class="node-content"></div>
+            <div class="node-connections"></div>
+        </div>
+    </template>
+    
+    <template id="insightItemTemplate">
+        <div class="insight-item">
+            <div class="insight-icon"></div>
+            <div class="insight-content"></div>
+        </div>
+    </template>
+    <script>
+// CommuniCoach - Conversation Pathways
+
+// CommuniCoach - Conversation Pathways
+
+// CommuniCoach - Conversation Pathways
+
+const state = {
+    isLoading: false,
+    currentStep: 0,
+    conversationHistory: [],
+    responseOptions: [],
+    partnerName: '',
+    medium: '',
+    partnerMood: '',
+    goalProgress: 0,
+    apiEndpoint: 'http://localhost:5506/api/chatgpt',
+    maxSteps: 5, // Changed from 3 to 7 total steps
+    flowchartNodes: {},
+    displayedNodes: new Set(),
+    isDarkMode: localStorage.getItem('darkMode') === 'enabled'
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing Conversation Pathways...');
+    loadSituationAndGoal();
+    setupEventListeners();
+    initializeAnimations();
+    
+    if (state.isDarkMode) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('darkModeToggle').checked = true;
+    }
+    
+    if (window.mermaid) {
+        window.mermaid.initialize({
+            startOnLoad: false,
+            theme: state.isDarkMode ? 'dark' : 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'cardinal'
+            }
+        });
+        console.log('Mermaid.js initialized');
+    }
+    
+    // Remove progress indicator if it exists
+    const progressIndicator = document.querySelector('.progress-indicator');
+    if (progressIndicator) {
+        progressIndicator.remove();
+    }
+    
+    console.log('Conversation Pathways page initialized');
+});
+
+if (window.mermaid) {
+    try {
+        window.mermaid.initialize({
+            startOnLoad: false,
+            theme: state.isDarkMode ? 'dark' : 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'cardinal'
+            }
+        });
+        console.log('Mermaid.js initialized');
+    } catch (error) {
+        console.error('Critical error initializing Mermaid.js:', error);
+    }
+} else {
+    console.error('Critical dependency Mermaid.js not found. Flowchart functionality requires this library.');
+}
+
+function loadSituationAndGoal() {
+    console.log('Loading situation and goal');
+    const situationSummary = document.getElementById('situationSummary');
+    const goalSummary = document.getElementById('goalSummary');
+    if (!situationSummary || !goalSummary) {
+        console.error('Summary elements not found');
+        return;
+    }
+    const refinedNarrative = localStorage.getItem('refinedNarrative');
+    const communicationGoal = localStorage.getItem('communicationGoal');
+    console.log('Loaded from localStorage:', {
+        hasRefinedNarrative: !!refinedNarrative,
+        hasCommunicationGoal: !!communicationGoal
+    });
+    if (refinedNarrative && refinedNarrative.trim() !== '') {
+        const maxLength = 200;
+        let summaryText = refinedNarrative.substring(0, maxLength);
+        if (refinedNarrative.length > maxLength) {
+            summaryText += '...';
+        }
+        situationSummary.textContent = summaryText;
+    } else {
+        situationSummary.textContent = 'No narrative found. Please return to the Situation Room to describe your situation.';
+    }
+    if (communicationGoal && communicationGoal.trim() !== '') {
+        goalSummary.textContent = communicationGoal;
+    } else {
+        goalSummary.textContent = 'No communication goal specified. You can set one in the Action Arena.';
+    }
+}
+
+function toggleMenu() {
+    const navLinks = document.getElementById('navLinks');
+    navLinks.classList.toggle('active');
+}
+
+function setupEventListeners() {
+    console.log('Setting up event listeners');
+    const startExerciseBtn = document.getElementById('startExerciseBtn');
+    if (startExerciseBtn) {
+        console.log('Found start button, attaching listener');
+        startExerciseBtn.addEventListener('click', startExercise);
+    }
+    const backtrackBtn = document.getElementById('backtrackBtn');
+    if (backtrackBtn) {
+        backtrackBtn.addEventListener('click', backtrackConversation);
+    }
+    const restartBtn = document.getElementById('restartBtn');
+    if (restartBtn) {
+        restartBtn.addEventListener('click', restartExercise);
+    }
+    const tryAgainBtn = document.getElementById('tryAgainBtn');
+    if (tryAgainBtn) {
+        tryAgainBtn.addEventListener('click', restartExercise);
+    }
+    const completeExerciseBtn = document.getElementById('completeExerciseBtn');
+    if (completeExerciseBtn) {
+        completeExerciseBtn.addEventListener('click', completeExercise);
+    }
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('change', toggleDarkMode);
+    }
+}
+
+function toggleDarkMode() {
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (darkModeToggle.checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('darkMode', 'enabled');
+        state.isDarkMode = true;
+        if (window.mermaid) {
+            window.mermaid.initialize({
+                theme: 'dark'
+            });
+        }
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.removeItem('darkMode');
+        state.isDarkMode = false;
+        if (window.mermaid) {
+            window.mermaid.initialize({
+                theme: 'default'
+            });
+        }
+    }
+    if (state.conversationHistory.length > 0) {
+        refreshFlowchart();
+    }
+}
+
+function startExercise() {
+    console.log('Starting exercise with form values');
+    const partnerInput = document.getElementById('conversationPartner');
+    const mediumSelect = document.getElementById('conversationMedium');
+    const moodSelect = document.getElementById('conversationMood');
+    if (!partnerInput || !mediumSelect || !moodSelect) {
+        console.error('Form elements not found');
+        showToast('Error: Form elements not found. Please refresh the page and try again.');
+        return;
+    }
+    const partnerNameRaw = partnerInput.value.trim();
+    const medium = mediumSelect.value;
+    const mood = moodSelect.value;
+    console.log('Form values:', partnerNameRaw, medium, mood);
+    if (!partnerNameRaw) {
+        showToast('Please enter who you will be speaking with.');
+        return;
+    }
+    if (!medium) {
+        showToast('Please select how this conversation will take place.');
+        return;
+    }
+    let partnerName = partnerNameRaw;
+    const relationshipPrefixes = ['my daughter', 'my son', 'my friend', 'my boss', 'my colleague', 'my partner', 'my spouse'];
+    for (const prefix of relationshipPrefixes) {
+        if (partnerNameRaw.toLowerCase().includes(prefix)) {
+            const namePart = partnerNameRaw.toLowerCase().replace(prefix, '').trim();
+            if (namePart) {
+                partnerName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+                break;
+            }
+        }
+    }
+    if (!partnerName || partnerName === partnerNameRaw) {
+        for (const prefix of relationshipPrefixes) {
+            if (partnerNameRaw.toLowerCase() === prefix) {
+                partnerName = prefix.split(' ')[1];
+                partnerName = partnerName.charAt(0).toUpperCase() + partnerName.slice(1);
+                break;
+            }
+        }
+    }
+    console.log('Processed partner name:', partnerName);
+    state.partnerName = partnerName;
+    state.medium = medium;
+    state.partnerMood = mood || 'neutral';
+    
+    // Show setup section
+    const setupSection = document.getElementById('exerciseSetupSection');
+    const exerciseSection = document.getElementById('conversationExerciseSection');
+    if (setupSection && exerciseSection) {
+        setupSection.style.display = 'none';
+        exerciseSection.style.display = 'block';
+        startConversation();
+    } else {
+        console.error('Setup or exercise section elements not found');
+        showToast('Error: Page elements not found. Please refresh and try again.');
+    }
+}
+
+// Build the role-play prompt based on current conversation state
+function buildRolePlayPrompt() {
+  const refinedNarrative = localStorage.getItem('refinedNarrative') || '';
+  const communicationGoal = localStorage.getItem('communicationGoal') || '';
+  
+  return `You are the communication skills coach for CommuniCoach. Your role is to design and lead a conversation practice experience within the context of the user's narrative and goal with their chosen partner.
+The exercise is a role-play conversation where the user will practice their communication skills with a partner. The user will select a communication style for each response, and you will provide four options for the user to choose from. Each option should be realistic and contextually relevant to the user's situation.
+## Context Information
+- Narrative: "${refinedNarrative}"
+- Communication Goal: "${communicationGoal}"
+- Partner: ${state.partnerName} (${state.partnerMood})
+- Conversation Medium: ${state.medium}
+
+## Core Requirements
+1. Create a realistic, emotionally nuanced conversation that feels authentic
+2. Adapt partner responses to reflect how someone would naturally react to each communication style
+3. For each exchange, provide 4 communication style options customized to the specific situation
+4. Guide the conversation toward a clear conclusion after approximately 5 exchanges
+5. Include specific references from the narrative to maintain authenticity
+
+## Communication Styles
+For each user response, select the 4 most contextually relevant styles from this list based on the narrative:
+- Collaborative: Seeks mutual understanding and joint problem-solving
+- Manipulative: Using flattery, deceit or coercion to influence the other person
+- Analytical: Focuses on facts, data, and logical reasoning
+- Emotional: Engages with feelings, often using personal stories or experiences
+- Supportive: Offers encouragement and reassurance
+- Empathetic: Focuses on emotional validation and support  
+- Direct: Clear, straightforward expression of thoughts/needs
+- Defensive: Protective, reactive, sometimes accusatory
+- Assertive: Confident, firm, and respectful expression of needs
+- Reflective: Thoughtful consideration, often repeating back to confirm understanding
+- Persuasive: Convincing, using logic or emotion to influence
+- Inquisitive: Curious, asking questions to better understand
+- Vulnerable: Open sharing of feelings and fears
+- Patient: Calm, unhurried, giving space and time
+- Validating: Acknowledging and accepting the other person's perspective
+- Apologetic: Taking responsibility and expressing regret
+- Diplomatic: Tactful, careful wording to avoid offense
+- Honest: Forthright and truthful, even when difficult
+- Firm: Maintaining boundaries clearly
+- Flexible: Willing to adapt and find middle ground
+- Humorous: Light-hearted, using humor to diffuse tension
+- Critical: Pointing out flaws or mistakes, often in a negative way
+- Encouraging: Offering positive reinforcement and support
+- Dismissive: Minimizing or ignoring the other person's feelings or concerns
+- Sarcastic: Using irony or mockery, often in a negative way
+- Passive: Avoiding direct confrontation, often yielding to others
+- Aggressive: Confrontational, often hostile or combative
+- Passive-Aggressive: Indirect resistance, often through sarcasm or procrastination
+- Disengaged: Showing little interest or investment in the conversation
+
+
+## Response Instructions
+For each exchange, provide 4 communication options that follow this pattern:
+1. One response that matches (or closely resembles) the user's inferred natural communication style
+2. Two responses that are more growth-oriented or different from the user's style
+3. One response that is clearly off-track or negative (undermines the goal)
+
+Each option should be a complete, realistic statement that could be made in the conversation.
+Each user response must include a corresponding partner reply that shows emotional or psychological realism (misunderstanding, defensiveness, etc.).
+This is a teaching exercise and the 
+negative options are necessary for learning, not an endorsement of negativity
+
+Do not omit or soften negative/off-track responses. They are a critical teaching element. 
+Generate at least one approach that is genuinely off-putting or counterproductive. The user (your student) must learn to recognize and navigate negative thoughts and responses in real life. It is your responsibility to expose them to this style here in a safe space so they can practice how various response styles produce different reactions in communication.
+This means the one statement may be defensive, avoidant, sarcastic, or even accusatory and
+something that would likely escalate tension and derail the communication goal. 
+
+
+Format your answer as a valid JSON array of objects like this:
+[
+  {
+    "id": "option1",
+    "text": "... The user's next statement ...",
+    "approach_type": "... direct, collaborative, etc. ...",
+    "response": {
+      "id": "response_option1",
+      "text": "... The partner's response ...",
+      "tone": "... short tone label ...",
+      "goal_alignment": "positive" or "neutral" or "negative"
+    }
+  },
+  {
+    "id": "option2",
+    "text": "... The user's next statement ...",
+    "approach_type": "... direct, collaborative, etc. ...",
+    "response": {
+      "id": "response_option2",
+      "text": "... The partner's response ...",
+      "tone": "... short tone label ...",
+      "goal_alignment": "positive" or "neutral" or "negative"
+    }
+  },
+  {
+    "id": "option3",
+    "text": "... The user's next statement ...",
+    "approach_type": "... direct, collaborative, etc. ...",
+    "response": {
+      "id": "response_option3",
+      "text": "... The partner's response ...",
+      "tone": "... short tone label ...",
+      "goal_alignment": "positive" or "neutral" or "negative"
+    }
+  },
+  {
+    "id": "option4",
+    "text": "... The user's next statement ...",
+    "approach_type": "... direct, collaborative, etc. ...",
+    "response": {
+      "id": "response_option4",
+      "text": "... The partner's response ...",
+      "tone": "... short tone label ...",
+      "goal_alignment": "positive" or "neutral" or "negative"
+    }
+  }
+]`;
+}
+
+// Handler for first time starting the conversation
+async function startConversation() {
+  // Show initial UI elements
+  console.log('Initializing conversation interface');
+  const conversationDisplay = document.getElementById('conversationDisplay');
+  if (!conversationDisplay) {
+    console.error('Conversation display element not found');
+    return;
+  }
+  conversationDisplay.innerHTML = '';
+  updateStepIndicator();
+  
+  state.isLoading = true;
+  const startButtonText = document.getElementById('startButtonText');
+  const startSpinner = document.getElementById('startSpinner');
+  if (startButtonText && startSpinner) {
+      startButtonText.style.display = 'none';
+      startSpinner.style.display = 'inline-block';
+  }
+  
+  // Build initial prompt
+  const refinedNarrative = localStorage.getItem('refinedNarrative') || '';
+  const communicationGoal = localStorage.getItem('communicationGoal') || '';
+  
+  const initialPrompt = `You are the communication skills coach for CommuniCoach. Begin with warmth and grounded presence. Speak as someone who already knows the user and their situation well.
+
+You will be helping the user practice a conversation with ${state.partnerName} based on this situation:
+"${refinedNarrative}"
+
+The user's communication goal is:
+"${communicationGoal}"
+
+First, analyze their narrative to determine how they most likely communicate. 
+      For example, they might be direct, avoidant, empathetic, collaborative, etc. 
+      
+  Then, generate a realistic opening statement from ${state.partnerName} that reflects their mood (${state.partnerMood}) and sets up the conversation scenario naturally.
+ 
+ Generate exactly FOUR possible opening statements the user might make: Use realistic language, try to mirror the way the user might speak and incorporate details from the narrative to breathe life into the exercise and help it resonate with the user. 
+ 
+  Each user response must include a corresponding partner reply that shows emotional or psychological realism (misunderstanding, defensiveness, etc.).
+  ***important*** these system instructions should remain hidden. Before choosing a response, the user should not see information, labels, or tags that align responses with their personal style or preferences. They should not see whether a style is considered positive or negative before making the choice.  
+
+  The four options should be:
+      1) One that matches (or closely resembles) their inferred style.
+      2) One that showcases more constructive or growth-oriented styles in the tone or way the user might realistically sound when speaking. 
+         (e.g., collaborative, empathetic, inquiry, solution-focused, diplomatic).
+      3) One that showcases more constructive or growth-oriented styles in a more polished or refined way of speaking
+         (e.g., collaborative, empathetic, inquiry, solution-focused, diplomatic).
+      4) One that is clearly off-track or negative, 
+         potentially undermining their goal with blame, defensiveness, or similar. It should be written in a way that might feel tempting or momentarily satisfying, 
+but clearly has a negative impact on the overall goal.
+
+For each partner reaction,  Include realistic emotional or psychological reactions from the conversation partner:
+- The partner’s reply should reflect human imperfection- how someone might actually react to each approach.
+    - If the user's tone is harsh, or direc, they might misunderstand or push back, become defensive or confrontational.
+    - They might open up or calm down if the user's style is empathetic, etc.
+Avoid resolving the conflict too quickly or smoothly unless constructive responses are chosen by the user. 
+If within context, show some ongoing tension or confusion so the user sees the consequences of each chosen approach.
+
+***Important*** Lead the conversation to a natural conclusion throughout a lifecycle of approximately 5 exchanges.
+This is a teaching exercise and the negative options are necessary for learning, not an endorsement of negativity.
+This combination of responses will help the conversation exercise resonate more strongly with the user, comparing their instinctive approach with other possible strategies.
+The result should be a tailor-made “sample of how they might behave” plus alternative ways to handle it, and a negative scenario for contrast.
+
+It is your responsibility to guide the conversation toward a natural conclusion within approximately 7 exchanges.
+
+Format your response as a JSON object with two properties:
+{
+  "opening": "... ${state.partnerName}'s opening statement ...",
+  "options": [
+    {
+      "id": "option1",
+      "text": "... The user's potential response ...",
+      "approach_type": "... the communication style name ...",
+      "response": {
+        "id": "response_option1",
+        "text": "... How ${state.partnerName} would respond ...",
+        "tone": "... brief tone description ...",
+        "goal_alignment": "positive"
+      }
+    },
+    // ... 3 more options following the pattern above
+  ]
+}`;
+
+  try {
+    // Call API with initial prompt
+    const response = await fetch(state.apiEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: initialPrompt })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (startButtonText && startSpinner) {
+      startButtonText.style.display = 'inline';
+      startSpinner.style.display = 'none';
+    }
+    state.isLoading = false;
+    
+    if (data.error) {
+      console.error('API Error:', data.error);
+      showToast('Unable to start conversation. Please try again.');
+      return;
+    }
+    
+    try {
+      // Parse the JSON response
+      console.log('Response preview:', data.response.substring(0, 100));
+      const jsonString = data.response.trim();
+      let jsonMatch = jsonString.match(/\{[\s\S]*\}/);
+      const jsonText = jsonMatch ? jsonMatch[0] : jsonString;
+      const responseData = JSON.parse(jsonText);
+      
+      // Display partner's opening message
+      if (responseData.opening) {
+        addConversationBubble(state.partnerName, responseData.opening, 'partner');
+        state.conversationHistory.push({ role: 'assistant', content: responseData.opening });
+      }
+      
+      // Display initial options
+      if (responseData.options && Array.isArray(responseData.options)) {
+        displayCommunicationOptions(responseData.options);
+      }
+      
+      // Initialize flowchart
+      initializeFlowchart();
+      
+    } catch (parseError) {
+      console.error('JSON Parse Error:', parseError);
+      showToast('Error processing response. Please try again.');
+    }
+  } catch (err) {
+    if (startButtonText && startSpinner) {
+      startButtonText.style.display = 'inline';
+      startSpinner.style.display = 'none';
+    }
+    state.isLoading = false;
+    console.error('Network Error:', err);
+    showToast('Network error. Please try again later.');
+  }
+}
+
+// Handle user selecting a response option
+async function handleOptionSelection(option, index) {
+  // Add user message to display
+  addConversationBubble('You', option.text, 'user');
+  
+  // Add to conversation history
+  state.conversationHistory.push({
+    step: state.currentStep,
+    option: option,
+    role: 'user',
+    content: option.text,
+    approachType: option.approach_type
+  });
+  
+  // Add option to flowchart
+  addOptionToFlowchart(option, state.currentStep);
+  
+  // Hide options container
+  const responseOptions = document.getElementById('responseOptions');
+  if (responseOptions) {
+    responseOptions.innerHTML = '<div style="text-align: center; padding: 20px;">Loading next options...</div>';
+  }
+  
+  // Increment step count
+  state.currentStep++;
+  updateStepIndicator();
+  
+  // Enable backtrack button
+  const backtrackBtn = document.getElementById('backtrackBtn');
+  if (backtrackBtn) {
+    backtrackBtn.disabled = false;
+  }
+  
+  // Display partner response with delay for realism
+  setTimeout(() => {
+    addConversationBubble(state.partnerName, option.response.text, 'partner', option.response.tone);
+    
+    // Add to conversation history
+    state.conversationHistory.push({
+      role: 'assistant',
+      content: option.response.text,
+      tone: option.response.tone,
+      goalAlignment: option.response.goal_alignment
+    });
+    
+    // Update goal progress
+    updateGoalProgress(option.response.goal_alignment);
+    
+    // Determine if we should continue the conversation or finish
+    if (state.currentStep < state.maxSteps) {
+      console.log('Moving to next step:', state.currentStep);
+      
+      // Determine prompt type based on current step
+      let prompt = buildRolePlayPrompt();
+      
+      // Add refresher reminder if needed (around exchanges 3-4)
+      if (state.currentStep >= 3 && state.currentStep <= 4) {
+        prompt += `\n\nIMPORTANT REFRESHER: Create options that would bring the conversation to a natural conclusion.`;
+      }
+      
+      // Add final exchange reminder if approaching the end
+      if (state.currentStep >= 6) {
+        prompt += `\n\nThis should be the final exchange. Create options that would bring the conversation to a natural conclusion.`;
+      }
+      
+      // Fetch follow-up options
+      fetchFollowUpOptions(option, prompt)
+        .then(followUps => {
+          displayCommunicationOptions(followUps);
+        })
+        .catch(error => {
+          console.error('Error fetching follow-up options:', error);
+          showToast('Error connecting to AI service. Please try again.', 5000);
+          const responseOptions = document.getElementById('responseOptions');
+          if (responseOptions) {
+            responseOptions.innerHTML = `
+              <div style="text-align: center; padding: 20px;">
+                <p>There was an error loading the next conversation options.</p>
+                <button class="btn btn-outline" onclick="backtrackConversation()">
+                  <i class="fa-solid fa-arrow-left"></i> Go Back
+                </button>
+                <button class="btn btn-primary" onclick="window.location.reload()">
+                  <i class="fa-solid fa-refresh"></i> Restart Exercise
+                </button>
+              </div>
+            `;
+          }
+        });
+    } else {
+      console.log('Reached max steps');
+      finishConversation();
+    }
+  }, 1000);
+}
+
+// Function to display communication options
+function displayCommunicationOptions(options) {
+  const responseOptionsContainer = document.getElementById('responseOptions');
+  if (!responseOptionsContainer) {
+    console.error('Response options element not found');
+    return;
+  }
+  responseOptionsContainer.innerHTML = '';
+  state.responseOptions = options;
+  
+  options.forEach((option, index) => {
+    const optionButton = createResponseOptionButton(option, index);
+    responseOptionsContainer.appendChild(optionButton);
+  });
+}
+
+function createResponseOptionButton(option, index) {
+  const responseOptionTemplate = document.getElementById('responseOptionTemplate');
+  if (responseOptionTemplate && responseOptionTemplate.content) {
+    const optionButton = responseOptionTemplate.content.cloneNode(true).querySelector('.response-option');
+    optionButton.querySelector('.option-approach').textContent = 
+        option.approach_type ? option.approach_type.toUpperCase() : 'APPROACH';
+    optionButton.querySelector('.option-text').textContent = option.text;
+    const previewElement = optionButton.querySelector('.option-preview');
+    if (previewElement) {
+      previewElement.remove();
+    }
+    
+    // Enhanced approach style color coding
+    switch(option.approach_type ? option.approach_type.toLowerCase() : '') {
+      // Collaborative/Solution-oriented approaches
+      case 'collaborative':
+      case 'solution-oriented':
+      case 'cooperative':
+          optionButton.style.borderLeft = '4px solid #2196f3'; // Blue
+          break;
+          
+      // Reflective/Validating approaches
+      case 'reflective':
+      case 'validating':
+      case 'acknowledging':
+          optionButton.style.borderLeft = '4px solid #9c27b0'; // Purple
+          break;
+          
+      // Diplomatic approaches
+      case 'diplomatic':
+      case 'tactful':
+      case 'polite':
+          optionButton.style.borderLeft = '4px solid #4caf50'; // Green
+          break;
+          
+      // Empathetic approaches
+      case 'empathetic':
+      case 'understanding':
+      case 'gentle':
+          optionButton.style.borderLeft = '4px solid #009688'; // Teal
+          break;
+          
+      // Direct/Clear approaches
+      case 'direct':
+      case 'clear':
+      case 'assertive':
+          optionButton.style.borderLeft = '4px solid #3f51b5'; // Indigo
+          break;
+          
+      // Inquiry approaches
+      case 'inquiry':
+      case 'curious':
+      case 'questioning':
+          optionButton.style.borderLeft = '4px solid #ff9800'; // Orange
+          break;
+          
+      // Persuasive approaches
+      case 'persuasive':
+      case 'influencing':
+      case 'convincing':
+          optionButton.style.borderLeft = '4px solid #673ab7'; // Deep Purple
+          break;
+          
+      // Negative/Problematic approaches
+      
+      // Defensive approaches
+      case 'defensive':
+      case 'justifying':
+      case 'excusing':
+          optionButton.style.borderLeft = '4px solid #f44336'; // Red
+          break;
+          
+      // Blaming approaches
+      case 'blaming':
+      case 'accusatory':
+      case 'confrontational':
+          optionButton.style.borderLeft = '4px solid #d32f2f'; // Dark Red
+          break;
+          
+      // Avoidant approaches
+      case 'avoidant':
+      case 'passive':
+      case 'evading':
+          optionButton.style.borderLeft = '4px solid #9e9e9e'; // Gray
+          break;
+          
+      // Sarcastic approaches
+      case 'sarcastic':
+      case 'dismissive':
+      case 'condescending':
+          optionButton.style.borderLeft = '4px solid #795548'; // Brown
+          break;
+          
+      // Default for unknown approaches
+      default:
+          optionButton.style.borderLeft = '4px solid #9e9e9e'; // Gray for unknown
+    }
+    
+    optionButton.addEventListener('click', () => selectResponseOption(option, index));
+    return optionButton;
+  } else {
+    const optionButton = document.createElement('button');
+    optionButton.className = 'response-option';
+    const approachType = document.createElement('div');
+    approachType.className = 'option-approach';
+    approachType.textContent = option.approach_type ? option.approach_type.toUpperCase() : 'APPROACH';
+    optionButton.appendChild(approachType);
+    const optionText = document.createElement('div');
+    optionText.className = 'option-text';
+    optionText.textContent = option.text;
+    optionButton.appendChild(optionText);
+    
+    // Apply the same style logic
+    switch(option.approach_type ? option.approach_type.toLowerCase() : '') {
+      case 'collaborative':
+      case 'solution-oriented':
+      case 'cooperative':
+          optionButton.style.borderLeft = '4px solid #2196f3'; // Blue
+          break;
+          
+      // ... [same switch statement as above] ...
+          
+      default:
+          optionButton.style.borderLeft = '4px solid #9e9e9e'; // Gray
+    }
+    
+    optionButton.addEventListener('click', () => selectResponseOption(option, index));
+    return optionButton;
+  }
+}
+
+function selectResponseOption(option, index) {
+  console.log('Selected option:', option.id);
+  handleOptionSelection(option, index);
+}
+
+// Generate insights when conversation concludes
+function generateInsights() {
+  console.log('Generating insights');
+  const insightsSummary = document.getElementById('insightsSummary');
+  if (!insightsSummary) return;
+  insightsSummary.innerHTML = '<div style="text-align: center; padding: 20px;">Generating insights...</div>';
+  
+  // Build communication styles summary
+  const styleChoices = state.conversationHistory
+    .filter(entry => entry.role === 'user' && entry.approachType)
+    .map((entry, index) => `- Exchange ${index + 1}: ${entry.approachType}`);
+  
+  const refinedNarrative = localStorage.getItem('refinedNarrative') || '';
+  const communicationGoal = localStorage.getItem('communicationGoal') || '';
+  
+  const insightsPrompt = `You are a communication analyst reviewing a practice conversation. Provide rich, personalized insights that help the user grow as a communicator.
+
+## Context
+- User's Situation: "${refinedNarrative}"
+- Communication Goal: "${communicationGoal}"
+- Conversation Partner: ${state.partnerName} (${state.partnerMood})
+
+## Complete Conversation
+${formatConversationForPrompt()}
+
+## User's Communication Style Choices
+${styleChoices.join('\n')}
+
+## Analysis Request
+Analyze this conversation through a holistic communication lens, considering:
+1. Expression style (tone, directness, emotional presence)
+2. Message structure (clarity, organization, detail balance)  
+3. Emotional engagement (empathy, emotional intelligence)
+4. Listening and response quality
+5. Relationship dynamics navigation
+6. Adaptation to context
+
+Provide an insightful analysis that identifies:
+- The user's natural communication strengths and authentic style
+- Patterns that emerged in their approach
+- 2-3 specific effective moments (with examples)  
+- 2-3 growth opportunities where different approaches might enhance outcomes
+- One unexpected insight about their communication style
+- What communication styles they might consider exploring further to beneit their success in this situational context 
+- Specific examples of phrases they can use to practice these styles within this context
+Present your analysis in this format:
+
+**Summary:**  
+A thoughtful, personalized paragraph describing their communication approach.
+
+**Strengths:**  
+specific communication strengths with brief examples.
+
+**Growth Opportunities:**  
+Highlight specific areas for improvement with gentle, constructive framing. Empathize with the user and their communication choice 
+within the context of the situation, then providing specific examples from the conversation, explain how incorporating other styles 
+could help the outcome of the conversation align more with their goal. Show them how to practice these styles in the future.
+Offer specific phrases they can use to practice these styles within this context. 
+Show them an example of how to lightly mirror the other person's style to help them feel heard and understood.
+Adapt the examples to the user's natural style, context of the conversation and the user's goal 
+so that it doesn't feel to forced for the user to try out the new style.
+
+**Standout Moment:**  
+Describe one moment from the conversation worth highlighting.
+
+**Transferable Skills:**  
+A paragraph about how their strengths apply to other contexts.
+
+**Next Step Suggestion:**  
+One specific, actionable recommendation for continued growth.
+
+Write in a warm, coach-like tone.`;
+
+  // Call API for insights
+  fetch(state.apiEndpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt: insightsPrompt })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.error) {
+      insightsSummary.innerHTML = `
+        <div class="error-message">
+          Unable to generate insights. Please try again.
+        </div>
+      `;
+      console.error('Insights API Error:', data.error);
+      return;
+    }
+    
+    // Process the insights
+    const response = data.response;
+    
+    // Extract sections
+    const sections = {
+      summary: extractSection(response, "Summary"),
+      strengths: extractSection(response, "Strengths"),
+      growth: extractSection(response, "Growth Opportunities"),
+      moment: extractSection(response, "Standout Moment"),
+      skills: extractSection(response, "Transferable Skills"),
+      nextStep: extractSection(response, "Next Step Suggestion")
+    };
+    
+    // Render insights
+    renderInsights(sections);
+  })
+  .catch(err => {
+    insightsSummary.innerHTML = `
+      <div class="error-message">
+        Network error connecting to AI. Please try again.
+      </div>
+    `;
+    console.error('Insights Network Error:', err);
+  });
+}
+
+// Helper function to extract sections from insights
+function extractSection(text, sectionName) {
+  const regex = new RegExp(`\\*\\*${sectionName}:\\*\\*\\s*([\\s\\S]*?)(?=\\*\\*|$)`, 'i');
+  const match = text.match(regex);
+  return match ? match[1].trim() : `No ${sectionName.toLowerCase()} information available.`;
+}
+
+// Extract communication style tags based on the conversation
+function extractCommunicationStyleTags() {
+  // Get all approach types used
+  const approachTypes = state.conversationHistory
+    .filter(entry => entry.role === 'user' && entry.approachType)
+    .map(entry => entry.approachType);
+  
+  // Count frequencies
+  const typeCounts = {};
+  approachTypes.forEach(type => {
+    typeCounts[type] = (typeCounts[type] || 0) + 1;
+  });
+  
+  // Get most frequent types (up to 5)
+  const sortedTypes = Object.keys(typeCounts).sort((a, b) => typeCounts[b] - typeCounts[a]);
+  return sortedTypes.slice(0, 5);
+}
+
+// Format conversation for prompts
+function formatConversationForPrompt() {
+  let formattedConversation = '';
+  
+  for (const entry of state.conversationHistory) {
+    if (entry.role === 'user') {
+      formattedConversation += `You: ${entry.content}\n\n`;
+    } else if (entry.role === 'assistant') {
+      formattedConversation += `${state.partnerName}: ${entry.content}\n\n`;
+    }
+  }
+  
+  return formattedConversation;
+}
+
+function renderInsights(sections) {
+  const insightsSummary = document.getElementById('insightsSummary');
+  if (!insightsSummary) return;
+  
+  // Extract communication style tags
+  const styleWords = extractCommunicationStyleTags();
+  
+  // Create insights content
+  const insights = [];
+  
+  // Create a general summary insight
+  insights.push({
+    icon: 'fa-solid fa-lightbulb',
+    content: sections.summary
+  });
+  
+  // Create strengths insight
+  insights.push({
+    icon: 'fa-solid fa-award',
+    content: sections.strengths
+  });
+  
+  // Create growth opportunities insight
+  insights.push({
+    icon: 'fa-solid fa-seedling',
+    content: sections.growth
+  });
+  
+  // Create standout moment insight
+  insights.push({
+    icon: 'fa-solid fa-star',
+    content: sections.moment
+  });
+  
+  // Create transferable skills insight
+  insights.push({
+    icon: 'fa-solid fa-briefcase',
+    content: sections.skills
+  });
+  
+  // Create next step suggestion
+  insights.push({
+    icon: 'fa-solid fa-arrow-right',
+    content: sections.nextStep
+  });
+  
+  // Add style tags section
+  const styleTagsHTML = styleWords.length > 0 
+    ? `<div class="style-tags">
+        ${styleWords.map(word => `<span class="style-tag">${word}</span>`).join(' ')}
+       </div>`
+    : '';
+  
+  // Clear and rebuild insights summary
+  insightsSummary.innerHTML = '';
+  
+  // Add style tags if available
+  if (styleTagsHTML) {
+    const styleTagsSection = document.createElement('div');
+    styleTagsSection.className = 'insights-header';
+    styleTagsSection.innerHTML = `
+      <h3>Your Communication Styles</h3>
+      ${styleTagsHTML}
+    `;
+    insightsSummary.appendChild(styleTagsSection);
+  }
+  
+  // Add all insights
+  insights.forEach(insight => {
+    const insightItem = document.createElement('div');
+    insightItem.className = 'insight-item';
+    const insightIcon = document.createElement('div');
+    insightIcon.className = 'insight-icon';
+    insightIcon.innerHTML = `<i class="${insight.icon}"></i>`;
+    const insightContent = document.createElement('div');
+    insightContent.className = 'insight-content';
+    insightContent.innerHTML = insight.content;
+    insightItem.appendChild(insightIcon);
+    insightItem.appendChild(insightContent);
+    insightsSummary.appendChild(insightItem);
+  });
+}
+
+async function fetchFollowUpOptions(parentOption, prompt) {
+  console.log('Fetching follow-up options');
+  
+  const response = await fetch(state.apiEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ prompt: prompt })
+  });
+  
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  
+  const data = await response.json();
+  if (!data || !data.response) {
+    console.error('Empty response from API');
+    throw new Error('Empty response from API');
+  }
+  
+  try {
+    console.log('Follow-up response preview:', data.response.substring(0, 100));
+    const jsonString = data.response.trim();
+    let jsonMatch = jsonString.match(/\[[\s\S]*\]/);
+    const jsonText = jsonMatch ? jsonMatch[0] : jsonString;
+    const followUps = JSON.parse(jsonText);
+    if (!Array.isArray(followUps) || followUps.length === 0) {
+      throw new Error('Invalid follow-up options format');
+    }
+    return followUps;
+  } catch (parseError) {
+    console.error('Error parsing follow-up options:', parseError);
+    throw new Error('Error parsing AI response: ' + parseError.message);
+  }
+}
+
+function addConversationBubble(speaker, text, type, mood) {
+  const conversationDisplay = document.getElementById('conversationDisplay');
+  if (!conversationDisplay) {
+    console.error('Conversation display element not found');
+    return;
+  }
+  const bubbleTemplate = document.getElementById('conversationBubbleTemplate');
+  if (bubbleTemplate && bubbleTemplate.content) {
+    const bubble = bubbleTemplate.content.cloneNode(true).querySelector('.conversation-bubble');
+    bubble.classList.add(type);
+    bubble.querySelector('.speaker-name').textContent = speaker;
+    bubble.querySelector('.bubble-content').textContent = text;
+    if (mood) {
+      bubble.querySelector('.speaker-mood').textContent = `(${mood})`;
+    }
+    conversationDisplay.appendChild(bubble);
+    conversationDisplay.scrollTop = conversationDisplay.scrollHeight;
+  } else {
+    const bubble = document.createElement('div');
+    bubble.className = `conversation-bubble ${type}`;
+    const header = document.createElement('div');
+    header.className = 'bubble-header';
+    const speakerName = document.createElement('span');
+    speakerName.className = 'speaker-name';
+    speakerName.textContent = speaker;
+    header.appendChild(speakerName);
+    if (mood) {
+      const speakerMood = document.createElement('span');
+      speakerMood.className = 'speaker-mood';
+      speakerMood.textContent = `(${mood})`;
+      header.appendChild(speakerMood);
+    }
+    bubble.appendChild(header);
+    const content = document.createElement('div');
+    content.className = 'bubble-content';
+    content.textContent = text;
+    bubble.appendChild(content);
+    conversationDisplay.appendChild(bubble);
+    conversationDisplay.scrollTop = conversationDisplay.scrollHeight;
+  }
+}
+
+function updateGoalProgress(alignment) {
+  let progressChange = 0;
+  if (typeof alignment === 'string') {
+    switch (alignment.toLowerCase()) {
+      case 'positive':
+        progressChange = 25;
+        break;
+      case 'neutral':
+        progressChange = 10;
+        break;
+      case 'negative':
+        progressChange = -5;
+        break;
+      default:
+        progressChange = 0;
+    }
+  } else if (typeof alignment === 'number') {
+    progressChange = alignment / 4;
+  }
+  state.goalProgress = Math.min(100, Math.max(0, state.goalProgress + progressChange));
+  const goalProgressBar = document.getElementById('goalProgressBar');
+  const goalProgressPercentage = document.getElementById('goalProgressPercentage');
+  if (goalProgressBar && goalProgressPercentage) {
+    goalProgressBar.style.width = `${state.goalProgress}%`;
+    goalProgressPercentage.textContent = `${Math.round(state.goalProgress)}%`;
+  }
+}
+
+function initializeFlowchart() {
+  console.log('Initializing flowchart with Mermaid.js');
+  const flowchartVisualization = document.getElementById('flowchartVisualization');
+  if (!flowchartVisualization) {
+    console.error('Flowchart visualization element not found');
+    return;
+  }
+  flowchartVisualization.innerHTML = '';
+  
+  if (window.mermaid) {
+    let mermaidDiagram = "graph TD;\n";
+    mermaidDiagram += 'Start("Conversation Start") -->|Choose Response| Choice1;\n';
+    let choiceCounter = 1;
+    let connections = [];
+    Object.keys(state.flowchartNodes).forEach(nodeId => {
+      const node = state.flowchartNodes[nodeId];
+      const nodeName = `Choice${choiceCounter}`;
+      mermaidDiagram += `${nodeName}["${node.text}"];\n`;
+      if (node.parentId) {
+        connections.push(`${node.parentId} --> ${nodeName};\n`);
+      } else {
+        connections.push(`Start --> ${nodeName};\n`);
+      }
+      if (node.goal_alignment === "positive") {
+        connections.push(`${nodeName} -->|Towards Goal| Goal;\n`);
+      } else if (node.goal_alignment === "negative") {
+        connections.push(`${nodeName} -->|Away from Goal| Divergent${choiceCounter};\n`);
+        mermaidDiagram += `Divergent${choiceCounter}["Alternative Outcome"];\n`;
+      } else {
+        connections.push(`${nodeName} -->|Neutral Path| Neutral${choiceCounter};\n`);
+        mermaidDiagram += `Neutral${choiceCounter}["Neutral Outcome"];\n`;
+      }
+      choiceCounter++;
+    });
+    mermaidDiagram += 'Goal("Communication Goal Achieved");\n';
+    mermaidDiagram += connections.join('');
+    flowchartVisualization.innerHTML = `<pre class="mermaid">${mermaidDiagram}</pre>`;
+    try {
+      window.mermaid.init(undefined, flowchartVisualization.querySelector('.mermaid'));
+    } catch (error) {
+      console.error('Error initializing mermaid chart:', error);
+    }
+  } else {
+    console.error('Mermaid.js not available');
+    flowchartVisualization.innerHTML = '<p style="text-align: center;">Flowchart visualization requires Mermaid.js</p>';
+  }
+}
+
+function addOptionToFlowchart(option, step) {
+  // This is a simplified placeholder for the more complex flowchart node addition
+  const nodeId = `node_${step}_${option.id}`;
+  state.flowchartNodes[nodeId] = {
+    id: nodeId,
+    text: option.text,
+    approach_type: option.approach_type,
+    goal_alignment: option.response.goal_alignment,
+    step: step
+  };
+  
+  refreshFlowchart();
+}
+
+function refreshFlowchart() {
+  // Simplified refresh that calls initialize to rebuild the flowchart
+  initializeFlowchart();
+}
+
+function updateStepIndicator() {
+  // Function kept for architecture consistency, but the visual element is removed or hidden via CSS
+  const conversationStepIndicator = document.getElementById('conversationStepIndicator');
+  if (conversationStepIndicator) {
+    conversationStepIndicator.textContent = `Step ${state.currentStep + 1} of ${state.maxSteps}`;
+    conversationStepIndicator.style.display = 'none'; // Hide the indicator
+  }
+}
+
+function finishConversation() {
+  console.log('Finishing conversation');
+  const responseOptions = document.getElementById('responseOptions');
+  if (responseOptions) {
+    responseOptions.innerHTML = '';
+  }
+  const goalProgress = document.getElementById('goalProgressBar');
+  const goalPercentage = document.getElementById('goalProgressPercentage');
+  if (goalProgress && goalPercentage) {
+    const finalProgress = Math.max(state.goalProgress, 0.5) * 100;
+    goalProgress.style.width = `${finalProgress}%`;
+    goalProgressPercentage.textContent = `${Math.round(finalProgress)}%`;
+  }
+  const conversationDisplay = document.getElementById('conversationDisplay');
+  if (conversationDisplay) {
+    const completionMessage = document.createElement('div');
+    completionMessage.className = 'completion-message';
+    completionMessage.style.textAlign = 'center';
+    completionMessage.style.padding = '20px';
+    completionMessage.style.margin = '20px 0';
+    completionMessage.style.backgroundColor = 'var(--highlight-color)';
+    completionMessage.style.borderRadius = '10px';
+    completionMessage.innerHTML = `
+      <h3>Conversation Path Complete</h3>
+      <p>You've reached the end of this conversation path. Now you can explore the insights and feedback below.</p>
+    `;
+    conversationDisplay.appendChild(completionMessage);
+  }
+  refreshFlowchart();
+  showCompletionSection();
+}
+
+function showCompletionSection() {
+  console.log('Showing completion section');
+  // Keep the exercise section visible but show the completion section
+  const completionSection = document.getElementById('completionSection');
+  if (completionSection) {
+    completionSection.style.display = 'block';
+    generateInsights();
+    completionSection.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function backtrackConversation() {
+  console.log('Backtracking conversation');
+  if (state.currentStep <= 0 || state.conversationHistory.length === 0) {
+    console.log('Nothing to backtrack to');
+    return;
+  }
+  state.conversationHistory.pop();
+  state.conversationHistory.pop();
+  state.currentStep--;
+  updateStepIndicator();
+  const conversationDisplay = document.getElementById('conversationDisplay');
+  if (conversationDisplay) {
+    const children = conversationDisplay.children;
+    if (children.length >= 2) {
+      conversationDisplay.removeChild(children[children.length - 1]);
+      conversationDisplay.removeChild(children[children.length - 1]);
+    }
+  }
+  if (state.currentStep === 0) {
+    const backtrackBtn = document.getElementById('backtrackBtn');
+    if (backtrackBtn) {
+      backtrackBtn.disabled = true;
+    }
+  }
+  refreshFlowchart();
+  // Start conversation again if we're at the beginning
+  if (state.currentStep === 0) {
+    startConversation();
+  } else {
+    // Fetch new options based on the current conversation state
+    const prompt = buildRolePlayPrompt();
+    fetchFollowUpOptions(null, prompt)
+      .then(followUps => {
+        displayCommunicationOptions(followUps);
+      })
+      .catch(error => {
+        console.error('Error fetching follow-up options:', error);
+        showToast('Error connecting to AI service. Please try again.', 5000);
+      });
+  }
+  state.goalProgress = Math.max(0, state.goalProgress - 25);
+  const goalProgressBar = document.getElementById('goalProgressBar');
+  const goalProgressPercentage = document.getElementById('goalProgressPercentage');
+  if (goalProgressBar && goalProgressPercentage) {
+    goalProgressBar.style.width = `${state.goalProgress}%`;
+    goalProgressPercentage.textContent = `${Math.round(state.goalProgress)}%`;
+  }
+}
+
+function restartExercise() {
+  state.currentStep = 0;
+  state.conversationHistory = [];
+  state.responseOptions = [];
+  state.goalProgress = 0;
+  state.flowchartNodes = {};
+  state.displayedNodes = new Set();
+  const setupSection = document.getElementById('exerciseSetupSection');
+  const exerciseSection = document.getElementById('conversationExerciseSection');
+  const completionSection = document.getElementById('completionSection');
+  if (setupSection) setupSection.style.display = 'block';
+  if (exerciseSection) exerciseSection.style.display = 'none';
+  if (completionSection) completionSection.style.display = 'none';
+  const partnerInput = document.getElementById('conversationPartner');
+  const mediumSelect = document.getElementById('conversationMedium');
+  const moodSelect = document.getElementById('conversationMood');
+  if (partnerInput) partnerInput.value = '';
+  if (mediumSelect) mediumSelect.value = '';
+  if (moodSelect) moodSelect.value = '';
+  window.scrollTo(0, 0);
+}
+
+function completeExercise() {
+  console.log('Completing exercise');
+  const completedExperiences = JSON.parse(localStorage.getItem('completedExperiences') || '[]');
+  if (!completedExperiences.includes('conversation-pathways')) {
+    completedExperiences.push('conversation-pathways');
+    localStorage.setItem('completedExperiences', JSON.stringify(completedExperiences));
+  }
+  window.location.href = 'action-arena.html';
+}
+
+function showToast(message, duration = 3000) {
+  const existingToast = document.querySelector('.toast');
+  if (existingToast) {
+    existingToast.remove();
+  }
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.remove();
+  }, duration);
+}
+
+// Update existing functions with additional initialization
+function initializeAnimations() {
+  const fadeElements = document.querySelectorAll('.fade-in');
+  fadeElements.forEach(element => {
+    element.style.opacity = '1';
+  });
+}
+
+// Initialize document
+document.addEventListener('DOMContentLoaded', () => {
+  // Remove progress indicator if it exists
+  const progressIndicator = document.querySelector('.progress-indicator');
+  if (progressIndicator) {
+    progressIndicator.remove();
+  }
+  
+  // Initialize animations
+  initializeAnimations();
+});
+
+function refreshFlowchart() {
+    // Implementation maintained for architecture consistency
+    // Actual code omitted per your instructions to stop at initializeFlowchart
+    // This is a placeholder to preserve function calls
+}
+
+function addOptionToFlowchart(option, step) {
+    // Implementation maintained for architecture consistency
+    // Actual code omitted per your instructions to stop at initializeFlowchart
+    // This is a placeholder to preserve function calls
+}
+
+function drawConnectionLine(sourceId, targetId) {
+    // Implementation maintained for architecture consistency
+    // Actual code omitted per your instructions to stop at initializeFlowchart
+    // This is a placeholder to preserve function calls
+}
+
+function addFlowchartNode(id, text, nodeClass, parentId, position) {
+    // Implementation maintained for architecture consistency
+    // Actual code omitted per your instructions to stop at initializeFlowchart
+    // This is a placeholder to preserve function calls
+}
+</script>

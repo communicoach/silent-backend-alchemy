@@ -1,0 +1,2778 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Your Refined Narrative - CommuniCoach</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+    /* ====== COLORS & THEMES ====== */
+    :root {
+        --primary-color: #2D4A3E;
+        --secondary-color: #1b4072;
+        --accent-color: #A1CE3E;
+        --highlight-color: #DCEFC6;
+        --energy-color: #74B49B;
+        --error-color: #FF6B6B;
+        --shadow-color: rgba(45, 74, 62, 0.15);
+        --bg-color: #ffffff;
+        --bg-secondary: #f9fef3;
+        --bg-card: #ffffff;
+        --text-primary: #2d4a3e;
+        --text-secondary: #555;
+        --text-light: #ffffff;
+        --border-color: #e0e0e0;
+        --input-bg: #ffffff;
+        --footer-bg: url('.vscode/Images/situationfooter.png'); /* Adjusted path */
+        --progress-bg: #e0e0e0;
+        --progress-fill: #136f6f;
+    }
+
+    [data-theme="dark"] {
+        --primary-color: #78a891;
+        --secondary-color: #60a3d9;
+        --highlight-color: #314a2e;
+        --shadow-color: rgba(0, 0, 0, 0.25);
+        --bg-color: #121212;
+        --bg-secondary: #1e1e1e;
+        --bg-card: #242424;
+        --text-primary: #e0e0e0;
+        --text-secondary: #aaaaaa;
+        --border-color: #444444;
+        --input-bg: #333333;
+        --progress-bg: #444444;
+        --progress-fill: #78c7ba;
+    }
+
+    /* Base Resets */
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-primary);
+        overflow-x: hidden;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Header and Navigation */
+    .header-wrapper {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: var(--bg-card);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        box-shadow: 0 2px 20px var(--shadow-color);
+    }
+
+    .top-nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 15px 0;
+        color: var(--text-primary);
+        position: relative;
+    }
+
+    .top-nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .logo {
+        position: absolute;
+        left: 20px;
+    }
+
+    .logo img {
+        height: 40px;
+    }
+
+    .top-nav a:hover {
+        background: var(--highlight-color);
+    }
+
+    .top-nav a.current {
+        background: #136f6f;
+        color: var(--text-light);
+    }
+
+    /* Dark Mode Toggle */
+    .dark-mode-toggle {
+        position: absolute;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .toggle-label {
+        font-size: 0.9rem;
+        color: var(--text-primary);
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: var(--accent-color);
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu-button {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-primary);
+        position: absolute;
+        right: 20px;
+        top: 15px;
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+        width: 100%;
+        padding: 10px 0;
+        background: var(--bg-secondary);
+    }
+
+    .progress-bar {
+        width: 80%;
+        margin: 0 auto;
+        height: 8px;
+        background: var(--progress-bg);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-bar .progress {
+        width: 60%;
+        height: 100%;
+        background: var(--progress-fill);
+        border-radius: 4px;
+        transition: width 0.5s ease;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        margin-top: 100px;
+        padding: 4rem 0;
+        background-color: var(--bg-secondary);
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        position: relative;
+    }
+
+    .hero-content {
+        display: flex;
+        align-items: center;
+        gap: 4rem;
+    }
+
+    .hero-text {
+        flex: 1.2;
+    }
+
+    .hero-image {
+        flex: 1;
+    }
+
+    .hero-image img {
+        width: 100%;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px var(--shadow-color);
+    }
+
+    /* Content Cards */
+    .content-card {
+        background-color: var(--highlight-color);
+        background-size: cover;
+        background-position: center;
+        border-radius: 15px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px var(--shadow-color);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .content-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 0;
+    }
+
+    .content-card > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .section-icon {
+        color: #ff221f;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        display: block;
+        text-align: center;
+    }
+
+    .hero-text h1 {
+        font-size: 1.75em;
+        margin-bottom: 20px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .hero-text p {
+        font-size: 1.1em;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    .text-content h1, .text-content h2 {
+        font-size: 1.75em;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .text-content p {
+        font-size: 1.1em;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    .italic-text {
+        font-style: italic;
+        font-weight: 500;
+    }
+    /* Scroll Indicator */
+    .scroll-indicator {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        color: var(--text-primary);
+        font-size: 2em;
+        animation: bounce 1.5s infinite;
+        z-index: 5;
+        cursor: pointer;
+    }
+
+    /* Tone Tags */
+    .tone-tags-container {
+        margin: 0 0 15px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .tone-tag {
+        background: var(--accent-color);
+        color: var(--text-light);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        width: auto;
+        align-self: flex-start;
+    }
+
+    .tone-tag i {
+        font-size: 0.9em;
+    }
+
+    /* Narrative Card */
+    .narrative-card {
+        max-width: 1000px;
+        margin: -20px auto 40px;
+        padding: 40px 20px;
+        background-color: var(--bg-card);
+        position: relative;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px var(--shadow-color);
+        z-index: 3;
+        overflow: hidden; /* Prevent content overflow */
+    }
+
+    .content-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: relative;
+        align-items: center;
+    }
+
+    /* Narrative Content */
+    .narrative-content {
+        width: 100%;
+        min-height: 300px;
+        background: rgba(220, 239, 198, 0.1);
+        border: 2px solid var(--accent-color);
+        border-radius: 15px;
+        padding: 20px;
+        transition: all 0.3s ease;
+        position: relative;
+        box-sizing: border-box;
+        color: var(--text-primary);
+    }
+
+    .narrative-content[contenteditable="true"] {
+        border-color: var(--energy-color);
+        box-shadow: 0 0 0 4px rgba(126, 87, 194, 0.1);
+    }
+
+    /* Edit Controls */
+    .edit-controls {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    .edit-button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        position: relative;
+        background: var(--highlight-color);
+        font-size: xx-large;
+        color: var(--text-primary);
+    }
+
+    .edit-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 15px var(--energy-color);
+    }
+
+    .edit-button.inline { background: #fdb195; }
+    .edit-button.coach { background: var(--accent-color); }
+    .edit-button.quick { background: #3f858ccb; }
+    .edit-button.tone { background: var(--accent-color); }
+    .edit-button.return { background: #7cbcca; }
+    .edit-button.save { background: #9c6dce; }
+    .edit-button.notes { background: #ffb75e; }
+
+    /* Floating Toolbar for Inline Edit */
+    .floating-toolbar {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        display: flex;
+        gap: 10px;
+        background: var(--bg-card);
+        border-radius: 30px;
+        padding: 5px 10px;
+        box-shadow: 0 4px 15px var(--shadow-color);
+        z-index: 10;
+        transition: all 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .floating-toolbar.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .toolbar-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        background: var(--highlight-color);
+        color: var(--text-primary);
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .toolbar-button:hover {
+        transform: scale(1.1);
+        background: var(--accent-color);
+        color: white;
+    }
+
+    .toolbar-button.microphone-icon.listening {
+        animation: pulse 1.5s infinite;
+        background: var(--error-color);
+    }
+
+    /* Tooltip */
+    .tooltip {
+        visibility: hidden;
+        position: absolute;
+        text-align: left;
+        width: 200px;
+        border-bottom-left-radius: 6px;
+        top: 0%;
+        transform: translateY(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 1000;
+        color: var(--text-primary);
+        font-size: 12px;
+        line-height: 1.4;
+        background: var(--highlight-color);
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        max-width: 200px;
+        right: 60px;
+    }
+
+    .edit-button:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    /* Editing Guidance Section */
+    .editing-guidance {
+        text-align: center; 
+        max-width: 800px; 
+        margin: 30px auto; 
+        padding: 20px; 
+        background: var(--highlight-color); 
+        border-radius: 15px;
+    }
+
+    .editing-guidance h3 {
+        color: var(--text-primary); 
+        margin-bottom: 15px;
+    }
+
+    .editing-guidance p {
+        color: var(--text-primary); 
+        margin-bottom: 15px;
+    }
+
+    .editing-guidance ul {
+        text-align: left; 
+        display: inline-block; 
+        color: var(--text-primary);
+    }
+
+    .editing-guidance li {
+        margin-bottom: 8px;
+    }
+
+    /* Bridge Section */
+    .bridge-section {
+        padding: 3rem 0;
+        background-color: var(--bg-secondary);
+        background-image: url('.vscode/Images/pattern-bg5.png');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+
+    .bridge-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 0;
+    }
+
+    .bridge-section .container {
+        position: relative;
+        z-index: 1;
+        max-width: 1000px; /* Narrower container for less spread */
+    }
+
+    .bridge-container {
+        padding: 0 1rem;
+    }
+
+    .bridge-section .content-wrapper {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 2.5rem; /* Reduced gap */
+        position: relative;
+        z-index: 1;
+    }
+
+    .bridge-section .text-content {
+        flex: 1.2;
+        position: relative;
+        z-index: 1;
+    }
+
+    .bridge-section .info-image-content {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .bridge-section .info-image-content img {
+        width: 100%;
+        max-width: 400px; /* More constrained image */
+        height: auto;
+        object-fit: contain;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px var(--shadow-color);
+    }
+
+    .bridge-section .content-card {
+        position: relative;
+        z-index: 2;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--highlight-color);
+    }
+
+    /* Action Arena Preview Section */
+    .action-arena-preview {
+        max-width: 900px;
+        width: calc(100% - 60px);
+        margin: 40px auto; 
+        padding: 30px; 
+        background-color: var(--bg-card); 
+        border-radius: 15px; 
+        box-shadow: 0 4px 15px var(--shadow-color);
+    }
+
+    .action-arena-preview h3 {
+        color: var(--text-primary); 
+        text-align: center; 
+        margin-bottom: 25px;
+    }
+
+    .experience-description {
+        margin-bottom: 30px; 
+        text-align: center;
+        padding: 0 20px;
+    }
+
+    .experience-description p {
+        color: var(--text-primary); 
+        line-height: 1.6; 
+        margin-bottom: 15px;
+    }
+
+    /* Info Cards - 2x2 Grid Layout with Fixed Height */
+    .info-cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, auto);
+        gap: 25px;
+        padding: 20px;
+        width: 100%;
+        max-width: 800px;
+        margin: 20px auto 40px;
+        position: relative;
+        z-index: 2;
+        background-color: transparent;
+    }
+
+    .info-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 380px;
+        background: var(--bg-card);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 20px var(--shadow-color);
+        transition: all 0.35s ease;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid transparent;
+        cursor: pointer;
+    }
+
+    .info-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent-color);
+    }
+
+    .info-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--accent-color);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .info-card::after {
+        content: '';
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        width: 30px;
+        height: 30px;
+        background: var(--accent-color);
+        border-radius: 50%;
+        opacity: 0;
+        transition: all 0.3s ease;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z'/%3E%3C/svg%3E");
+        background-size: 20px;
+        background-repeat: no-repeat;
+        background-position: center;
+        z-index: 2;
+    }
+
+    .info-card:hover::after {
+        opacity: 1;
+    }
+
+    .info-card .card-hover-content {
+        padding: 10px 0;
+        border-top: 1px dashed var(--border-color);
+        margin-top: 15px;
+    }
+
+    /* Image size recommendation: 300x200px for the best balance */
+    .info-card .icon {
+        height: 160px;
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto 20px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain; /* Ensures image isn't distorted */
+        transition: all 0.3s ease;
+    }
+
+    .info-card h3 {
+        color: var(--text-primary);
+        font-size: 1.1em;
+        margin-bottom: 15px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .info-card-content {
+        color: var(--text-primary);
+        line-height: 1.6;
+        font-size: 0.95em;
+        text-align: center;
+        width: 100%;
+    }
+
+    .info-card .card-hover-content {
+        display: none;
+        margin-top: 10px;
+        color: var(--text-primary);
+        font-size: 0.9em;
+        line-height: 1.5;
+        padding: 0 5px;
+    }
+
+    .info-card:hover .card-hover-content {
+        display: block;
+    }
+
+    /* Continuation Section */
+    .continuation-section {
+        max-width: 600px; 
+        margin: 40px auto; 
+        text-align: left;
+        padding: 0 20px;
+    }
+
+    .continuation-section p {
+        color: var(--text-primary); 
+        margin-bottom: 20px; 
+        font-size: 1.1em;
+    }
+
+    .continuation-section li {
+        color: var(--text-primary);
+        margin-bottom: 8px;
+    }
+
+    /* Continue Button */
+    .gradient-btn {
+        background: linear-gradient(135deg, #5885bd, #1b4072, #011f46);
+        color: white;
+        padding: 15px 40px;
+        border: none;
+        border-radius: 30px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        display: inline-block;
+        margin: 5px 10px;
+    }
+
+    .gradient-btn.center {
+        display: block;
+        margin: 30px auto;
+    }
+
+    .gradient-btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(135deg, #1b4072, #8AB0AB, #0a0a0a);
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    /* Notes Scratch Pad Overlay */
+    .notes-overlay {
+        position: fixed;
+        top: 0;
+        right: -400px;
+        width: 400px;
+        height: 100%;
+        background: var(--bg-card);
+        box-shadow: -5px 0 20px var(--shadow-color);
+        z-index: 1001;
+        transition: right 0.4s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .notes-overlay.active {
+        right: 0;
+    }
+
+    .notes-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .notes-header h3 {
+        margin: 0;
+        color: var(--text-primary);
+    }
+
+    .close-notes {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-primary);
+        cursor: pointer;
+    }
+
+    .notes-content {
+        flex-grow: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .notes-textarea {
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        background: var(--input-bg);
+        color: var(--text-primary);
+        resize: none;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+    }
+
+    .notes-textarea:focus {
+        outline: none;
+        border-color: var(--accent-color);
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--highlight-color);
+        border-radius: 50%;
+        border-top-color: var(--energy-color);
+        animation: spin 1s linear infinite;
+        margin-left: 10px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /* Dialog Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1010;
+    }
+
+    .modal-dialog {
+        background: var(--bg-card);
+        border-radius: 15px;
+        width: 90%;
+        max-width: 500px;
+        padding: 25px;
+        box-shadow: 0 4px 30px var(--shadow-color);
+        position: relative;
+    }
+
+    .modal-header {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-title {
+        margin: 0;
+        color: var(--text-primary);
+        font-size: 1.4em;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        color: var(--text-primary);
+        cursor: pointer;
+    }
+
+    /* Tone Dialog Styles */
+    .tone-options-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .tone-option {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        padding: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        color: var(--text-primary);
+    }
+
+    .tone-option:hover,
+    .tone-option.selected {
+        background: var(--highlight-color);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px var(--shadow-color);
+    }
+
+    .tone-option.selected {
+        background: linear-gradient(135deg, #ffd588a6, #ed9f40af, #ff70288e);
+        color: white;
+        border-color: #ed9f40;
+    }
+
+    /* Coach Request Dialog */
+    .coach-request-container {
+        position: relative;
+    }
+
+    .coach-request-textarea {
+        width: 100%;
+        min-height: 150px;
+        border: 2px solid var(--border-color);
+        border-radius: 15px;
+        resize: vertical;
+        font-family: inherit;
+        padding: 15px;
+        background: var(--input-bg);
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .coach-request-textarea:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+    }
+
+    .coach-mic-button {
+        position: absolute;
+        right: 15px;
+        bottom: 15px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--accent-color);
+        color: white;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .coach-mic-button:hover {
+        transform: scale(1.1);
+    }
+
+    .coach-mic-button.listening {
+        animation: pulse 1.5s infinite;
+        background: var(--error-color);
+    }
+
+    /* Modal Footer */
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .modal-btn {
+        padding: 10px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.3s ease;
+    }
+
+    .modal-btn-primary {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+    }
+
+    .modal-btn-secondary {
+        background: none;
+        color: var(--text-primary);
+        border: 1px solid var(--text-primary);
+    }
+
+    .modal-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .modal-btn-primary:hover {
+        background: var(--secondary-color);
+    }
+
+    .modal-btn-secondary:hover {
+        background: var(--highlight-color);
+    }
+
+    /* Save Narrative Dialog */
+    .save-dialog-container {
+        margin-top: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text-primary);
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px 15px;
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        background: var(--input-bg);
+        color: var(--text-primary);
+        font-family: inherit;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--accent-color);
+    }
+
+    /* Quick Edit Options */
+    .quick-edit-options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .quick-edit-option {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--text-primary);
+    }
+
+    .quick-edit-option:hover {
+        background: var(--highlight-color);
+        transform: translateY(-2px);
+    }
+
+    .quick-edit-option i {
+        font-size: 1.2em;
+        opacity: 0.7;
+    }
+
+    /* Toast Notifications */
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary-color);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        animation: fadeInUp 0.3s ease;
+    }
+
+    /* Footer */
+    .footer-nav {
+        width: 100%;
+        margin-top: auto;
+        color: #ffffff;
+        background: var(--footer-bg) no-repeat center center;
+        background-size: cover;
+        min-height: 60px;
+        padding: 15px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    .footer-nav p {
+        margin: 0;
+    }
+
+    .footer-nav a {
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .footer-nav a:hover {
+        opacity: 0.8;
+    }
+
+    /* Animations */
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateX(-50%) translateY(0);
+        }
+        50% {
+            transform: translateX(-50%) translateY(-10px);
+        }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+        opacity: 0;
+        animation: fadeIn 0.8s ease forwards;
+    }
+
+    .delay-1 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-2 {
+        animation-delay: 0.4s;
+    }
+
+    .delay-3 {
+        animation-delay: 0.6s;
+    }
+
+    .delay-4 {
+        animation-delay: 0.8s;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translate(-50%, 20px); }
+        to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .bridge-section .container {
+            padding: 0 1.5rem;
+        }
+        
+        .tone-options-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .info-cards-container {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .notes-overlay {
+            width: 350px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        /* Header adjustments */
+        .top-nav {
+            flex-direction: column;
+            padding: 10px 0;
+        }
+
+        .nav-links {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            gap: 10px;
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        .nav-links.active {
+            display: flex;
+        }
+
+        .logo {
+            position: static;
+            margin-bottom: 10px;
+        }
+
+        .mobile-menu-button {
+            display: block;
+        }
+
+        .dark-mode-toggle {
+            position: static;
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        /* Container adjustments */
+        .container {
+            padding: 0 1rem;
+        }
+
+        /* Hero section adjustments */
+        .hero-section {
+            height: auto;
+            padding: 3rem 0;
+        }
+        
+        .hero-content {
+            flex-direction: column-reverse;
+            text-align: center;
+            gap: 2rem;
+        }
+        
+        .hero-text h1 {
+            font-size: 1.6em;
+        }
+        
+        .hero-text p {
+            font-size: 0.95em;
+        }
+        
+        /* Content layout adjustments */
+        .content-layout {
+            padding: 0;
+        }
+        
+        .narrative-card {
+            padding: 15px;
+            margin: -30px 15px 30px;
+        }
+
+        .narrative-content {
+            margin: 0 auto;
+            width: 90%;
+        }
+
+        /* Edit controls adjustments */
+        .edit-controls {
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .edit-button {
+            width: 45px;
+            height: 45px;
+            font-size: large;
+        }
+        
+        /* Tone dialog adjustments */
+        .tone-options-container {
+            grid-template-columns: 1fr;
+        }
+        
+        /* Bridge section adjustments */
+        .bridge-section .content-wrapper {
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .bridge-section .text-content {
+            order: 1;
+        }
+        
+        .bridge-section .info-image-content {
+            order: 2;
+        }
+        
+        .bridge-section .info-image-content img {
+            max-width: 100%;
+        }
+        
+        /* Action arena preview adjustments */
+        .action-arena-preview {
+            margin: 30px 15px;
+            padding: 20px;
+            width: calc(100% - 30px);
+        }
+        
+        /* Info cards adjustments */
+        .info-cards-container {
+            grid-template-columns: 1fr;
+            padding: 20px;
+            gap: 20px;
+            margin: 20px auto;
+            width: calc(100% - 40px);
+        }
+        
+        .info-card {
+            min-height: unset;
+            padding: 20px;
+        }
+        
+        .info-card .icon {
+            height: 140px;
+            margin-bottom: 15px;
+        }
+        
+        /* Continuation section adjustments */
+        .continuation-section {
+            margin: 30px 15px;
+            padding: 0 15px;
+            width: calc(100% - 30px);
+        }
+        
+        /* Button adjustments */
+        .gradient-btn {
+            padding: 12px 20px;
+            font-size: 1em;
+        }
+
+        .btn-container {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gradient-btn {
+            width: 100%;
+            max-width: 250px;
+            margin: 5px 0;
+        }
+        
+        /* Editing guidance adjustments */
+        .editing-guidance {
+            margin: 30px 15px;
+            padding: 20px;
+            width: calc(100% - 30px);
+        }
+        
+        /* Footer adjustments */
+        .footer-nav {
+            flex-direction: column;
+            padding: 15px;
+            gap: 10px;
+        }
+        
+        /* Dialog adjustments */
+        .modal-dialog {
+            padding: 20px;
+            width: 95%;
+        }
+        
+        .modal-footer {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            width: 100%;
+        }
+
+        /* Notes Scratch Pad adjustments */
+        .notes-overlay {
+            width: 100%;
+            right: -100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-section {
+            padding: 2rem 0;
+        }
+        
+        .hero-text h1 {
+            font-size: 1.5em;
+        }
+        
+        .hero-text p {
+            font-size: 0.85em;
+        }
+        
+        .content-card {
+            padding: 1.5rem;
+        }
+        
+        .edit-button {
+            width: 40px;
+            height: 40px;
+            font-size: large;
+        }
+        
+        .info-card {
+            padding: 15px;
+        }
+        
+        .info-card h3 {
+            font-size: 1em;
+        }
+        
+        .info-card-content p {
+            font-size: 0.85em;
+        }
+    }
+    </style>
+</head>
+<body>
+    <!-- Header and Progress Indicator -->
+    <div class="header-wrapper">
+        <div class="top-nav">
+            <a href="#" class="logo">
+                <img src=".vscode/Images/CClogo.png" alt="CommuniCoach">
+            </a>
+            <button class="mobile-menu-button" onclick="toggleMenu()">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="welcome.html">Welcome</a>
+                <a href="tone-selection.html">Tone Selection</a>
+                <a href="situation-room.html">Situation Room</a>
+                <a href="refined-narrative.html" class="current">Refined Narrative</a>
+                <a href="action-arena.html">Action Arena</a>
+            </div>
+            <!-- Dark Mode Toggle -->
+            <div class="dark-mode-toggle">
+                <span class="toggle-label">Dark Mode</span>
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hero Section - Side by Side Layout -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text fade-in">
+                    <div class="content-card">
+                        <i class="fa-solid fa-comments section-icon"></i>
+                        <h1>Your Narrative Perfected</h1>
+                        <p>This is the moment where your thoughts take shape. The words in front of you <span class="italic-text">are yours</span>—refined, clear, and presented in their most powerful form. They should capture not just what you meant to say, but how you feel. Does this narrative reflect what you need to express? Take your time—with the buttons to the right, you can adjust the tone, reword a phrase, or add missing details—until it feels just right. Next up: The Action Arena. Because knowing what to say is one thing. Saying it, and seeing how it lands, is another.</p>
+                    </div>
+                </div>
+                <div class="hero-image fade-in delay-1">
+                    <img src=".vscode/Images/room.png" alt="Situation Room">
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>&#x25BC;</span>
+        </div>
+    </section>
+            
+    <!-- Main Narrative Card -->
+    <div class="narrative-card">
+        <div class="content-layout">
+            <!-- Tone Tags Container - New Feature -->
+            <div class="tone-tags-container" id="toneTagsContainer">
+                <!-- Tone tags will be added here dynamically -->
+            </div>
+            
+            <!-- Narrative Content -->
+            <div class="narrative-content" id="narrativeContent" contenteditable="false">
+                <!-- Narrative content will be loaded here dynamically -->
+            </div>
+            
+            <!-- Floating Toolbar for Inline Edit - New Feature -->
+            <div class="floating-toolbar" id="floatingToolbar">
+                <button class="toolbar-button microphone-icon" id="inlineMicBtn">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+                <button class="toolbar-button" id="saveInlineBtn">
+                    <i class="fa-solid fa-check"></i>
+                </button>
+                <button class="toolbar-button" id="cancelInlineBtn">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Edit Controls Row -->
+            <div class="edit-controls">
+                <button class="edit-button tone" id="toneButton">
+                    🎨
+                    <div class="tooltip">Try different tones to transform your message's impact and reception</div>
+                </button>
+               
+                <button class="edit-button quick" id="quickButton">
+                    ⚡
+                    <div class="tooltip">
+                        Choose from pre-set editing options to transform your entire narrative with a single click
+                    </div>
+                </button>
+                
+                <button class="edit-button coach" id="coachButton">
+                    💭
+                    <div class="tooltip">
+                        Ask your coach for suggestions on tone, clarity, or perspective
+                    </div>
+                </button>
+                
+                <button class="edit-button inline" id="inlineButton">
+                    ✎
+                    <div class="tooltip">
+                        Make direct changes to your narrative
+                    </div>
+                </button>
+
+                <button class="edit-button return" id="returnButton">
+                    ↩
+                    <div class="tooltip">Return to Situation Room</div>
+                </button>
+                
+                <button class="edit-button notes" id="notesButton">
+                    📝
+                    <div class="tooltip">Open notes scratch pad</div>
+                </button>
+                
+                <button class="edit-button save" id="saveButton">
+                    💾
+                    <div class="tooltip">Save to your account</div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- CTA Buttons -->
+        <div class="btn-container">
+            <button class="gradient-btn" id="proceedButton">
+                Continue to Action Arena
+                <span class="loading-spinner hidden"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Editing Guidance Section -->
+    <div class="editing-guidance">
+        <h3>Fine-Tune Your Words, Effortlessly</h3>
+        <p>We've anticipated that you might hesitate to ask for adjustments—that's why we built these tools into the experience so you can shape your message exactly how you want. Use the icon buttons to:</p>
+        <ul>
+            <li><strong>✎ Make direct edits</strong> - Adjust any word or phrase freely</li>
+            <li><strong>💭 Ask your coach</strong> - Your AI coach can refine any section to better match your tone, intent, or emotions</li>
+            <li><strong>⚡ Try quick edits</strong> - Experiment with entirely new takes on your message in one click</li>
+            <li><strong>🎨 Change the tone</strong> - Explore how different tones change perception</li>
+            <li><strong>↩ Return to your situation</strong> - Expand your original thoughts if something still feels unsaid</li>
+            <li><strong>📝 Use scratch pad</strong> - Keep notes or save versions as you refine your narrative</li>
+            <li><strong>💾 Save to account</strong> - Store your refined narrative for future reference</li>
+        </ul>
+        <p>Your words, your way. No hesitation—just effortless refinement.</p>
+    </div>
+
+    <!-- Bridge Section -->
+    <section class="bridge-section">
+        <div class="container">
+            <div class="bridge-container">
+                <div class="content-wrapper">
+                    <div class="info-image-content fade-in delay-1">
+                        <img src=".vscode/Images/action preview1.png" alt="Action Arena Preview">
+                    </div>
+                    <div class="text-content fade-in">
+                        <div class="content-card">
+                            <i class="fa-solid fa-forward section-icon"></i>
+                            <h3>What Happens Next</h3>
+                            <p>A refined message is powerful. But how do you bring it to life?</p>
+                            <p>You've just seen your thoughts transformed into something clear, compelling, and undeniably you. That alone is a gift. But what if you could take it further? Enter the Action Arena.</p>
+                            <p>This is where you see that perfected message in motion. Before stepping into the real conversation, you get to:</p>
+                            <ul style="text-align: left; display: inline-block; color: var(--text-primary);">
+                                <li style="margin-bottom: 8px;"><strong>✅  See how your words might land</strong></li>
+                                <li style="margin-bottom: 8px;"><strong>✅  Make sure your message aligns with your goals</strong></li>
+                                <li style="margin-bottom: 8px;"><strong>✅  Test different ways of expressing yourself</strong></li>
+                            </ul>
+                            <p>No overthinking. No "I wish I had said that" moments after the fact. Just clarity, confidence, and real preparation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Action Arena Preview Section -->
+    <div class="action-arena-preview">
+        <i class="fa-solid fa-gamepad section-icon"></i>
+        <h3>The Action Arena Experience</h3>
+        <div class="experience-description">
+            <p>It's organic, intuitive, and surprisingly fun. It isn't about practicing scripts or memorizing lines. It's working through your situation naturally.</p>
+            <p>These are just a few of the interactive experiences waiting for you-</p>
+        </div>
+        
+        <!-- Info Cards Section -->
+        <div class="info-cards-container">
+            <div class="info-card fade-in delay-1">
+                <div class="icon" style="background-image: url('.vscode/Images/conversations.png');"></div>
+                <h3>🔥 Conflict Resolution Simulator</h3>
+                <div class="info-card-content">
+                    <p>Navigate Disputes Skillfully- 
+                        Engage in realistic simulations to apply conflict resolution strategies confidently and effectively in challenging interactions.</p>
+                    <div class="card-hover-content">
+                        <p>Test negotiation, mediation, and collaboration approaches. Receive instant feedback to hone your conflict management expertise.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card fade-in delay-2">
+                <div class="icon" style="background-image: url('.vscode/Images/bg1.png');"></div>
+                <h3>🔍 Perspective Taking</h3>
+                <div class="info-card-content">
+                    <p>Experience Another's Point of View-
+                        Explore your scenario through the eyes of others to uncover hidden motivations, emotions, and insights.</p>
+                    <div class="card-hover-content">
+                        <p>Build empathy and understanding without judgment—viewing interactions from multiple angles to deepen connections and clarity.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card fade-in delay-3">
+                <div class="icon" style="background-image: url('.vscode/Images/conversation.png');"></div>
+                <h3>🛤 Conversation Pathways</h3>
+                <div class="info-card-content">
+                    <p>Practice real-world interactions with dynamic flowcharts that evolve with each decision, providing instant feedback to sharpen your strategy.</p>
+                    <div class="card-hover-content">
+                        <p>Every choice opens new possibilities. Experiment freely, discover impactful outcomes, and refine your communication skills in real-time.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card fade-in delay-4">
+                <div class="icon" style="background-image: url('.vscode/Images/puzzle.png');"></div>
+                <h3>🗣 Persuasion Puzzles</h3>
+                <div class="info-card-content">
+                    <p>Master the Power of Persuasion-
+                        Tackle engaging scenarios by strategically applying persuasive techniques tailored to your communication goals.</p>
+                    <div class="card-hover-content">
+                        <p>Choose your approach—logical, emotional, or credible—and see immediate results. Adapt your strategy to influence outcomes effectively.</p>
+                    </div> 
+                </div>     
+            </div> 
+        </div>
+    </div>
+
+    <!-- Continuation Section -->
+    <div class="continuation-section">
+        <i class="fa-solid fa-arrow-right section-icon"></i>
+        <p>Your refined narrative is yours to keep and if you're ready for the next step… here it is.</p>
+        <ul>
+            <li><strong>Choose 3 experiences free—no credit card required.</strong></li>
+            <li><strong>Test, refine, and gain insights before real conversations.</strong></li> 
+            <li><strong>Make sure your message actually lands how you want it to.</strong></li>
+        </ul>
+        <p>Your words, in motion. Step inside.</p>
+    </div>
+
+    <!-- Final CTA Button -->
+    <button class="gradient-btn center" id="finalProceedButton">
+        Continue to the Action Arena
+        <span class="loading-spinner hidden"></span>
+    </button>
+
+    <!-- Notes Scratch Pad (New Feature) -->
+    <div class="notes-overlay" id="notesOverlay">
+        <div class="notes-header">
+            <h3>Notes Scratch Pad</h3>
+            <button class="close-notes" id="closeNotesBtn">×</button>
+        </div>
+        <div class="notes-content">
+            <textarea class="notes-textarea" id="notesTextarea" placeholder="Write your notes, ideas, or save different versions here as you refine your narrative..."></textarea>
+        </div>
+    </div>
+
+    <!-- Tone Selection Modal -->
+    <div class="modal-overlay" id="toneModalOverlay">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h2 class="modal-title">Select Your Tone</h2>
+                <button class="modal-close" id="closeToneModalBtn">×</button>
+            </div>
+            <div class="tone-options-container">
+                <div class="tone-option" data-tone="empathetic">Empathetic</div>
+                <div class="tone-option" data-tone="clear">Clear</div>
+                <div class="tone-option" data-tone="balanced">Balanced</div>
+                <div class="tone-option" data-tone="authentic">Authentic</div>
+                <div class="tone-option" data-tone="structured">Structured</div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-primary" id="applyToneBtn">
+                    Apply Selected Tone
+                    <span class="loading-spinner hidden" id="toneSpinner"></span>
+                </button>
+                <button class="modal-btn modal-btn-secondary" id="cancelToneBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coach Request Modal -->
+    <div class="modal-overlay" id="coachModalOverlay">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h2 class="modal-title">Ask Your Coach</h2>
+                <button class="modal-close" id="closeCoachModalBtn">×</button>
+            </div>
+            <div class="coach-request-container">
+                <textarea class="coach-request-textarea" id="coachRequestTextarea" placeholder="Ask for guidance on tone, clarity, or perspective..."></textarea>
+                <button class="coach-mic-button" id="coachMicBtn">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-primary" id="submitCoachRequestBtn">
+                    Submit Request
+                    <span class="loading-spinner hidden" id="coachSpinner"></span>
+                </button>
+                <button class="modal-btn modal-btn-secondary" id="cancelCoachBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Edits Modal -->
+    <div class="modal-overlay" id="quickEditModalOverlay">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h2 class="modal-title">Quick Edit Options</h2>
+                <button class="modal-close" id="closeQuickEditModalBtn">×</button>
+            </div>
+            <div class="quick-edit-options">
+                <div class="quick-edit-option" data-edit="Simplify Language">
+                    Simplify Language
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <div class="quick-edit-option" data-edit="Clarify Key Points">
+                    Clarify Key Points 
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div class="quick-edit-option" data-edit="Neutralize Tone">
+                    Neutralize Tone
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <div class="quick-edit-option" data-edit="Add Warmth">
+                    Add Warmth
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <div class="quick-edit-option" data-edit="Make More Concise">
+                    Make More Concise
+                    <i class="fa-solid fa-scissors"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Narrative Modal -->
+    <div class="modal-overlay" id="saveModalOverlay">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h2 class="modal-title">Save to Your Account</h2>
+                <button class="modal-close" id="closeSaveModalBtn">×</button>
+            </div>
+            <div class="save-dialog-container">
+                <p>Save your refined narrative to access it later from your account.</p>
+                <div class="form-group">
+                    <label for="narrativeTitle">Title (optional)</label>
+                    <input type="text" id="narrativeTitle" placeholder="E.g., Work Conversation with Manager">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-primary" id="confirmSaveBtn">
+                    Save Narrative
+                    <span class="loading-spinner hidden" id="saveSpinner"></span>
+                </button>
+                <button class="modal-btn modal-btn-secondary" id="cancelSaveBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-nav">
+        <p>Your privacy is our priority. All content is processed securely.</p>
+        <a href="#privacy-policy">Privacy Policy</a>
+        <p>&copy; 2025 CommuniCoach. All rights reserved.</p>
+    </div>
+
+    <script>
+    // Application State
+    const state = {
+        currentNarrative: localStorage.getItem('refinedNarrative') || '',
+        originalNarrative: localStorage.getItem('originalNarrative') || '',
+        selectedTones: JSON.parse(localStorage.getItem('selectedTones') || '[]'),
+        currentTone: '', // Active tone
+        isEditing: false,
+        isInlineEditing: false,
+        isProcessing: false,
+        recognition: null,
+        isListening: false,
+        activeInput: null
+    };
+
+    // DOM References
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const narrativeContent = document.getElementById('narrativeContent');
+    const toneTagsContainer = document.getElementById('toneTagsContainer');
+    const floatingToolbar = document.getElementById('floatingToolbar');
+    
+    // Edit Button References
+    const toneButton = document.getElementById('toneButton');
+    const quickButton = document.getElementById('quickButton');
+    const coachButton = document.getElementById('coachButton');
+    const inlineButton = document.getElementById('inlineButton');
+    const returnButton = document.getElementById('returnButton');
+    const notesButton = document.getElementById('notesButton');
+    const saveButton = document.getElementById('saveButton');
+    
+    // Inline Edit Tools
+    const inlineMicBtn = document.getElementById('inlineMicBtn');
+    const saveInlineBtn = document.getElementById('saveInlineBtn');
+    const cancelInlineBtn = document.getElementById('cancelInlineBtn');
+    
+    // Coach Request Modal
+    const coachModalOverlay = document.getElementById('coachModalOverlay');
+    const coachRequestTextarea = document.getElementById('coachRequestTextarea');
+    const coachMicBtn = document.getElementById('coachMicBtn');
+    const submitCoachRequestBtn = document.getElementById('submitCoachRequestBtn');
+    const cancelCoachBtn = document.getElementById('cancelCoachBtn');
+    const closeCoachModalBtn = document.getElementById('closeCoachModalBtn');
+    
+    // Tone Selection Modal
+    const toneModalOverlay = document.getElementById('toneModalOverlay');
+    const toneOptions = document.querySelectorAll('.tone-option');
+    const applyToneBtn = document.getElementById('applyToneBtn');
+    const cancelToneBtn = document.getElementById('cancelToneBtn');
+    const closeToneModalBtn = document.getElementById('closeToneModalBtn');
+    
+    // Quick Edit Modal
+    const quickEditModalOverlay = document.getElementById('quickEditModalOverlay');
+    const quickEditOptions = document.querySelectorAll('.quick-edit-option');
+    const closeQuickEditModalBtn = document.getElementById('closeQuickEditModalBtn');
+    
+    // Save Modal
+    const saveModalOverlay = document.getElementById('saveModalOverlay');
+    const narrativeTitle = document.getElementById('narrativeTitle');
+    const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+    const cancelSaveBtn = document.getElementById('cancelSaveBtn');
+    const closeSaveModalBtn = document.getElementById('closeSaveModalBtn');
+    
+    // Notes Scratch Pad
+    const notesOverlay = document.getElementById('notesOverlay');
+    const notesTextarea = document.getElementById('notesTextarea');
+    const closeNotesBtn = document.getElementById('closeNotesBtn');
+    
+    // Proceed Buttons
+    const proceedButton = document.getElementById('proceedButton');
+    const finalProceedButton = document.getElementById('finalProceedButton');
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', init);
+
+    function init() {
+        // Dark Mode Setting
+        initDarkMode();
+        
+        // Load Narrative Content
+        loadNarrativeContent();
+        
+        // Set progress bar
+        const progressBar = document.querySelector('.progress-bar .progress');
+        if (progressBar) progressBar.style.width = '60%';
+        
+        // Update Tone Tags
+        updateToneTags();
+        
+        // Setup Speech Recognition
+        setupSpeechRecognition();
+        
+        // Initialize Floating Toolbar
+        setupInlineEditingToolbar();
+        
+        // Set up event listeners
+        setupEventListeners();
+        
+        // Setup Fade-in Animations
+        setupAnimations();
+        
+        // Load Notes from Local Storage
+        loadNotesContent();
+    }
+
+    function initDarkMode() {
+        // Set initial theme based on localStorage
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            darkModeToggle.checked = true;
+        }
+
+        // Toggle theme when checkbox is clicked
+        darkModeToggle.addEventListener('change', () => {
+            const isDark = darkModeToggle.checked;
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+    }
+
+    function loadNarrativeContent() {
+        // First try refined narrative
+        let content = localStorage.getItem('refinedNarrative');
+        
+        // If not found, check for original narrative
+        if (!content || content.trim() === '') {
+            content = localStorage.getItem('originalNarrative') || '';
+            // Save it as refined narrative if we have it
+            if (content.trim() !== '') {
+                localStorage.setItem('refinedNarrative', content);
+            }
+        }
+        
+        state.currentNarrative = content;
+        narrativeContent.textContent = content;
+        
+        // Get current tone if available
+        const tones = JSON.parse(localStorage.getItem('selectedTones') || '[]');
+        if (tones.length > 0) {
+            state.currentTone = tones[0];
+            updateToneTags();
+        }
+    }
+
+    function updateToneTags() {
+        if (!toneTagsContainer) return;
+        
+        // Clear existing tags
+        toneTagsContainer.innerHTML = '';
+        
+        // If we have a current tone, add a tag
+        if (state.currentTone) {
+            const toneTag = document.createElement('div');
+            toneTag.className = 'tone-tag';
+            
+            // Get a nice icon based on the tone
+            let toneIcon = '';
+            switch(state.currentTone) {
+                case 'empathetic':
+                    toneIcon = '<i class="fa-solid fa-heart"></i>';
+                    break;
+                case 'clear':
+                    toneIcon = '<i class="fa-solid fa-glasses"></i>';
+                    break;
+                case 'balanced':
+                    toneIcon = '<i class="fa-solid fa-scale-balanced"></i>';
+                    break;
+                case 'authentic':
+                    toneIcon = '<i class="fa-solid fa-user"></i>';
+                    break;
+                case 'structured':
+                    toneIcon = '<i class="fa-solid fa-list-ol"></i>';
+                    break;
+                default:
+                    toneIcon = '<i class="fa-solid fa-comment"></i>';
+            }
+            
+            // Format the tone name nicely
+            const formattedTone = state.currentTone.charAt(0).toUpperCase() + state.currentTone.slice(1);
+            
+            toneTag.innerHTML = `${toneIcon} ${formattedTone} Tone`;
+            toneTagsContainer.appendChild(toneTag);
+        }
+    }
+
+    function setupSpeechRecognition() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            console.warn('Speech recognition not supported in this browser');
+            return;
+        }
+
+        state.recognition = new SpeechRecognition();
+        state.recognition.continuous = true;
+        state.recognition.interimResults = true;
+        state.recognition.lang = 'en-US';
+
+        state.recognition.onstart = () => {
+            console.log('Speech recognition started');
+            state.isListening = true;
+            
+            // Update UI based on active input
+            if (state.activeInput === 'inline') {
+                inlineMicBtn.classList.add('listening');
+                showToast('Listening for inline edits...');
+            } else if (state.activeInput === 'coach') {
+                coachMicBtn.classList.add('listening');
+                showToast('Listening for coaching request...');
+            }
+        };
+
+        state.recognition.onend = () => {
+            console.log('Speech recognition ended');
+            state.isListening = false;
+            
+            // Update UI
+            if (state.activeInput === 'inline') {
+                inlineMicBtn.classList.remove('listening');
+            } else if (state.activeInput === 'coach') {
+                coachMicBtn.classList.remove('listening');
+            }
+        };
+
+        state.recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            state.isListening = false;
+            
+            // Update UI
+            if (state.activeInput === 'inline') {
+                inlineMicBtn.classList.remove('listening');
+            } else if (state.activeInput === 'coach') {
+                coachMicBtn.classList.remove('listening');
+            }
+            
+            showToast('Speech recognition error. Please try again.', 'error');
+        };
+
+        state.recognition.onresult = (event) => {
+            let interimTranscript = '';
+            let finalTranscript = '';
+            
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    finalTranscript += transcript;
+                } else {
+                    interimTranscript += transcript;
+                }
+            }
+            
+            // Apply transcript to the active input
+            if (finalTranscript) {
+                applyTranscriptToActiveInput(finalTranscript);
+            }
+        };
+    }
+
+    function applyTranscriptToActiveInput(transcript) {
+        if (state.activeInput === 'inline') {
+            // Apply to narrative content (inline editing)
+            if (state.isInlineEditing) {
+                // Get cursor position or selection
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+                
+                // Insert transcript at cursor position
+                range.deleteContents();
+                range.insertNode(document.createTextNode(transcript));
+                
+                // Move cursor to end of inserted text
+                range.collapse(false);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        } else if (state.activeInput === 'coach') {
+            // Apply to coach request textarea
+            if (coachRequestTextarea) {
+                coachRequestTextarea.value += transcript + ' ';
+                coachRequestTextarea.focus();
+            }
+        }
+    }
+
+    function setupInlineEditingToolbar() {
+        if (!floatingToolbar) return;
+        
+        // Add event listeners for toolbar buttons
+        inlineMicBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent click from closing inline editing
+            toggleInlineSpeechRecognition();
+        });
+        
+        saveInlineBtn.addEventListener('click', () => {
+            saveInlineEdits();
+        });
+        
+        cancelInlineBtn.addEventListener('click', () => {
+            cancelInlineEdits();
+        });
+    }
+
+    function toggleInlineSpeechRecognition() {
+        if (state.isListening) {
+            // Stop recognition
+            if (state.recognition) {
+                state.recognition.stop();
+                state.isListening = false;
+                inlineMicBtn.classList.remove('listening');
+            }
+        } else {
+            // Start recognition for inline editing
+            state.activeInput = 'inline';
+            if (state.recognition) {
+                try {
+                    state.recognition.start();
+                    inlineMicBtn.classList.add('listening');
+                } catch (err) {
+                    console.error('Error starting speech recognition:', err);
+                    showToast('Error activating microphone. Please try again.', 'error');
+                }
+            }
+        }
+    }
+
+    function saveInlineEdits() {
+        if (!state.isInlineEditing) return;
+        
+        // Save updated content
+        state.currentNarrative = narrativeContent.textContent;
+        localStorage.setItem('refinedNarrative', state.currentNarrative);
+        
+        // Exit inline editing mode
+        exitInlineEditingMode();
+        
+        showToast('Changes saved successfully');
+    }
+
+    function cancelInlineEdits() {
+        if (!state.isInlineEditing) return;
+        
+        // Restore original content
+        narrativeContent.textContent = state.currentNarrative;
+        
+        // Exit inline editing mode
+        exitInlineEditingMode();
+        
+        showToast('Changes discarded');
+    }
+
+    function enterInlineEditingMode() {
+        state.isInlineEditing = true;
+        narrativeContent.contentEditable = true;
+        narrativeContent.focus();
+        
+        // Show floating toolbar
+        floatingToolbar.classList.add('active');
+        
+        // Add placeholder if empty
+        if (narrativeContent.textContent.trim() === '') {
+            narrativeContent.textContent = 'Start typing here...';
+            // Select all text so it gets replaced when user starts typing
+            document.execCommand('selectAll', false, null);
+        }
+    }
+
+    function exitInlineEditingMode() {
+        state.isInlineEditing = false;
+        narrativeContent.contentEditable = false;
+        
+        // Hide floating toolbar
+        floatingToolbar.classList.remove('active');
+        
+        // Stop speech recognition if active
+        if (state.isListening && state.activeInput === 'inline') {
+            state.recognition.stop();
+            state.isListening = false;
+            inlineMicBtn.classList.remove('listening');
+        }
+        
+        state.activeInput = null;
+    }
+
+    function setupEventListeners() {
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-button');
+        const navLinks = document.getElementById('navLinks');
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+        
+        // Edit Buttons
+        if (toneButton) toneButton.addEventListener('click', showToneModal);
+        if (quickButton) quickButton.addEventListener('click', showQuickEditModal);
+        if (coachButton) coachButton.addEventListener('click', showCoachModal);
+        if (inlineButton) inlineButton.addEventListener('click', enterInlineEditingMode);
+        if (returnButton) returnButton.addEventListener('click', returnToSituationRoom);
+        if (notesButton) notesButton.addEventListener('click', toggleNotesScratchPad);
+        if (saveButton) saveButton.addEventListener('click', showSaveModal);
+        
+        // Tone Modal
+        if (toneOptions) {
+            toneOptions.forEach(option => {
+                option.addEventListener('click', () => selectToneOption(option));
+            });
+        }
+        if (applyToneBtn) applyToneBtn.addEventListener('click', applySelectedTone);
+        if (cancelToneBtn) cancelToneBtn.addEventListener('click', closeToneModal);
+        if (closeToneModalBtn) closeToneModalBtn.addEventListener('click', closeToneModal);
+        
+        // Coach Modal
+        if (submitCoachRequestBtn) submitCoachRequestBtn.addEventListener('click', submitCoachRequest);
+        if (cancelCoachBtn) cancelCoachBtn.addEventListener('click', closeCoachModal);
+        if (closeCoachModalBtn) closeCoachModalBtn.addEventListener('click', closeCoachModal);
+        if (coachMicBtn) coachMicBtn.addEventListener('click', toggleCoachSpeechRecognition);
+        
+        // Quick Edit Modal
+        if (quickEditOptions) {
+            quickEditOptions.forEach(option => {
+                option.addEventListener('click', () => applyQuickEdit(option));
+            });
+        }
+        if (closeQuickEditModalBtn) closeQuickEditModalBtn.addEventListener('click', closeQuickEditModal);
+        
+        // Save Modal
+        if (confirmSaveBtn) confirmSaveBtn.addEventListener('click', saveToAccount);
+        if (cancelSaveBtn) cancelSaveBtn.addEventListener('click', closeSaveModal);
+        if (closeSaveModalBtn) closeSaveModalBtn.addEventListener('click', closeSaveModal);
+        
+        // Notes Scratch Pad
+        if (closeNotesBtn) closeNotesBtn.addEventListener('click', closeNotesScratchPad);
+        
+        // Auto-save notes on change
+        if (notesTextarea) {
+            notesTextarea.addEventListener('input', debounce(() => {
+                localStorage.setItem('narrativeNotes', notesTextarea.value);
+            }, 500));
+        }
+        
+        // Proceed Buttons
+        if (proceedButton) proceedButton.addEventListener('click', proceedToActionArena);
+        if (finalProceedButton) finalProceedButton.addEventListener('click', proceedToActionArena);
+        
+        // Scroll Indicator
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        if (scrollIndicator) {
+            scrollIndicator.addEventListener('click', () => {
+                const narrativeCard = document.querySelector('.narrative-card');
+                if (narrativeCard) {
+                    narrativeCard.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
+        
+        // Click outside narrative to save when in inline edit mode
+        document.addEventListener('click', (e) => {
+            if (state.isInlineEditing && 
+                !narrativeContent.contains(e.target) && 
+                !floatingToolbar.contains(e.target) &&
+                e.target !== inlineButton) {
+                saveInlineEdits();
+            }
+        });
+    }
+
+    function selectToneOption(option) {
+        // Remove selected class from all options
+        toneOptions.forEach(opt => opt.classList.remove('selected'));
+        
+        // Add selected class to clicked option
+        option.classList.add('selected');
+        
+        // Store selected tone
+        state.selectedTone = option.getAttribute('data-tone');
+    }
+
+    function showToneModal() {
+        toneModalOverlay.style.display = 'flex';
+        
+        // Set current tone as selected if it exists
+        if (state.currentTone) {
+            const currentToneOption = document.querySelector(`.tone-option[data-tone="${state.currentTone}"]`);
+            if (currentToneOption) {
+                toneOptions.forEach(opt => opt.classList.remove('selected'));
+                currentToneOption.classList.add('selected');
+                state.selectedTone = state.currentTone;
+            }
+        }
+    }
+
+    function closeToneModal() {
+        toneModalOverlay.style.display = 'none';
+    }
+
+    function applySelectedTone() {
+        if (!state.selectedTone) {
+            showToast('Please select a tone first');
+            return;
+        }
+        
+        // Show loading spinner
+        const spinner = document.getElementById('toneSpinner');
+        if (spinner) spinner.classList.remove('hidden');
+        applyToneBtn.disabled = true;
+        
+        // Prepare tone instructions from tone-selection.html
+        let toneGuidance = '';
+        switch(state.selectedTone) {
+            case 'empathetic':
+                toneGuidance = `
+You are refining the speaker's words into an empathetic tone:
+- Maintain warmth and compassion, from the speaker's own viewpoint
+- Do not shift to a coach perspective; stay first-person
+`;
+                break;
+            case 'clear':
+                toneGuidance = `
+You are refining the speaker's words into a clear tone:
+- Make the text concise and direct
+- Eliminate unnecessary fluff, preserve emotional truth
+`;
+                break;
+            case 'balanced':
+                toneGuidance = `
+You are refining the speaker's words into a balanced tone:
+- Show fairness and openness to multiple sides
+- Maintain first-person viewpoint, avoiding extremes
+`;
+                break;
+            case 'authentic':
+                toneGuidance = `
+You are refining the speaker's words into an authentic tone:
+- Preserve the speaker's natural style and emotional truth
+- Keep the narrative personal and relatable
+`;
+                break;
+            case 'structured':
+                toneGuidance = `
+You are refining the speaker's words into a structured tone:
+- Organize ideas logically (e.g., cause -> effect)
+- Maintain the speaker's personal voice
+`;
+                break;
+        }
+        
+        // Call API to transform text
+        fetch('http://localhost:5506/api/edit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                prompt: state.currentNarrative,
+                editInstruction: toneGuidance
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            // Update narrative with new tone
+            state.currentNarrative = data.response;
+            narrativeContent.textContent = data.response;
+            
+            // Update localStorage
+            localStorage.setItem('refinedNarrative', data.response);
+            
+            // Update selected tones
+            state.currentTone = state.selectedTone;
+            state.selectedTones = [state.selectedTone];
+            localStorage.setItem('selectedTones', JSON.stringify(state.selectedTones));
+            
+            // Update tone tags
+            updateToneTags();
+            
+            showToast(`Applied ${state.selectedTone} tone successfully`);
+            
+            // Close modal
+            closeToneModal();
+        })
+        .catch(error => {
+            console.error('Error applying tone:', error);
+            showToast('Error applying tone. Please try again.', 'error');
+        })
+        .finally(() => {
+            // Hide spinner and re-enable button
+            if (spinner) spinner.classList.add('hidden');
+            applyToneBtn.disabled = false;
+        });
+    }
+
+    function showCoachModal() {
+        coachModalOverlay.style.display = 'flex';
+        if (coachRequestTextarea) {
+            coachRequestTextarea.value = '';
+            coachRequestTextarea.focus();
+        }
+    }
+
+    function closeCoachModal() {
+        coachModalOverlay.style.display = 'none';
+        
+        // Stop speech recognition if active
+        if (state.isListening && state.activeInput === 'coach') {
+            state.recognition.stop();
+            state.isListening = false;
+            coachMicBtn.classList.remove('listening');
+        }
+    }
+
+    function toggleCoachSpeechRecognition() {
+        if (state.isListening && state.activeInput === 'coach') {
+            // Stop recognition
+            if (state.recognition) {
+                state.recognition.stop();
+                state.isListening = false;
+                coachMicBtn.classList.remove('listening');
+            }
+        } else {
+            // Start recognition for coach dialog
+            state.activeInput = 'coach';
+            if (state.recognition) {
+                try {
+                    state.recognition.start();
+                    coachMicBtn.classList.add('listening');
+                } catch (err) {
+                    console.error('Error starting speech recognition:', err);
+                    showToast('Error activating microphone. Please try again.', 'error');
+                }
+            }
+        }
+    }
+
+    function submitCoachRequest() {
+        const request = coachRequestTextarea?.value?.trim();
+        if (!request) {
+            showToast('Please enter a request for your coach');
+            return;
+        }
+        
+        // Show loading spinner
+        const spinner = document.getElementById('coachSpinner');
+        if (spinner) spinner.classList.remove('hidden');
+        submitCoachRequestBtn.disabled = true;
+        
+        // Call API to get coaching response
+        fetch('http://localhost:5506/api/edit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                prompt: state.currentNarrative,
+                editInstruction: request
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            // Update narrative with coached content
+            state.currentNarrative = data.response;
+            narrativeContent.textContent = data.response;
+            
+            // Update localStorage
+            localStorage.setItem('refinedNarrative', data.response);
+            
+            showToast('Coaching applied successfully');
+            
+            // Close modal
+            closeCoachModal();
+        })
+        .catch(error => {
+            console.error('Error applying coaching:', error);
+            showToast('Error applying coaching. Please try again.', 'error');
+        })
+        .finally(() => {
+            // Hide spinner and re-enable button
+            if (spinner) spinner.classList.add('hidden');
+            submitCoachRequestBtn.disabled = false;
+        });
+    }
+
+    function showQuickEditModal() {
+        quickEditModalOverlay.style.display = 'flex';
+    }
+
+    function closeQuickEditModal() {
+        quickEditModalOverlay.style.display = 'none';
+    }
+
+    function applyQuickEdit(option) {
+        const editType = option.getAttribute('data-edit');
+        if (!editType) return;
+        
+        // Show loading spinner before closing modal
+        option.innerHTML += ' <span class="loading-spinner"></span>';
+        
+        // Call API to apply quick edit
+        fetch('http://localhost:5506/api/edit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                prompt: state.currentNarrative,
+                editInstruction: editType
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            // Update narrative with edited content
+            state.currentNarrative = data.response;
+            narrativeContent.textContent = data.response;
+            
+            // Update localStorage
+            localStorage.setItem('refinedNarrative', data.response);
+            
+            showToast(`Quick edit "${editType}" applied successfully`);
+            
+            // Close modal
+            closeQuickEditModal();
+        })
+        .catch(error => {
+            console.error('Error applying quick edit:', error);
+            showToast('Error applying quick edit. Please try again.', 'error');
+        })
+        .finally(() => {
+            // Restore original button content
+            option.innerHTML = `${editType} <i class="fa-solid fa-wand-magic-sparkles"></i>`;
+        });
+    }
+
+    function showSaveModal() {
+        saveModalOverlay.style.display = 'flex';
+        
+        // Generate default title if empty
+        if (narrativeTitle && !narrativeTitle.value) {
+            const now = new Date();
+            const defaultTitle = `Narrative - ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+            narrativeTitle.value = defaultTitle;
+        }
+    }
+
+    function closeSaveModal() {
+        saveModalOverlay.style.display = 'none';
+    }
+
+    function saveToAccount() {
+        const title = narrativeTitle?.value?.trim() || 'Untitled Narrative';
+        
+        // Show loading spinner
+        const spinner = document.getElementById('saveSpinner');
+        if (spinner) spinner.classList.remove('hidden');
+        confirmSaveBtn.disabled = true;
+        
+        // Get existing sessions from localStorage
+        let sessions = JSON.parse(localStorage.getItem('userSessions') || '[]');
+        
+        // Create new session entry
+        const newSession = {
+            id: 'session-' + Date.now(),
+            title: title,
+            date: new Date().toISOString(),
+            status: 'complete',
+            preview: state.currentNarrative.substring(0, Math.min(60, state.currentNarrative.length)),
+            content: state.currentNarrative,
+            original: state.originalNarrative
+        };
+        
+        // Add to sessions array
+        sessions.push(newSession);
+        
+        // Save back to localStorage
+        localStorage.setItem('userSessions', JSON.stringify(sessions));
+        
+        // Simulate API delay
+        setTimeout(() => {
+            // Hide spinner and re-enable button
+            if (spinner) spinner.classList.add('hidden');
+            confirmSaveBtn.disabled = false;
+            
+            showToast('Narrative saved to your account');
+            
+            // Close modal
+            closeSaveModal();
+        }, 1000);
+    }
+
+    function toggleNotesScratchPad() {
+        if (notesOverlay.classList.contains('active')) {
+            closeNotesScratchPad();
+        } else {
+            openNotesScratchPad();
+        }
+    }
+
+    function openNotesScratchPad() {
+        notesOverlay.classList.add('active');
+    }
+
+    function closeNotesScratchPad() {
+        notesOverlay.classList.remove('active');
+        
+        // Save notes when closing
+        if (notesTextarea && notesTextarea.value.trim()) {
+            localStorage.setItem('narrativeNotes', notesTextarea.value);
+        }
+    }
+
+    function loadNotesContent() {
+        if (notesTextarea) {
+            const savedNotes = localStorage.getItem('narrativeNotes');
+            if (savedNotes) {
+                notesTextarea.value = savedNotes;
+            }
+        }
+    }
+
+    function returnToSituationRoom() {
+        // Save current narrative before returning
+        localStorage.setItem('refinedNarrative', state.currentNarrative);
+        
+        // Keep original narrative in local storage
+        // localStorage.setItem('originalNarrative', state.originalNarrative);
+        
+        // Redirect to situation room
+        window.location.href = 'situation-room.html';
+    }
+
+    function proceedToActionArena() {
+        // Show loading spinner on both buttons
+        document.querySelectorAll('.gradient-btn .loading-spinner').forEach(spinner => {
+            spinner.classList.remove('hidden');
+        });
+        
+        // Disable both buttons
+        proceedButton.disabled = true;
+        finalProceedButton.disabled = true;
+        
+        // Save current narrative before proceeding
+        localStorage.setItem('refinedNarrative', state.currentNarrative);
+        
+        // After a short delay, redirect to action arena
+        setTimeout(() => {
+            window.location.href = 'action-arena.html';
+        }, 1000);
+    }
+
+
+    function setupAnimations() {
+    const fadeElems = document.querySelectorAll('.fade-in');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    fadeElems.forEach(elem => {
+        elem.style.opacity = 0;
+        elem.style.transform = 'translateY(20px)';
+        elem.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        observer.observe(elem);
+    });
+}
+
+function showToast(message, type = 'success') {
+        // Remove any existing toast
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+        
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.className = `toast ${type === 'error' ? 'error' : ''}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            if (document.body.contains(toast)) {
+                toast.remove();
+            }
+        }, 3000);
+    }
+
+    // Helper function to debounce functions (for notes auto-save)
+    function debounce(func, delay) {
+        let timeoutId;
+        return function(...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+    }
+
+    // Mobile menu toggle
+    function toggleMenu() {
+        const navLinks = document.getElementById('navLinks');
+        if (navLinks) {
+            navLinks.classList.toggle('active');
+        }
+    }
+
+</script>
+</body>
+</html>

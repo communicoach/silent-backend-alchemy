@@ -1,0 +1,3610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Role Play Exercise - CommuniCoach</title>
+
+  <!-- Fonts + Icons -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Main CSS -->
+  <style>
+    /* ====== COLORS & THEMES ====== */
+    :root {
+      --primary-color: #2d4a3e;
+      --secondary-color: #1b4072;
+      --accent-color: #a1ce3e;
+      --highlight-color: #dcefc6;
+      --energy-color: #74b49b;
+      --error-color: #ff6b6b;
+      --shadow-color: rgba(45, 74, 62, 0.15);
+      --bg-color: #ffffff;
+      --bg-secondary: #f9fef3;
+      --bg-card: #ffffff;
+      --text-primary: #2d4a3e;
+      --text-secondary: #555;
+      --text-light: #ffffff;
+
+      --user-bubble-bg: #e8f4f8;
+      --partner-bubble-bg: #f0f0f0;
+      --coach-bubble-bg: #dcefc6;
+
+      --gradient-bg: linear-gradient(
+        135deg,
+        rgba(45, 74, 62, 0.05),
+        rgba(161, 206, 62, 0.07)
+      );
+      --border-color: #e0e0e0;
+      --input-bg: #ffffff;
+      --footer-bg: url(".vscode/Images/situationfooter.png"); /* Adjusted path */
+      --progress-bg: #e0e0e0;
+      --progress-fill: #136f6f;
+    }
+    
+
+    [data-theme="dark"] {
+      --primary-color: #78a891;
+      --secondary-color: #60a3d9;
+      --highlight-color: #314a2e;
+      --shadow-color: rgba(0, 0, 0, 0.25);
+
+      --bg-color: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-card: #242424;
+
+      --text-primary: #e0e0e0;
+      --text-secondary: #aaaaaa;
+
+      --user-bubble-bg: #2d4a3e;
+      --partner-bubble-bg: #333333;
+      --coach-bubble-bg: #314a2e;
+
+      --gradient-bg: linear-gradient(
+        135deg,
+        rgba(45, 74, 62, 0.15),
+        rgba(161, 206, 62, 0.17)
+      );
+      --border-color: #444444;
+      --input-bg: #333333;
+
+      --progress-bg: #444444;
+      --progress-fill: #78c7ba;
+    }
+
+    /* ====== GLOBAL STYLES ====== */
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: var(--bg-secondary);
+      opacity: 0.8;
+      z-index: -1;
+    }
+
+    /* Header and Navigation */
+.header-wrapper {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    box-shadow: 0 2px 20px var(--shadow-color);
+}
+
+.top-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 0;
+    color: var(--text-primary);
+    position: relative;
+}
+
+.top-nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.logo {
+    position: absolute;
+    left: 20px;
+}
+
+.logo img {
+    height: 40px;
+}
+
+.top-nav a:hover {
+    background: var(--highlight-color);
+}
+
+.top-nav a.current {
+    background: #136f6f;
+    color: var(--text-light);
+}
+
+/* Progress Bar */
+.progress-bar-container {
+    width: 100%;
+    padding: 10px 0;
+    background: rgba(255, 255, 255, 0.8);
+    background: var(--bg-secondary);
+}
+
+.progress-bar {
+    width: 80%;
+    margin: 0 auto;
+    height: 8px;
+    background: var(--progress-bg);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar .progress {
+    width: 80%; /* Will be updated via JS */
+    height: 100%;
+    background: var(--progress-fill);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+    position: absolute;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-label {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--accent-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Mobile Menu */
+.mobile-menu-button {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    position: absolute;
+    right: 20px;
+    top: 15px;
+}
+
+    /* ====== HERO SECTION ====== */
+    .hero-section {
+      margin-top: 100px;
+      padding: 4rem 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+    }
+    .hero-content {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+    }
+    .hero-text {
+      flex: 1.2;
+    }
+    .hero-image {
+      flex: 1;
+    }
+    .hero-image img {
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px var(--shadow-color);
+    }
+    .content-card {
+      background-color: var(--highlight-color);
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      position: relative;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .section-icon {
+      color: #ff221f;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+      text-align: center;
+    }
+    .hero-text h1 {
+      font-size: 1.75em;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    /* ====== SITUATION & GOAL ====== */
+    .situation-review-section {
+      padding: 2rem 0;
+    }
+    .situation-card {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      margin-bottom: 2rem;
+    }
+    .situation-card h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.4em;
+      margin-bottom: 1.5rem;
+    }
+    .situation-content {
+      padding: 1.5rem;
+      border: 2px solid var(--accent-color);
+      border-radius: 10px;
+      background: var(--highlight-color);
+      margin-bottom: 1.5rem;
+    }
+    .goal-summary {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 1rem;
+      border-left: 4px solid var(--accent-color);
+    }
+
+    /* ====== EXERCISE SETUP ====== */
+    .exercise-setup-section {
+      padding: 2rem 0;
+    }
+    .setup-card {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      font-family: "Poppins", sans-serif;
+      font-size: 1em;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      transition: 0.3s;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+    }
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+
+    /* ====== MODE SELECTION SECTION ====== */
+    .mode-selection-section {
+      padding: 2rem 0;
+      display: none;
+    }
+    .mode-selection-card {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+    }
+    .mode-selection-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+    }
+    .mode-selection-title h2 {
+      font-size: 1.6em;
+      margin-bottom: 0.5rem;
+    }
+    .mode-selection-title p {
+      font-size: 1.1em;
+      color: var(--text-secondary);
+    }
+    .mode-options {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .mode-option {
+      flex: 1;
+      min-width: 280px;
+      max-width: 400px;
+      background: var(--bg-secondary);
+      border: 2px solid transparent;
+      border-radius: 15px;
+      padding: 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .mode-option:hover {
+      transform: translateY(-5px);
+      background: var(--highlight-color);
+      border-color: var(--accent-color);
+      box-shadow: 0 8px 25px var(--shadow-color);
+    }
+    .mode-option.selected {
+      background: var(--highlight-color);
+      border-color: var(--accent-color);
+      box-shadow: 0 8px 25px var(--shadow-color);
+    }
+    .mode-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--secondary-color);
+      background: var(--bg-card);
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px var(--shadow-color);
+    }
+    .mode-option h3 {
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+    .mode-option p {
+      margin-bottom: 1.5rem;
+      color: var(--text-secondary);
+      flex-grow: 1;
+    }
+    .mode-benefits {
+      margin-top: auto;
+      width: 100%;
+      text-align: left;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 0.8rem;
+    }
+    .benefit-item i {
+      color: var(--accent-color);
+      margin-top: 4px;
+    }
+    .benefit-item span {
+      font-size: 0.9em;
+      color: var(--text-primary);
+    }
+    .mode-selection-actions {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ====== ROLE PLAY SECTIONS ====== */
+    /* Common Elements */
+    .role-play-section {
+      padding: 2rem 0 4rem;
+      display: none;
+    }
+    .pause-coaching-btn {
+      position: fixed;
+      right: 30px;
+      bottom: 30px;
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+    .pause-coaching-btn:hover {
+      transform: translateY(-3px);
+      background: var(--secondary-color);
+    }
+    .role-play-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .role-play-title {
+      font-size: 1.4em;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .partner-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--highlight-color);
+      border-radius: 50px;
+      font-size: 0.9em;
+      color: var(--text-primary);
+    }
+    .partner-indicator i {
+      color: var(--accent-color);
+    }
+    
+    /* Text Mode Interface */
+    .text-mode-interface {
+      display: none;
+    }
+    .conversation-card {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .conversation-display {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: 10px;
+      background: var(--bg-secondary);
+    }
+    .message {
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+    .message-bubble {
+      max-width: 80%;
+      padding: 1rem;
+      border-radius: 15px;
+      position: relative;
+    }
+    .message.user .message-bubble {
+      background: var(--user-bubble-bg);
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+    }
+    .message.partner .message-bubble {
+      background: var(--partner-bubble-bg);
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+    }
+    .message.coach .message-bubble {
+      background: var(--coach-bubble-bg);
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+      border-left: 4px solid var(--accent-color);
+    }
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .input-area {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+    .input-area textarea {
+      flex: 1;
+      min-height: 60px;
+      max-height: 150px;
+      padding: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 15px;
+      resize: none;
+      font-family: "Poppins", sans-serif;
+      font-size: 1rem;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      transition: 0.3s;
+    }
+    .input-area textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+    }
+    .input-controls {
+      display: flex;
+      gap: 0.8rem;
+    }
+    .send-message-btn {
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 50%;
+      background: var(--primary-color);
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .send-message-btn:hover {
+      transform: scale(1.05);
+      background: var(--secondary-color);
+    }
+    .typing-indicator {
+      display: flex;
+      padding: 0.8rem 1.5rem;
+      background: var(--partner-bubble-bg);
+      border-radius: 15px;
+      border-bottom-left-radius: 4px;
+      margin-right: auto;
+      max-width: 80px;
+    }
+    .typing-indicator span {
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      background: var(--text-secondary);
+      display: inline-block;
+      margin: 0 2px;
+      opacity: 0.6;
+    }
+    .typing-indicator span:nth-child(1) {
+      animation: typing 1.2s infinite 0s;
+    }
+    .typing-indicator span:nth-child(2) {
+      animation: typing 1.2s infinite 0.2s;
+    }
+    .typing-indicator span:nth-child(3) {
+      animation: typing 1.2s infinite 0.4s;
+    }
+    @keyframes typing {
+      0% { opacity: 0.6; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-5px); }
+      100% { opacity: 0.6; transform: translateY(0); }
+    }
+    .microphone-btn.listening {
+  background-color: var(--accent-color);
+  animation: pulseMic 1.2s infinite;
+}
+
+@keyframes pulseMic {
+  0% { box-shadow: 0 0 0 0 rgba(161, 206, 62, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(161, 206, 62, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(161, 206, 62, 0); }
+}
+
+
+    /* Voice Mode Interface */
+    .voice-mode-interface {
+      display: none;
+    }
+    .voice-conversation-card {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      margin-bottom: 2rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: left;
+      text-align: center;
+    }
+    .voice-tips-card {
+  
+  text-align: left;
+  align-self: center;
+  width: 100%;
+  max-width: 600px;
+}
+    .voice-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .voice-selection {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .voice-selection label {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .voice-selection select {
+      padding: 0.6rem 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-family: "Poppins", sans-serif;
+    }
+    .voice-visualization {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: var(--highlight-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      transition: all 0.3s ease;
+      overflow: visible;
+      animation: huePulse 2s infinite linear;
+    }
+    .voice-visualization.active {
+      background: var(--accent-color);
+      box-shadow: 0 0 0 10px rgba(161, 206, 62, 0.2);
+    }
+    .voice-visualization.listening:before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  z-index: 0;
+  background: radial-gradient(circle, var(--accent-color) 40%, transparent 80%);
+  animation: pulse 1.5s infinite;
+  opacity: 0.5;
+  z-index: -1;
+}
+@keyframes speakBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+@keyframes breathePulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+}
+
+
+@keyframes huePulse {
+  0% { filter: hue-rotate(0deg); opacity: 0.4; }
+  50% { filter: hue-rotate(180deg); opacity: 0.6; }
+  100% { filter: hue-rotate(360deg); opacity: 0.4; }
+}
+
+
+.voice-visualization .speaking-pulse {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-color) 40%, transparent 80%);
+  animation: speakPulse 1.4s infinite ease-in-out;
+  opacity: 0.7;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes speakPulse {
+  0% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.25); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 0.3; }
+}
+
+
+.voice-visualization.speaking .voice-icon {
+  animation: speakBounce 0.9s infinite ease-in-out;
+  color: var(--text-light);
+}
+
+
+
+
+.voice-icon {
+      font-size: 3rem;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+      z-index: 1;
+    }
+   
+    .microphone-btn {
+      margin-top: 1.5rem;
+      width: 60px;
+      height: 60px;
+      border: none;
+      border-radius: 50%;
+      background: var(--primary-color);
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .microphone-btn:hover {
+      transform: scale(1.05);
+      background: var(--secondary-color);
+    }
+    .microphone-btn.muted {
+      background: var(--error-color);
+    }
+    
+    .voice-instructions {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: var(--highlight-color);
+      border-radius: 15px;
+      max-width: 600px;
+      width: 100%;
+    }
+    .voice-instructions h4 {
+      font-size: 1.1em;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .voice-instructions ul {
+      padding-left: 1.5rem;
+      color: var(--text-primary);
+    }
+    .voice-instructions li {
+      margin-bottom: 0.5rem;
+      font-size: 0.9em;
+    }
+
+    /* Coaching Mode Overlay */
+    .coaching-mode-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .coaching-card {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 800px;
+      position: relative;
+      animation: fadeIn 0.5s ease;
+    }
+    .coaching-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid var(--accent-color);
+    }
+    .coaching-icon {
+      font-size: 2.5rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+    .coaching-header h3 {
+      font-size: 1.6em;
+      margin-bottom: 0.8rem;
+      color: var(--text-primary);
+    }
+    .coaching-header p {
+      color: var(--text-secondary);
+      font-size: 1.1em;
+    }
+    .coaching-content {
+      margin-bottom: 2rem;
+    }
+    .coaching-suggestions {
+      background: var(--highlight-color);
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+    }
+    .coaching-suggestions h4 {
+      font-size: 1.1em;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+    .suggestion-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+    .suggestion-item {
+      background: var(--bg-card);
+      padding: 0.8rem 1.2rem;
+      border-radius: 50px;
+      font-size: 0.9em;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-color);
+    }
+    .suggestion-item:hover {
+      background: var(--accent-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+    .coaching-input {
+      margin-bottom: 2rem;
+    }
+    .coaching-input label {
+      display: block;
+      margin-bottom: 0.8rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .coaching-input textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 15px;
+      font-family: "Poppins", sans-serif;
+      font-size: 1rem;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      resize: none;
+    }
+    .coaching-input textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+    }
+    .coaching-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .coaching-actions button {
+      flex: 1;
+      padding: 1rem;
+      border-radius: 10px;
+      font-family: "Poppins", sans-serif;
+      font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.coaching-actions button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px var(--shadow-color);
+}
+
+.coaching-actions button:first-child {
+  background: var(--primary-color);
+  color: white;
+}
+
+.coaching-actions button:last-child {
+  background: var(--bg-secondary);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.coaching-actions button:first-child:hover {
+  background: var(--secondary-color);
+}
+
+.coaching-actions button:last-child:hover {
+  background: var(--highlight-color);
+}
+.coaching-hint-dropdown {
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+  width: 100%;
+  max-width: 600px;
+}
+
+.coaching-hint-dropdown label {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.coaching-hint-dropdown select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 2px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  box-shadow: 0 2px 10px var(--shadow-color);
+  transition: border-color 0.3s ease;
+}
+
+.coaching-hint-dropdown select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.25);
+}
+
+      /* ====== INSIGHTS SECTION ====== */
+      .insights-overlay-container {
+      padding: 2rem 0;
+      display: none;
+    }
+    .insights-card {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      margin-bottom: 2rem;
+    }
+    .insights-title {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 1.4em;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+    }
+    .insights-title i {
+      color: var(--accent-color);
+    }
+    .insights-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .insight-item {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 1.5rem;
+      border-left: 4px solid var(--accent-color);
+    }
+    .textContent 
+.style-tag {
+  display: inline-block;
+  background: var(--highlight-color);
+  color: var(--primary-color);
+  padding: 0.3rem 0.8rem;
+  margin: 0.3rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  border: 1px solid var(--accent-color);
+}
+
+
+    .insight-item h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 1.2em;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+    .insight-item h3 i {
+      color: var(--secondary-color);
+    }
+    .insight-content {
+      color: var(--text-secondary);
+      font-size: 0.95em;
+      line-height: 1.6;
+    }
+    .insight-content ul {
+      padding-left: 1.5rem;
+      margin-top: 0.8rem;
+    }
+    .insight-content li {
+      margin-bottom: 0.5rem;
+    }
+    .insight-quote {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-card);
+      border-radius: 10px;
+      border-left: 3px solid var(--secondary-color);
+      font-style: italic;
+      color: var(--text-primary);
+    }
+    .insight-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      gap: 1rem;
+    }
+
+    /* ====== BUTTONS & CONTROLS ====== */
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      font-family: "Poppins", sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+      box-shadow: 0 4px 15px var(--shadow-color);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      background: var(--secondary-color);
+      box-shadow: 0 8px 25px var(--shadow-color);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+    }
+    .btn-outline:hover {
+      background: var(--highlight-color);
+      transform: translateY(-3px);
+    }
+    .btn-accent {
+      background: var(--accent-color);
+      color: white;
+    }
+    .btn-accent:hover {
+      background: var(--energy-color);
+    }
+    .btn-danger {
+      background: var(--error-color);
+      color: white;
+    }
+    .btn-danger:hover {
+      background: #ff4747;
+    }
+    .btn.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .btn .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s linear infinite;
+      margin-right: 0.5rem;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ====== FOOTER ====== */
+    .footer-nav {
+      width: 100%;
+      margin-top: auto;
+      color: #ffffff;
+      background: var(--footer-bg) no-repeat center center;
+      background-size: cover;
+      min-height: 60px;
+      padding: 15px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+    .footer-nav p {
+      margin: 0;
+    }
+    .footer-nav a {
+      color: white;
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+    .footer-nav a:hover {
+      opacity: 0.8;
+    }
+
+    /* ====== TOAST & NOTIFICATIONS ====== */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary-color);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      animation: fadeInUp 0.3s ease;
+    }
+    .toast.error {
+      background: var(--error-color);
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translate(-50%, 20px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    /* ====== TOOLTIPS ====== */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: var(--primary-color);
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .tooltip .tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--primary-color) transparent transparent transparent;
+    }
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* ====== RESPONSIVE BREAKPOINTS ====== */
+    @media (max-width: 768px) {
+      .hero-content {
+        flex-direction: column-reverse;
+        gap: 2rem;
+        text-align: center;
+      }
+      .hero-text h1 {
+        font-size: 1.6em;
+      }
+      .hero-text p {
+        font-size: 0.95em;
+      }
+      .mode-options {
+        flex-direction: column;
+      }
+      .mode-option {
+        max-width: 100%;
+      }
+      .input-area {
+        flex-direction: column;
+      }
+      .input-area textarea {
+        margin-bottom: 1rem;
+      }
+      .input-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .coaching-card {
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 1.5rem;
+      }
+      .coaching-actions {
+        flex-direction: column;
+      }
+      .voice-transcript {
+        padding: 1rem;
+      }
+      .pause-coaching-btn {
+        right: 20px;
+        bottom: 20px;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      .role-play-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .partner-indicator {
+        align-self: flex-start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 1rem;
+      }
+      .setup-card, 
+      .mode-selection-card, 
+      .conversation-card, 
+      .voice-conversation-card, 
+      .insights-card {
+        padding: 1.5rem;
+      }
+      .voice-visualization {
+        width: 150px;
+        height: 150px;
+      }
+      .voice-icon {
+        font-size: 3rem;
+      }
+      .voice-instructions {
+        padding: 1rem;
+      }
+      .coaching-icon {
+        font-size: 2rem;
+      }
+      .coaching-header h3 {
+        font-size: 1.4em;
+      }
+      .coaching-header p {
+        font-size: 1em;
+      }
+      .suggestion-items {
+        gap: 0.5rem;
+      }
+      .suggestion-item {
+        padding: 0.6rem 1rem;
+        font-size: 0.8em;
+      }
+  
+    .top-nav {
+        flex-direction: column;
+        padding: 10px 0;
+    }
+
+    .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding-top: 10px;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .logo {
+        position: static;
+        margin-bottom: 10px;
+    }
+
+    .mobile-menu-button {
+        display: block;
+    }
+
+    .dark-mode-toggle {
+        position: static;
+        margin-top: 10px;
+        justify-content: center;
+    }
+    .footer-nav {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 0;
+        gap: 10px;
+    }
+
+    }
+
+    /* ====== ANIMATIONS ====== */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards;
+    }
+    .delay-1 {
+      animation-delay: 0.2s;
+    }
+    .delay-2 {
+      animation-delay: 0.4s;
+    }
+    .breathing-animation {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background-color: #ff4747;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      animation: breathe 2s infinite ease-in-out;
+    }
+    @keyframes breathe {
+      0%, 100% { transform: scale(0.9); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Nav / Dark Mode -->
+  <div class="header-wrapper">
+    <div class="top-nav">
+      <a href="#" class="logo"><img src=".vscode/Images/CClogo.png" alt="CommuniCoach"></a>
+      <button class="mobile-menu-button" onclick="toggleMenu()">☰</button>
+      <div class="nav-links" id="navLinks">
+        <a href="welcome.html">Welcome</a>
+        <a href="tone-selection.html">Tone Selection</a>
+        <a href="situation-room.html">Situation Room</a>
+        <a href="refined-narrative.html">Refined Narrative</a>
+        <a href="action-arena.html">Action Arena</a>
+        <a href="action-roleplay.html" class="current">Role Play</a>
+      </div>
+      <!-- Dark Mode Toggle -->
+      <div class="dark-mode-toggle">
+        <span class="toggle-label">Dark Mode</span>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle" />
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-content">
+      <div class="hero-text fade-in">
+        <div class="content-card">
+          <i class="fa-solid fa-comments section-icon"></i>
+          <h1>Role Play Exercise</h1>
+          <p>
+            Practice your communication skills through interactive role-play with an AI partner.
+            This safe environment allows you to try different approaches, receive feedback, and
+            build confidence for your real-world conversation.
+          </p>
+          <p>
+            Remember, you can pause at any time to receive coaching or ask questions about
+            communication strategies. The more you practice, the more prepared you'll feel.
+          </p>
+        </div>
+      </div>
+      <div class="hero-image fade-in delay-1">
+        <img src=".vscode/Images/conversation.png" alt="Role Play Exercise" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Situation + Goal -->
+  <section class="situation-review-section">
+    <div class="container">
+      <div class="situation-card fade-in delay-1">
+        <h2><i class="fa-solid fa-file-lines"></i> Your Current Situation</h2>
+        <div class="situation-content" id="situationSummary">
+          <!-- from localStorage -->
+        </div>
+        <div class="goal-summary">
+          <p><strong>Your Communication Goal:</strong> 
+            <span id="goalSummary"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Setup Section -->
+  <section class="exercise-setup-section" id="exerciseSetupSection">
+    <div class="container">
+      <div class="setup-card fade-in delay-2">
+        <h2>Set the Stage</h2>
+        <p>Define the details of your conversation scenario to make the role-play more realistic and valuable.</p>
+        <form id="setupForm">
+          <div class="form-group">
+            <label for="conversationPartner">Who will you be speaking with?</label>
+            <input type="text" id="conversationPartner" placeholder="e.g. Sarah (your manager)" />
+          </div>
+          <div class="form-group">
+            <label for="conversationMedium">Conversation Medium</label>
+            <select id="conversationMedium">
+              <option value="">Select a medium...</option>
+              <option value="face-to-face">Face-to-face</option>
+              <option value="video-call">Video call</option>
+              <option value="phone-call">Phone call</option>
+              <option value="email">Email</option>
+              <option value="text-message">Text message</option>
+            </select>
+          </div>
+          <div class="form-group">
+  <label for="partnerMood">How does your partner usually show up in these conversations?</label>
+  <select id="partnerMood">
+    <option value="">Select a mood...</option>
+
+    <optgroup label="Open / Emotionally Present">
+      <option value="receptive">Receptive — open, listening, available</option>
+      <option value="warm-nervous">Warm but Nervous — caring, but uneasy or unsure</option>
+    </optgroup>
+
+    <optgroup label="Tense / On Edge">
+      <option value="defensive">Defensive — feels attacked, quick to justify</option>
+      <option value="stressed">Stressed — overwhelmed, short-tempered</option>
+      <option value="hurt">Hurt or Wounded — reactive, carries emotional baggage</option>
+      <option value="avoidant">Avoidant — dodges tough conversations, changes subject</option>
+    </optgroup>
+
+    <optgroup label="Difficult / Triggering">
+      <option value="irritated">Irritated — impatient, easily provoked</option>
+      <option value="dismissive">Dismissive — minimizes, brushes you off</option>
+      <option value="sarcastic">Sarcastic — biting humor, undercuts sincerity</option>
+      <option value="controlling">Controlling — dominates, interrupts, needs to be right</option>
+      <option value="blaming">Blaming — flips fault onto you, avoids accountability</option>
+    </optgroup>
+  </select>
+</div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary" id="startExerciseBtn">
+              <span id="startButtonText">Continue</span>
+              <span id="startSpinner" class="spinner" style="display: none;"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mode Selection Section -->
+  <section class="mode-selection-section" id="modeSelectionSection">
+    <div class="container">
+      <div class="mode-selection-card fade-in">
+        <div class="mode-selection-title">
+          <h2>Choose Your Role-Play Mode</h2>
+          <p>Select how you'd like to practice this conversation</p>
+        </div>
+        <div class="mode-options">
+          <!-- Text Mode Option -->
+          <div class="mode-option" id="textModeOption">
+            <div class="mode-icon">
+              <i class="fa-solid fa-keyboard"></i>
+            </div>
+            <h3>Text Mode</h3>
+            <p>Type or Speak your responses in a messaging-style interface. Perfect for carefully thinking through your communication.</p>
+            <div class="mode-benefits">
+              <div class="benefit-item">
+                <i class="fa-solid fa-check"></i>
+                <span>More time to think and craft responses</span>
+              </div>
+              <div class="benefit-item">
+                <i class="fa-solid fa-check"></i>
+                <span>Creates a written record of conversation insights to review later</span>
+              </div>
+              <div class="benefit-item">
+                <i class="fa-solid fa-check"></i>
+                <span>Great for practicing messaging-style communications</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Voice Mode Option -->
+          <div class="mode-option" id="voiceModeOption">
+            <div class="mode-icon">
+              <i class="fa-solid fa-microphone"></i>
+            </div>
+            <h3>Voice Mode</h3>
+            <p>Speak your responses aloud and hear your AI partner respond to you. Perfect for practicing natural conversation flow.</p>
+            <div class="mode-benefits">
+              <div class="benefit-item">
+                <i class="fa-solid fa-check"></i>
+                <span>More realistic conversation practice</span>
+              </div>
+              <div class="benefit-item">
+                <i class="fa-solid fa-check"></i>
+                <span>Practice tone, pacing, and verbal delivery</span>
+              </div>
+              <div class="benefit-item">
+                <i class="fa-solid fa-check"></i>
+                <span>Sharpen your skill in spontaneous responses</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mode-selection-actions">
+          <button class="btn btn-primary" id="confirmModeBtn" disabled>
+            <span id="confirmModeText">Start Role Play</span>
+            <span id="confirmModeSpinner" class="spinner" style="display: none;"></span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Role Play Section - Text Mode -->
+<section class="role-play-section" id="textRolePlaySection">
+  <div class="container">
+    <div class="text-mode-interface">
+
+      <div class="conversation-card fade-in">
+        <div class="role-play-header">
+          <div class="role-play-title">
+            <i class="fa-solid fa-comments"></i>
+            <span>Text Role Play</span>
+          </div>
+          <div class="partner-indicator">
+            <i class="fa-solid fa-user"></i>
+            <span id="partnerNameDisplay">Partner</span>
+          </div>
+        </div>
+
+        <!-- Conversation History -->
+        <div class="conversation-display" id="conversationDisplay">
+          <!-- messages go here -->
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+          <textarea
+            id="userInput"
+            placeholder="Type your message here..."
+            rows="3"
+          ></textarea>
+          <div class="input-controls">
+            <button id="sendMessageBtn" class="send-message-btn">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Microphone Option -->
+        <button id="textMicrophoneBtn" class="microphone-btn">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+        <p class="voice-status" id="textVoiceStatus">Click the microphone to start</p>
+
+        <!-- Instruction Card -->
+        <div class="voice-instructions">
+          <h4><i class="fa-solid fa-circle-info"></i> Tips for Text Mode</h4>
+          <ul>
+            <li>You can type or click the mic to speak your response.</li>
+            <li>Use <strong>Pause for Coaching</strong> for live guidance.</li>
+            <li>Select <strong>End & Get Insights</strong> when you’re ready to reflect.</li>
+            <li><strong>Try Again</strong> resets the exercise with the same partner.</li>
+            <li><strong>Return to Action Arena</strong> when you're ready to move forward.</li>
+          </ul>
+        </div>
+
+        <!-- Action Buttons (Responsive Layout) -->
+        <div class="text-mode-actions button-row">
+          <button id="textPauseCoachingBtn" class="btn btn-accent">
+            <i class="fa-solid fa-chalkboard-user"></i> Pause for Coaching
+          </button>
+          <button id="textCompleteExerciseBtn" class="btn btn-primary">
+            <i class="fa-solid fa-lightbulb"></i> End & Get Insights
+          </button>
+          <button class="btn btn-outline" id="tryAgainBtn">
+            <i class="fa-solid fa-rotate"></i> Try Again
+          </button>
+          <button class="btn btn-accent" id="returnToArenaBtn" style="display: none;">
+            <i class="fa-solid fa-circle-arrow-right"></i> Return to Action Arena
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+    
+      <!-- Coaching Mode Overlay -->
+<div class="coaching-mode-container" id="coachingModeContainer">
+  <div class="coaching-card">
+    <div class="coaching-header">
+      <div class="coaching-icon">
+        <i class="fa-solid fa-chalkboard-user"></i>
+      </div>
+      <h3>Coaching Mode</h3>
+      <p>Take a break from the role play to receive guidance and communication advice</p>
+    </div>
+
+    <div class="coaching-content" id="coachingContent">
+      <!-- Initial coaching message appears here -->
+    </div>
+
+    <div class="coaching-suggestions">
+      <h4>Suggested Questions:</h4>
+      <div class="suggestion-items">
+        <div class="suggestion-item" onclick="selectCoachingSuggestion(this)">How am I doing so far?</div>
+        <div class="suggestion-item" onclick="selectCoachingSuggestion(this)">What should I say next?</div>
+        <div class="suggestion-item" onclick="selectCoachingSuggestion(this)">How can I be more assertive?</div>
+        <div class="suggestion-item" onclick="selectCoachingSuggestion(this)">How can I show more empathy?</div>
+        <div class="suggestion-item" onclick="selectCoachingSuggestion(this)">Can you adjust the partner's responses?</div>
+      </div>
+    </div>
+
+    <div class="coaching-input">
+      <label for="coachingQuestion">Ask for specific advice:</label>
+      <div class="input-area">
+        <textarea
+          id="coachingQuestion"
+          placeholder="Type your questions or ask for specific communication strategies..."
+        ></textarea>
+        <button id="coachingMicrophoneBtn" class="microphone-btn small-mic" type="button">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="coaching-actions">
+      <button id="submitCoachingBtn" class="btn btn-primary">
+        <i class="fa-solid fa-paper-plane"></i> Ask Coach
+      </button>
+      <button id="resumeRolePlayBtn" class="btn btn-outline">
+        <i class="fa-solid fa-play"></i> Resume Role Play
+      </button>
+    </div>
+  </div>
+</div>
+
+  
+   
+   <!-- Insights Overlay -->
+<div class="insights-overlay-container" id="insightsSection">
+  <div class="insights-card fade-in">
+
+    <!-- Summary -->
+    <div class="insight-item">
+      <h3><i class="fa-solid fa-comment-dots"></i> Overall Summary</h3>
+      <div class="insight-content" id="insightSummary"></div>
+    </div>
+
+    <!-- Communication Style -->
+    <div class="insight-item">
+      <h3><i class="fa-solid fa-fingerprint"></i> Your Communication Style</h3>
+      <div class="insight-content" id="insightStyle" class="tag-list"></div>
+    </div>
+
+    <!-- Strengths -->
+    <div class="insight-item">
+      <h3><i class="fa-solid fa-star"></i> Strengths You Demonstrated</h3>
+      <div class="insight-content" id="insightStrengths"></div>
+    </div>
+
+    <!-- Growth Opportunities -->
+    <div class="insight-item">
+      <h3><i class="fa-solid fa-seedling"></i> Growth Opportunities</h3>
+      <div class="insight-content" id="insightGrowth"></div>
+    </div>
+
+    <!-- Standout Moment -->
+    <div class="insight-item">
+      <h3><i class="fa-solid fa-bullseye"></i> A Standout Moment</h3>
+      <blockquote class="insight-quote" id="insightMoment"></blockquote>
+    </div>
+
+    <!-- Transferable Skills -->
+    <div class="insight-item">
+      <h3><i class="fa-solid fa-arrows-up-down-left-right"></i> Transferable Skills</h3>
+      <div class="insight-content" id="insightSkills"></div>
+    </div>
+
+    <!-- Next Step -->
+    <div class="insight-item">
+      <h3><i class="fa-solid fa-shoe-prints"></i> Suggested Next Step</h3>
+      <div class="insight-content" id="insightNextStep"></div>
+    </div>
+
+    <!-- Action Buttons -->
+<div class="insight-actions button-row">
+  <button class="btn btn-primary" id="completeExerciseBtn">
+    <i class="fa-solid fa-check"></i> Close Insights
+  </button>
+</div>
+</div>
+</div>
+
+  <!-- Role Play Section - Voice Mode -->
+<section class="role-play-section" id="voiceRolePlaySection">
+  <div class="container">
+    <div class="voice-mode-interface">
+
+      <div class="voice-conversation-card fade-in">
+        <div class="role-play-header">
+          <div class="role-play-title">
+            <i class="fa-solid fa-comments"></i>
+            <span>Voice Role Play</span>
+          </div>
+          <div class="partner-indicator">
+            <i class="fa-solid fa-user"></i>
+            <span id="voicePartnerNameDisplay">Partner</span>
+          </div>
+        </div>
+
+        <!-- Voice Controls -->
+        <div class="voice-controls">
+          <!-- Voice Selector -->
+          <div class="voice-selection">
+            <label for="aiVoiceSelect">AI Voice:</label>
+            <select id="aiVoiceSelect">
+              <option value="alloy">Alloy (Balanced)</option>
+              <option value="shimmer">Shimmer (Friendly)</option>
+              <option value="nova">Nova (Professional)</option>
+              <option value="echo">Echo (Warm)</option>
+              <option value="fable">Fable (Expressive)</option>
+            </select>
+          </div>
+
+          <!-- Visualization Ring -->
+          <div class="voice-visualization" id="voiceVisualization">
+            <i class="fa-solid fa-comment-dots voice-icon"></i>
+          </div>
+
+          <!-- Mic Button -->
+          <button id="microphoneBtn" class="microphone-btn">
+            <i class="fa-solid fa-microphone"></i>
+          </button>
+
+          <!-- Voice Status -->
+          <p class="voice-status-indicator" id="voiceStatus">Ready to begin</p>
+        </div>
+
+        <!-- Persistent Voice Tips Card -->
+        <div class="voice-tips-card">
+          <h4><i class="fa-solid fa-circle-info"></i> Voice Mode Tips</h4>
+          <ul>
+            <li>Click the microphone to speak or mute.</li>
+            <li>Say <strong>"Pause for Coaching"</strong> for help or guidance.</li>
+            <li>Say <strong>"Pause for Technical Difficulties"</strong> if the coach gets confused.</li>
+            <li>It’s okay to challenge or recalibrate the character’s behavior—just let the coach know.</li>
+          </ul>
+        </div>
+
+        <!-- Floating Tooltip Comparison (Text vs Voice Mode) -->
+        <div class="voice-tooltip">
+          
+          <div class="tooltip-text">
+            <p><strong>Voice Mode:</strong> Fully immersive and fast-paced. No transcript or written feedback is saved.</p>
+            <p><strong>Text Mode:</strong> Thoughtful, editable pace with written coaching and insights you can review later.</p>
+            <p>Use <strong>Try Again</strong> below to restart or switch modes.</p>
+          </div>
+        </div>
+
+        <!-- Coaching Prompt Dropdown -->
+        <div class="coaching-hint-dropdown">
+          <label for="voiceCoachingHint">
+            <i class="fa-solid fa-chalkboard-user"></i> Quick Coaching Reminders:
+            <br><span style="font-weight: normal; font-size: 0.9em; display: block; margin-top: 0.3rem;">
+              These are just examples — feel free to say anything to Coach during the exercise.
+            </span>
+          </label>
+          
+          <select id="voiceCoachingHint">
+            <option value="">Select a coaching comment...</option>
+            <option>How am I doing so far?</option>
+            <option>What should I say next?</option>
+            <option>How can I be more assertive?</option>
+            <option>How can I show more empathy?</option>
+            <option>Can you recalibrate the partner’s responses?</option>
+            <option>I think the partner is reacting unnaturally—can we adjust?</option>
+          </select>
+        </div>
+       
+        
+
+        <!-- Exit Buttons -->
+    <!-- Voice Mode Action Buttons -->
+<div class="voice-mode-actions button-row">
+  <button class="btn btn-outline" id="voiceTryAgainBtn">
+    <i class="fa-solid fa-rotate"></i> Try Again
+  </button>
+  <button class="btn btn-accent" id="voiceReturnToArenaBtn">
+    <i class="fa-solid fa-circle-arrow-right"></i> Return to Action Arena
+  </button>
+</div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- Footer -->
+  <footer class="footer-nav">
+    <p>&copy; 2024 CommuniCoach. All rights reserved.</p>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+  </footer>
+
+  <!-- Templates -->
+  
+  <template id="messageBubbleTemplate">
+    <div class="message">
+      <div class="message-bubble">
+        <div class="message-header">
+          <span class="message-sender"></span>
+          <span class="message-time"></span>
+        </div>
+        <div class="message-content"></div>
+      </div>
+    </div>
+  </template>
+
+  <template id="typingIndicatorTemplate">
+    <div class="message partner">
+      <div class="message-bubble">
+        <div class="typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  
+
+  <!-- Realtime voice logic -->
+  <script src="realtime-api.js"></script>
+
+  <script>/********************************************************
+    * Enhanced action-roleplay.js - preserving WebRTC functionality
+    ********************************************************/
+// === DOM REFERENCES (SCOPED & UPDATED) ===
+
+// Shared UI
+const darkModeToggle = document.getElementById('darkModeToggle');
+const progressBarEl = document.querySelector('.progress-bar .progress');
+
+// === TEXT MODE ONLY ===
+const textRolePlaySection = document.getElementById('textRolePlaySection');
+const conversationDisplay = document.getElementById('conversationDisplay');
+const userInput = document.getElementById('userInput');
+const sendMessageBtn = document.getElementById('sendMessageBtn');
+const textMicrophoneBtn = document.getElementById('textMicrophoneBtn');
+const textPauseCoachingBtn = document.getElementById('textPauseCoachingBtn');
+const textCompleteExerciseBtn = document.getElementById('textCompleteExerciseBtn');
+const textTryAgainBtn = document.getElementById('tryAgainBtn');
+const textReturnToArenaBtn = document.getElementById('returnToArenaBtn');
+
+// Templates (for text conversation)
+const messageBubbleTemplate = document.getElementById('messageBubbleTemplate');
+const typingIndicatorTemplate = document.getElementById('typingIndicatorTemplate');
+
+// Coaching Overlay (Text Mode)
+const coachingModeContainer = document.getElementById('coachingModeContainer');
+const coachingContent = document.getElementById('coachingContent');
+const coachingQuestion = document.getElementById('coachingQuestion');
+const submitCoachingBtn = document.getElementById('submitCoachingBtn');
+const resumeRolePlayBtn = document.getElementById('resumeRolePlayBtn');
+const coachingMicrophoneBtn = document.getElementById('coachingMicrophoneBtn');
+
+// New Insights Overlay (Text Mode)
+const insightsOverlayContainer = document.getElementById('insightsSection'); // consider renaming to insightsOverlay in HTML
+const insightsContent = document.getElementById('insightsContent'); // new innerHTML target
+const completeExerciseBtn = document.getElementById('completeExerciseBtn'); // 'Close Insights' button
+
+// === VOICE MODE ONLY ===
+const voiceRolePlaySection = document.getElementById('voiceRolePlaySection');
+const microphoneBtn = document.getElementById('microphoneBtn');
+const voiceVisualization = document.getElementById('voiceVisualization');
+const voiceStatus = document.getElementById('voiceStatus');
+const aiVoiceSelect = document.getElementById('aiVoiceSelect');
+const voicePartnerNameDisplay = document.getElementById('voicePartnerNameDisplay');
+const voiceCoachingHint = document.getElementById('voiceCoachingHint');
+const voiceTryAgainBtn = document.getElementById('voiceTryAgainBtn');
+const voiceReturnToArenaBtn = document.getElementById('voiceReturnToArenaBtn');
+
+// === SETUP / MODE SELECTION ===
+const setupSection = document.getElementById('exerciseSetupSection');
+const modeSelectionSection = document.getElementById('modeSelectionSection');
+const textModeOption = document.getElementById('textModeOption');
+const voiceModeOption = document.getElementById('voiceModeOption');
+const confirmModeBtn = document.getElementById('confirmModeBtn');
+
+const situationSummaryEl = document.getElementById('situationSummary');
+const goalSummaryEl = document.getElementById('goalSummary');
+const conversationPartnerInput = document.getElementById('conversationPartner');
+const conversationMediumSelect = document.getElementById('conversationMedium');
+const partnerMoodSelect = document.getElementById('partnerMood');
+const startExerciseBtn = document.getElementById('startExerciseBtn');
+
+// === STATE ===
+let refinedNarrative = '';
+let communicationGoal = '';
+let partnerName = '';
+let conversationMedium = '';
+let partnerMood = '';
+let selectedMode = ''; // 'text' or 'voice'
+let isVoiceActive = false;
+let isInCoachingMode = false;
+let textRecognition;
+let isTextMicRecognizing = false;
+let coachingRecognition;
+let isCoachingMicRecognizing = false;
+
+
+function getPartnerMoodProfile(moodKey) {
+  const moodProfiles = {
+    'receptive': {
+      summary: "open and emotionally available",
+      behavior: "Responds with curiosity and warmth. Willing to hear you out, even if unsure. May ask reflective questions or express appreciation. Minimal tension."
+    },
+    'warm-nervous': {
+      summary: "warm but unsure or anxious",
+      behavior: "Tries to be supportive but may seem hesitant or afraid of conflict. Uses soft language, asks for reassurance, sometimes avoids direct statements."
+    },
+    'defensive': {
+      summary: "quick to feel accused or misunderstood",
+      behavior: "Frequently interrupts or justifies actions. Misreads intentions. Can escalate tension quickly if they feel judged, even if you're gentle."
+    },
+    'stressed': {
+      summary: "overwhelmed and easily agitated",
+      behavior: "Rushed, impatient, focused on other problems. May react sharply or shut down. Often seems unavailable even if physically present."
+    },
+    'hurt': {
+      summary: "emotionally wounded or bruised",
+      behavior: "Carries past pain into the conversation. May respond from a place of sadness, betrayal, or hopelessness. Sensitive to tone or phrasing."
+    },
+    'avoidant': {
+      summary: "avoids discomfort or depth",
+      behavior: "Changes subject, keeps things surface-level. Uses vagueness or distractions. Tends to nod along without true engagement."
+    },
+    'irritated': {
+      summary: "easily annoyed or provoked",
+      behavior: "Uses clipped responses, sighs, or eye-rolls. Shows little patience. May escalate quickly with tone, but isn't deeply reflective."
+    },
+    'dismissive': {
+      summary: "minimizes your concerns",
+      behavior: "Waves off what you say, interrupts with unrelated points, or changes the topic. Comes across as condescending or bored."
+    },
+    'sarcastic': {
+      summary: "uses humor to undercut seriousness",
+      behavior: "Makes jokes that subtly shame or mock. Avoids vulnerability. Often uses irony as a shield, even if the issue is serious."
+    },
+    'controlling': {
+      summary: "needs to steer or dominate the interaction",
+      behavior: "Interrupts, reframes your words, or insists on their own logic. May override your perspective or speak over you."
+    },
+    'blaming': {
+      summary: "quick to turn fault toward you",
+      behavior: "Deflects responsibility. Focuses on your past mistakes. May exaggerate your role in the problem to avoid accountability."
+    }
+  };
+
+  return moodProfiles[moodKey] || {
+    summary: "unknown or unpredictable",
+    behavior: "Responds in an emotionally unpredictable way. Please refine mood selection if this doesn’t match your experience."
+  };
+}
+
+
+// === CONVERSATION HISTORY (Text Mode Only) ===
+let conversationHistory = [];
+
+// On load
+  document.addEventListener('DOMContentLoaded', init);
+  
+   
+  function init() {
+  console.log('[RolePlay] Initializing...');
+
+  // Load user's situation and goal into the Setup section
+  loadSituationAndGoal();
+
+  // Set initial theme based on localStorage
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  if (savedTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    darkModeToggle.checked = true;
+  }
+
+  darkModeToggle.addEventListener('change', () => {
+    const isDark = darkModeToggle.checked;
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  // Setup form: continue to mode selection
+  startExerciseBtn.addEventListener('click', handleStartExercise);
+
+  // Mode selection (text or voice)
+  textModeOption.addEventListener('click', () => selectMode('text'));
+  voiceModeOption.addEventListener('click', () => selectMode('voice'));
+  confirmModeBtn.addEventListener('click', handleConfirmMode);
+}
+     
+    
+   function loadSituationAndGoal() {
+     const rawNarr = localStorage.getItem('refinedNarrative') || '';
+     refinedNarrative = rawNarr.length > 300 ? rawNarr.slice(0,300)+'...' : rawNarr;
+     communicationGoal = localStorage.getItem('communicationGoal') || '(No goal)';
+   
+     if (situationSummaryEl) situationSummaryEl.textContent = refinedNarrative || '(No narrative found)';
+     if (goalSummaryEl) goalSummaryEl.textContent = communicationGoal;
+   }
+   
+   function setProgressBar(percent) {
+     if (progressBarEl) progressBarEl.style.width = percent + '%';
+   }
+   
+   function handleStartExercise() {
+     partnerName = conversationPartnerInput.value.trim() || 'Partner';
+     conversationMedium = conversationMediumSelect.value || 'face-to-face';
+     partnerMood = partnerMoodSelect.value || 'neutral';
+   
+     if (!partnerName || !conversationMedium || !partnerMood) {
+       showToast('Please fill all fields.', 2500);
+       return;
+     }
+     
+   
+     // Instead of showing role play section directly, show mode selection
+     setupSection.style.display = 'none';
+     if (modeSelectionSection) {
+       modeSelectionSection.style.display = 'block';
+       
+       // Update partner name displays
+       if (partnerNameDisplay) partnerNameDisplay.textContent = partnerName;
+       if (voicePartnerNameDisplay) voicePartnerNameDisplay.textContent = partnerName;
+    
+     }
+   }
+   
+   function selectMode(mode) {
+     selectedMode = mode;
+     
+     // Visual feedback
+     if (textModeOption) textModeOption.classList.remove('selected');
+     if (voiceModeOption) voiceModeOption.classList.remove('selected');
+     
+     if (mode === 'text' && textModeOption) {
+       textModeOption.classList.add('selected');
+     } else if (mode === 'voice' && voiceModeOption) {
+       voiceModeOption.classList.add('selected');
+     }
+     
+     // Enable continue button
+     if (confirmModeBtn) confirmModeBtn.disabled = false;
+   }
+   
+   function handleConfirmMode() {
+  if (modeSelectionSection) modeSelectionSection.style.display = 'none';
+
+  if (selectedMode === 'text') {
+    if (textRolePlaySection) {
+      textRolePlaySection.style.display = 'block';
+      const interfaceEl = document.querySelector('.text-mode-interface');
+      if (interfaceEl) interfaceEl.style.display = 'block';
+    }
+
+    // Activate text mode setup
+    enterTextMode();
+  }
+
+  else if (selectedMode === 'voice') {
+    if (voiceRolePlaySection) {
+      voiceRolePlaySection.style.display = 'block';
+      const interfaceEl = document.querySelector('.voice-mode-interface');
+      if (interfaceEl) interfaceEl.style.display = 'block';
+    }
+
+    // Activate voice mode setup
+    enterVoiceMode();
+  }
+}
+function enterTextMode() {
+  console.log('[Text Mode] Entering Text Role Play');
+
+  // Send personalized intro from AI Coach
+  const introPrompt = buildIntroPrompt();
+  fetch('http://127.0.0.1:5506/api/chatgpt', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt: introPrompt })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      addMessageBubble('Coach', 'Welcome message failed. Please try again.', 'coach');
+    } else {
+      addMessageBubble(partnerName, data.response, 'partner');
+      conversationHistory.push({ role: 'assistant', content: data.response });
+    }
+  })
+  .catch(err => {
+    console.error('[Text Mode] Error sending intro prompt:', err);
+    addMessageBubble('Coach', 'An error occurred during setup. Please try again.', 'coach');
+  });
+
+  // Setup text input + mic
+  sendMessageBtn.addEventListener('click', handleSendMessage);
+  textMicrophoneBtn.addEventListener('click', startTextMicTranscription);
+
+
+}
+
+  // Insights Overlay (Text Mode)
+  if (textCompleteExerciseBtn)
+    textCompleteExerciseBtn.addEventListener('click', handleCompleteExercise);
+
+  if (completeExerciseBtn)
+    completeExerciseBtn.addEventListener('click', exitInsightsOverlay);
+
+  function exitInsightsOverlay() {
+    if (insightsOverlayContainer) {
+      insightsOverlayContainer.style.display = 'none';
+    }
+  }
+  if (coachingMicrophoneBtn)
+  coachingMicrophoneBtn.addEventListener('click', startTextMicTranscriptionForCoaching);
+
+
+  // Coaching Overlay (Text Mode)
+  if (textPauseCoachingBtn)
+    textPauseCoachingBtn.addEventListener('click', enterCoachingMode);
+
+  if (submitCoachingBtn)
+    submitCoachingBtn.addEventListener('click', submitCoachingQuestion);
+
+  if (coachingMicrophoneBtn)
+    coachingMicrophoneBtn.addEventListener('click', startTextMicTranscription);
+
+  if (resumeRolePlayBtn)
+    resumeRolePlayBtn.addEventListener('click', exitCoachingMode);
+
+  function exitCoachingMode() {
+    if (coachingModeContainer) {
+      coachingModeContainer.style.display = 'none';
+    }
+  }
+
+  console.log('[Text Mode] Entering Text Role Play');
+
+  
+// New implementation of handleSendMessage
+async function handleSendMessage() {
+  const text = userInput.value.trim();
+  if (!text) return;
+  
+  // Display user message in UI
+  addMessageBubble('You', text, 'user');
+  userInput.value = '';
+  
+  // Add to conversation history
+  conversationHistory.push({ role: 'user', content: text });
+  
+  // Show typing indicator
+  const typingEl = addTypingIndicator();
+  const moodProfile = getPartnerMoodProfile(partnerMood);
+  
+  // Build the prompt directly here to ensure it works
+  const rolePlayPrompt = `Your name is Coach, and you are the communication skills coach for CommuniCoach, but for this portion, you must play the part of the user's conversation partner in a realistic role-play.
+
+The user is speaking with the conversation partner ${partnerName}, who is in a ${conversationMedium} scenario.
+This person is typically: ${moodProfile.summary}
+Your communication style should reflect this behavior:
+"${moodProfile.behavior}"
+
+The user has shared their following real-life situation and is practicing their approach for a real-life conversation:
+"${refinedNarrative}"
+
+And their communication goal is:
+"${communicationGoal}"
+
+Stay firmly in character, offering natural, authentic responses that someone with this personality, context, and mood might give. If appropriate to the character, incorporate small, realistic pitfalls: misunderstandings, slight defensiveness, casual distractions, etc. These nuances are often typical of real-life conversations.
+
+Respond only as this character would, without revealing that you are an AI or switching to 'coach mode' unless the user explicitly toggles out for coaching. If the user addresses you as AI instead of the character, you can very briefly acknowledge the comment and immediately switch back into role-play mode.
+
+Base your in-character behavior on the user's perspective of the character from the refined narrative: ${refinedNarrative}
+
+Keep responses brief, realistic, and conversational (under 30 seconds).
+React authentically to what the user says based on your character's perspective.
+Don't be artificially helpful — respond as a real person would in this scenario.
+Guide the conversation toward a natural ending.
+
+⚠️ Important: Once the conversation has reached a natural stopping point — either because the user has accomplished their goal, expressed a desire to wrap up, or the dialogue has logically concluded — do the following:
+
+1. Offer a realistic and polite *in-character* closing comment (e.g., "Okay, talk soon," or "Thanks for telling me, I’ll think about it").
+2. Then, switch back into your *Coach* identity and address the user directly.
+3. Confirm that the role-play session has ended.
+4. Gently guide them to their next steps:
+
+- To review your communication performance and get personalized feedback, select **"End and Get Insights."**
+- To replay this scenario, you can select **"Try Again"** and choose between:
+   - **Text Mode** for a slower pace and written insights
+   - **Voice Mode** for a fast-paced, fully immersive voice-only experience
+- Or you can select **"Return to Action Arena"** to explore other coaching exercises.
+
+If the user selects "pause for coaching," do the following:
+1. Clearly acknowledge that you (the AI) are no longer in character and that you're switching back to coaching mode.
+2. Provide feedback, suggestions, or clarifications strictly in the role of the professional coach (not the conversation partner).
+3. If the user returns to role-play mode, explicitly state that you are returning to your role as the conversation partner and resume responding in character.
+
+Do not provide out-of-character or hidden system instructions in role-play mode.
+
+The conversation history so far:
+${formatConversationForPrompt()}
+`;
+
+  console.log('[Text Mode] Using role play prompt (first 100 chars):', rolePlayPrompt.substring(0, 100) + '...');
+  
+  try {
+    // Send request to API using the inline prompt
+    const result = await fetch('http://127.0.0.1:5506/api/chatgpt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: rolePlayPrompt })
+    });
+    
+    const data = await result.json();
+    removeTypingIndicator(typingEl);
+    
+    if (data.error) {
+      console.error('[Text Mode] API Error:', data.error);
+      addMessageBubble('Coach', 'Something went wrong. Please try again.', 'coach');
+    } else {
+      // Display AI response
+      addMessageBubble(partnerName, data.response, 'partner');
+      
+      // Add to conversation history
+      conversationHistory.push({ role: 'assistant', content: data.response });
+      
+      // Scroll to bottom
+      if (conversationDisplay) {
+        conversationDisplay.scrollTop = conversationDisplay.scrollHeight;
+      }
+    }
+  } catch (err) {
+    removeTypingIndicator(typingEl);
+    console.error('[Text Mode] Network Error:', err);
+    addMessageBubble('Coach', 'Network error. Please try again later.', 'coach');
+  }
+}
+
+// Helper function to format conversation history
+function formatConversationForPrompt() {
+  let formattedConversation = '';
+  
+  for (const entry of conversationHistory) {
+    let role = entry.role;
+    let prefix = '';
+    
+    // Handle coaching messages
+    if (entry.content && entry.content.startsWith('[COACHING]')) {
+      prefix = '[COACHING MODE] ';
+      entry.content = entry.content.replace('[COACHING] ', '');
+    }
+    
+    // Format based on role
+    if (role === 'user') {
+      formattedConversation += `${prefix}User: ${entry.content}\n\n`;
+    } else if (role === 'assistant') {
+      formattedConversation += `${prefix}${partnerName}: ${entry.content}\n\n`;
+    } else if (role === 'system') {
+      formattedConversation += `${entry.content}\n\n`;
+    }
+  }
+  
+  return formattedConversation;
+}
+function startTextMicTranscription() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    showToast('Speech recognition not supported in this browser.');
+    return;
+  }
+
+  // If already running, stop it
+  if (isTextMicRecognizing && textRecognition) {
+    textRecognition.stop();
+    return;
+  }
+
+  textRecognition = new SpeechRecognition();
+  textRecognition.lang = 'en-US';
+  textRecognition.interimResults = true;
+  textRecognition.continuous = true;
+
+  let finalTranscript = userInput.value || '';
+  let recognitionTimeout;
+
+  textRecognition.onstart = () => {
+    isTextMicRecognizing = true;
+    textMicrophoneBtn.classList.add('listening');
+    showToast('Listening...');
+  };
+
+  textRecognition.onresult = (event) => {
+    let interimTranscript = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        if (!finalTranscript.endsWith(' ')) finalTranscript += ' ';
+        finalTranscript += transcript;
+      } else {
+        interimTranscript += transcript;
+      }
+    }
+    userInput.value = finalTranscript + interimTranscript;
+    userInput.focus();
+
+    clearTimeout(recognitionTimeout);
+    recognitionTimeout = setTimeout(() => textRecognition.stop(), 120000);
+  };
+
+  textRecognition.onerror = (event) => {
+    console.error('[Mic] Recognition error:', event.error);
+    isTextMicRecognizing = false;
+    textMicrophoneBtn.classList.remove('listening');
+    showToast('Mic error: ' + event.error);
+  };
+
+  textRecognition.onend = () => {
+    isTextMicRecognizing = false;
+    textMicrophoneBtn.classList.remove('listening');
+    clearTimeout(recognitionTimeout);
+    console.log('[Mic] Recognition ended');
+  };
+
+  try {
+    textRecognition.start();
+    recognitionTimeout = setTimeout(() => textRecognition.stop(), 120000);
+  } catch (err) {
+    console.error('[Mic] Start error:', err);
+    showToast('Could not start mic', 2000, true);
+  }
+}
+
+
+function startTextMicTranscriptionForCoaching() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    showToast('Speech recognition not supported in this browser.');
+    return;
+  }
+
+  // If already running, stop it
+  if (isCoachingMicRecognizing && coachingRecognition) {
+    coachingRecognition.stop();
+    return;
+  }
+
+  coachingRecognition = new SpeechRecognition();
+  coachingRecognition.lang = 'en-US';
+  coachingRecognition.interimResults = true;
+  coachingRecognition.continuous = true;
+
+  let finalTranscript = coachingQuestion.value || '';
+  let recognitionTimeout;
+
+  coachingRecognition.onstart = () => {
+    isCoachingMicRecognizing = true;
+    coachingMicrophoneBtn.classList.add('listening');
+    showToast('Listening for coaching question...');
+  };
+
+  coachingRecognition.onresult = (event) => {
+    let interimTranscript = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        if (!finalTranscript.endsWith(' ')) finalTranscript += ' ';
+        finalTranscript += transcript;
+      } else {
+        interimTranscript += transcript;
+      }
+    }
+
+    coachingQuestion.value = finalTranscript + interimTranscript;
+    coachingQuestion.focus();
+
+    clearTimeout(recognitionTimeout);
+    recognitionTimeout = setTimeout(() => coachingRecognition.stop(), 120000);
+  };
+
+  coachingRecognition.onerror = (event) => {
+    console.error('[Coaching Mic] Recognition error:', event.error);
+    isCoachingMicRecognizing = false;
+    coachingMicrophoneBtn.classList.remove('listening');
+    showToast('Mic error: ' + event.error);
+  };
+
+  coachingRecognition.onend = () => {
+    isCoachingMicRecognizing = false;
+    coachingMicrophoneBtn.classList.remove('listening');
+    clearTimeout(recognitionTimeout);
+    console.log('[Coaching Mic] Recognition ended');
+  };
+
+  try {
+    coachingRecognition.start();
+    recognitionTimeout = setTimeout(() => coachingRecognition.stop(), 120000);
+  } catch (err) {
+    console.error('[Coaching Mic] Start error:', err);
+    showToast('Could not start coaching mic', 2000, true);
+  }
+}
+
+
+function handleCompleteExercise() {
+  console.log('[Insights] handleCompleteExercise triggered');
+  
+  // Show the insights overlay container
+  if (insightsOverlayContainer) {
+    insightsOverlayContainer.style.display = 'flex';
+    
+    // Initial loading state
+    if (insightsContent) {
+      insightsContent.innerHTML = `
+        <div style="text-align: center; padding: 2rem;">
+          <div class="spinner" style="display: inline-block;"></div>
+          <p>Analyzing your communication patterns...</p>
+        </div>
+      `;
+    }
+  }
+
+  // Build the insights prompt
+  const insightsPrompt = `You are a nuanced communication analyst reviewing a role-play conversation between a user and their AI coach (playing a character). Your task is to provide rich, personalized insights that help the user grow as a communicator.
+
+CONTEXT:
+User's Situation: ${refinedNarrative}
+User's Communication Goal: ${communicationGoal}
+Conversation Partner: ${partnerName} (${partnerMood}, via ${conversationMedium})
+
+CONVERSATION HISTORY:
+${formatConversationForPrompt()}
+
+Analyze this conversation through a holistic communication lens, considering how the user:
+1. Expressed themselves (style, tone, directness, emotional presence)
+2. Structured their message (clarity, organization, brevity/detail balance)
+3. Engaged emotionally (empathy, emotional intelligence, tone modulation)
+4. Listened and responded (attention, validation, reflective practices)
+5. Navigated relationship dynamics (power, boundaries, conflict, repair)
+6. Persuaded or influenced (reasoning, appeals to emotion/logic/credibility)
+7. Adapted to context (medium-appropriateness, cultural awareness, timing)
+8. Demonstrated self-awareness (meta-communication, pattern recognition)
+
+Instead of rigidly categorizing everything, provide an insightful narrative analysis that identifies:
+- The user's natural communication strengths and authentic style
+- Patterns that emerged in their communication approach
+- 2 to 3 specific moments where they communicated effectively (with examples)
+- 2 to 3 growth opportunities where different approaches might enhance outcomes
+- One unexpected or subtle insight about their communication style
+- Specific transferable skills they demonstrated that would benefit other scenarios
+
+They practiced through a realistic, emotionally grounded conversation. Your job is to now offer a full coaching-style reflection using the following format, written as narrative text:
+
+**Summary:**  
+A thoughtful, personalized overview of their communication approach.
+
+**Strengths:**  
+2 to 3 specific communication strengths with brief examples.
+
+**Growth Opportunities:**  
+2 to 3 specific growth opportunities with gentle, constructive framing.
+
+**Standout Moment:**  
+Describe one moment from the conversation worth highlighting.
+
+**Transferable Skills:**  
+A paragraph about how their strengths apply to other contexts.
+
+**Next Step Suggestion:**  
+One specific, actionable recommendation for continued growth.
+
+Write in a warm, coach-like tone. Do not include any AI disclaimers or markdown formatting. Speak as if you just watched the entire session.`;
+
+  // Send the insights request
+  fetch('http://127.0.0.1:5506/api/chatgpt', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt: insightsPrompt })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.error) {
+      // Handle error
+      if (insightsContent) {
+        insightsContent.innerHTML = `
+          <div style="margin-top: 1rem; padding: 1rem; background: #ffeded; border-radius: 10px; border-left: 4px solid var(--error-color);">
+            <strong>Error:</strong> Unable to generate insights. Please try again.
+          </div>
+        `;
+      }
+      console.error('[Insights] API Error:', data.error);
+      return;
+    }
+    
+    // Parse the response to extract different sections
+    const response = data.response;
+    const sections = {
+      summary: extractSection(response, "Summary"),
+      strengths: extractSection(response, "Strengths"),
+      growth: extractSection(response, "Growth Opportunities"),
+      moment: extractSection(response, "Standout Moment"),
+      skills: extractSection(response, "Transferable Skills"),
+      nextStep: extractSection(response, "Next Step Suggestion")
+    };
+    
+    // Update the UI with the parsed sections
+    if (document.getElementById('insightSummary')) {
+      document.getElementById('insightSummary').innerHTML = sections.summary;
+    }
+    if (document.getElementById('insightStrengths')) {
+      document.getElementById('insightStrengths').innerHTML = sections.strengths;
+    }
+    if (document.getElementById('insightGrowth')) {
+      document.getElementById('insightGrowth').innerHTML = sections.growth;
+    }
+    if (document.getElementById('insightMoment')) {
+      document.getElementById('insightMoment').innerHTML = sections.moment;
+    }
+    if (document.getElementById('insightSkills')) {
+      document.getElementById('insightSkills').innerHTML = sections.skills;
+    }
+    if (document.getElementById('insightNextStep')) {
+      document.getElementById('insightNextStep').innerHTML = sections.nextStep;
+    }
+
+      // Extract communication style tags for the style section
+    if (document.getElementById('insightStyle')) {
+      const styleEl = document.getElementById('insightStyle');
+      const styleWords = extractCommunicationStyleTags(response);
+      styleEl.innerHTML = styleWords.map(word => 
+        `<span class="style-tag">${word}</span>`
+      ).join(' ');
+    }
+  })
+  .catch(err => {
+    if (insightsContent) {
+      insightsContent.innerHTML = `
+        <div style="margin-top: 1rem; padding: 1rem; background: #ffeded; border-radius: 10px; border-left: 4px solid var(--error-color);">
+          <strong>Error:</strong> Network error connecting to AI. Please try again.
+        </div>
+      `;
+    }
+    console.error('[Insights] Network Error:', err);
+  });
+  
+  // Helper function to extract sections from the response
+  function extractSection(text, sectionName) {
+    const regex = new RegExp(`\\*\\*${sectionName}:\\*\\*\\s*([\\s\\S]*?)(?=\\*\\*|$)`, 'i');
+    const match = text.match(regex);
+    return match ? match[1].trim() : `No ${sectionName.toLowerCase()} information available.`;
+  }
+  
+  // Helper function to extract communication style tags
+  function extractCommunicationStyleTags(text) {
+    // Look for descriptive words about communication style
+    const styleWords = [
+      "Direct", "Assertive", "Diplomatic", "Empathetic", "Analytical", 
+      "Concise", "Detailed", "Formal", "Casual", "Professional",
+      "Persuasive", "Reflective", "Emotional", "Logical", "Adaptable",
+      "Patient", "Proactive", "Reactive", "Collaborative", "Independent"
+    ];
+    
+    // Find which words appear in the text
+    const foundStyles = styleWords.filter(word => 
+      text.toLowerCase().includes(word.toLowerCase())
+    );
+    
+    // Return at least 3-5 styles, adding generic ones if needed
+    if (foundStyles.length < 3) {
+      const defaultStyles = ["Thoughtful", "Engaged", "Authentic"];
+      return [...foundStyles, ...defaultStyles.slice(0, 3 - foundStyles.length)];
+    }
+    
+    return foundStyles.slice(0, 5); // Limit to 5 max
+    
+  }
+  
+}
+// ===== Coaching Mode =====
+function enterCoachingMode() {
+  isInCoachingMode = true;
+
+  // Show coaching overlay
+  if (coachingModeContainer) {
+    coachingModeContainer.style.display = 'flex';
+  }
+
+  // Add scroll style to coaching-card
+  const coachingCard = coachingModeContainer?.querySelector('.coaching-card');
+  if (coachingCard) {
+    coachingCard.style.maxHeight = '85vh';
+    coachingCard.style.overflowY = 'auto';
+  }
+
+  // Initial coaching message
+  if (coachingContent) {
+    coachingContent.innerHTML = `
+      <p>I'm now in coaching mode, here to help you improve your communication. 
+      What would you like guidance on?</p>
+    `;
+  }
+
+  // If in voice mode, mute microphone
+  if (selectedMode === 'voice' && isVoiceActive && window.localStream) {
+    // Temporarily mute but don't change the UI state
+    window.localStream.getAudioTracks().forEach(track => {
+      track.enabled = false;
+    });
+  }
+}
+
+function exitCoachingMode() {
+  isInCoachingMode = false;
+  
+  // Hide coaching overlay
+  if (coachingModeContainer) {
+    coachingModeContainer.style.display = 'none';
+  }
+  
+  // Resume role play
+  if (selectedMode === 'text') {
+    // Add a coach message indicating return to role play
+    addMessageBubble('Coach', 'Resuming role play. You are now speaking with ' + partnerName + ' again.', 'coach');
+    
+    // Store in conversation history
+    conversationHistory.push({
+      role: 'system',
+      content: 'Resuming role play as ' + partnerName
+    });
+  } else if (selectedMode === 'voice' && isVoiceActive && window.localStream) {
+    // Restore microphone state based on previous mute status
+    window.localStream.getAudioTracks().forEach(track => {
+      track.enabled = !isMuted;
+    });
+    
+    // Let the AI know we're resuming
+    if (window.dc && window.dc.readyState === 'open') {
+      const textMsg = {
+        type: "conversation.item.create",
+        item: {
+          type: "message",
+          role: "user",
+          content: [{ 
+            type: "input_text", 
+            text: "Let's resume our role play. You are " + partnerName + " again."
+          }]
+        }
+      };
+      
+      window.dc.send(JSON.stringify(textMsg));
+      
+      const respEvent = {
+        type: "response.create",
+        response: {
+          modalities: ["audio", "text"]
+        }
+      };
+      
+      window.dc.send(JSON.stringify(respEvent));
+    }
+  }
+}
+
+function submitCoachingQuestion() {
+  const question = coachingQuestion.value.trim();
+  if (!question) return;
+  
+  // Clear input
+  coachingQuestion.value = '';
+  
+  // Update UI to show user question
+  if (coachingContent) {
+    coachingContent.innerHTML += `
+      <div style="margin-top: 1rem; padding: 0.8rem; background: var(--bg-secondary); border-radius: 10px;">
+        <strong>You asked:</strong> ${question}
+      </div>
+      <div style="margin-top: 1rem; text-align: center;">
+        <div class="spinner" style="display: inline-block;"></div>
+        <span>Getting coaching advice...</span>
+      </div>
+    `;
+  }
+  
+  // Build coaching prompt
+  const coachingPrompt = buildCoachingPrompt(question);
+  
+  // Make API request
+  fetchChatResponse(coachingPrompt)
+    .then(response => {
+      // Update UI with response
+      if (coachingContent) {
+        // Remove loading indicator
+        coachingContent.innerHTML = coachingContent.innerHTML.replace(
+          /<div style="margin-top: 1rem; text-align: center;">.*?<\/div>/s,
+          ''
+        );
+        
+        // Add coach response
+        coachingContent.innerHTML += `
+          <div style="margin-top: 1rem; padding: 1rem; background: var(--highlight-color); border-radius: 10px; border-left: 4px solid var(--accent-color);">
+            <strong>Coach advice:</strong>
+            <div style="margin-top: 0.5rem;">${formatCoachingResponse(response)}</div>
+          </div>
+        `;
+      }
+      
+      // Store in conversation history
+      conversationHistory.push({
+        role: 'user',
+        content: '[COACHING] ' + question
+      });
+      
+      conversationHistory.push({
+        role: 'assistant',
+        content: '[COACHING] ' + response
+      });
+    })
+    .catch(err => {
+      console.error('Error fetching coaching response:', err);
+      
+      // Update UI with error
+      if (coachingContent) {
+        // Remove loading indicator
+        coachingContent.innerHTML = coachingContent.innerHTML.replace(
+          /<div style="margin-top: 1rem; text-align: center;">.*?<\/div>/s,
+          ''
+        );
+        
+        // Add error message
+        coachingContent.innerHTML += `
+          <div style="margin-top: 1rem; padding: 1rem; background: #ffeded; border-radius: 10px; border-left: 4px solid var(--error-color);">
+            <strong>Error:</strong> Unable to get coaching advice. Please try again.
+          </div>
+        `;
+      }
+    });
+}
+
+function selectCoachingSuggestion(element) {
+  if (!element || !coachingQuestion) return;
+  
+  // Set the suggestion text to the input field
+  coachingQuestion.value = element.textContent;
+  
+  // Focus the input
+  coachingQuestion.focus();
+}
+
+function formatCoachingResponse(response) {
+  // Convert line breaks to HTML
+  return response.replace(/\n/g, '<br>');
+}
+function enterVoiceMode() {
+  console.log('[Voice Mode] Entering Voice Role Play');
+
+  // Show interface
+  if (voiceRolePlaySection) {
+    voiceRolePlaySection.style.display = 'block';
+    const interfaceEl = document.querySelector('.voice-mode-interface');
+    if (interfaceEl) interfaceEl.style.display = 'block';
+  }
+
+  // Reset mic status text
+  if (voiceStatus) {
+    voiceStatus.textContent = 'Click the microphone to start';
+  }
+  // === 🔧 Insert These Button Handlers Here ===
+  if (voiceTryAgainBtn) {
+  voiceTryAgainBtn.addEventListener('click', () => {
+    console.log('[Voice Mode] Try Again clicked');
+    window.location.reload();
+  });
+}
+
+if (voiceReturnToArenaBtn) {
+  voiceReturnToArenaBtn.addEventListener('click', () => {
+    console.log('[Voice Mode] Return to Action Arena clicked');
+    window.location.href = 'action-arena.html';
+  });
+}
+
+
+
+  // Bind mic button
+  if (microphoneBtn) {
+    microphoneBtn.addEventListener('click', toggleVoiceMode);
+  }
+ 
+
+  // Coaching dropdown hint (optional verbal triggers)
+  if (voiceCoachingHint) {
+    voiceCoachingHint.addEventListener('change', (e) => {
+      const selected = e.target.value;
+      if (selected && window.dc && window.dc.readyState === 'open') {
+        const message = {
+          type: "conversation.item.create",
+          item: {
+            type: "message",
+            role: "user",
+            content: [{ type: "input_text", text: selected }]
+          }
+        };
+        window.dc.send(JSON.stringify(message));
+        e.target.value = ''; // Reset dropdown
+      }
+    });
+  }
+}
+function updateVoiceStatus(state) {
+  if (!voiceStatus || !voiceVisualization) return;
+
+  // Update status text
+  switch (state) {
+    case 'ready':
+      voiceStatus.textContent = 'Ready to begin';
+      break;
+    case 'listening':
+      voiceStatus.textContent = 'Listening…';
+      break;
+    case 'speaking':
+      voiceStatus.textContent = `${partnerName} is speaking…`;
+      break;
+    case 'muted':
+      voiceStatus.textContent = 'Microphone muted';
+      break;
+    case 'off':
+    default:
+      voiceStatus.textContent = 'Voice mode off';
+      break;
+  }
+
+  // Reset visualization classes
+  voiceVisualization.classList.remove('listening', 'speaking', 'active');
+
+  // Apply visual state
+  if (state === 'listening') {
+    voiceVisualization.classList.add('listening');
+  } else if (state === 'speaking') {
+    voiceVisualization.classList.add('speaking');
+  } else if (state === 'ready') {
+    voiceVisualization.classList.add('active');
+  }
+}
+
+
+// ===== Bind Realtime Message Handler =====
+let currentAssistantResponse = '';
+let messageHandlerBound = false;
+
+function bindRealtimeMessageHandler() {
+  if (!window.dc || messageHandlerBound) return;
+
+  window.dc.onmessage = (evt) => {
+    try {
+      const event = JSON.parse(evt.data);
+      console.log('[Voice Mode] Event received:', event);
+
+      // --- AI streamed text (optional logging only) ---
+      if (event.type === "response.text.delta" && event.delta) {
+        currentAssistantResponse += event.delta;
+      }
+
+      // --- AI finished speaking ---
+      if (event.type === "response.audio.ended") {
+        updateVoiceStatus('ready');
+
+        if (currentAssistantResponse.trim()) {
+          conversationHistory.push({
+            role: 'assistant',
+            content: currentAssistantResponse.trim()
+          });
+          console.log('[Voice Mode] Assistant response saved:', currentAssistantResponse.trim());
+        }
+        currentAssistantResponse = '';
+      }
+
+      // --- AI starts speaking ---
+      if (event.type === "response.audio.started") {
+        updateVoiceStatus('speaking');
+      }
+
+      // --- Transcribed user speech ---
+      if (event.type === "conversation.item.created" && event.item?.role === "user") {
+        const textChunk = event.item.content?.[0]?.text;
+        if (textChunk) {
+          conversationHistory.push({
+            role: 'user',
+            content: textChunk
+          });
+          console.log('[Voice Mode] User said:', textChunk);
+        } else {
+          console.warn('[Voice Mode] No text content in transcription event');
+        }
+      }
+
+    } catch (err) {
+      console.error('[Voice Mode] Message handler error:', err.message);
+    }
+  };
+
+  messageHandlerBound = true;
+}
+
+
+   // KEEPING ORIGINAL WebRTC CODE INTACT
+   async function toggleVoiceMode() {
+  if (window.pc) {
+    stopVoiceMode();
+    updateVoiceStatus('off');
+    return;
+  }
+
+  try {
+    updateVoiceStatus('Requesting microphone access...');
+
+    const debugDiv = document.getElementById('voice-debug') || createDebugOverlay();
+    const logDebug = (msg) => {
+      console.log(msg);
+      const line = document.createElement('div');
+      line.textContent = msg;
+      debugDiv.appendChild(line);
+      debugDiv.scrollTop = debugDiv.scrollHeight;
+    };
+
+    // Test mic permission
+    const testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    testStream.getTracks().forEach(track => track.stop());
+    logDebug("✅ Microphone access granted");
+
+    // Fetch session config
+    logDebug("🔑 Requesting ephemeral token...");
+    const sessionResp = await fetch("http://127.0.0.1:5506/session");
+    const ephemeralData = await sessionResp.json();
+    const ephemeralKey = ephemeralData.client_secret?.value;
+    if (!ephemeralKey) throw new Error("Invalid ephemeral token");
+
+    // Create audio output
+    window.remoteAudio = document.createElement("audio");
+    window.remoteAudio.autoplay = true;
+    window.remoteAudio.controls = true;
+    window.remoteAudio.style.position = "fixed";
+    window.remoteAudio.style.bottom = "10px";
+    window.remoteAudio.style.right = "10px";
+    window.remoteAudio.style.zIndex = "9999";
+    document.body.appendChild(window.remoteAudio);
+
+    // Create connection
+    logDebug("🔌 Creating WebRTC connection...");
+    window.pc = new RTCPeerConnection({
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' }
+      ]
+    });
+
+    window.pc.oniceconnectionstatechange = () => {
+      logDebug(`🧊 ICE state: ${window.pc.iceConnectionState}`);
+    };
+
+    // Capture mic
+    const localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    localStream.getTracks().forEach(track => window.pc.addTrack(track, localStream));
+
+    // Handle AI audio
+    window.pc.ontrack = (event) => {
+      const stream = event.streams[0];
+      window.remoteAudio.srcObject = stream;
+      updateVoiceStatus('speaking');
+    };
+
+    // Setup data channel
+    logDebug("📲 Creating data channel...");
+    window.dc = window.pc.createDataChannel("oai-events");
+
+    // ✅ NEW: Configure session and send combined prompt
+    window.dc.onopen = () => {
+      logDebug("📲 Data channel open");
+
+      const selectedVoice = aiVoiceSelect ? aiVoiceSelect.value : 'alloy';
+
+      const sessionConfig = {
+        type: "session.update",
+        session: {
+          voice: selectedVoice,
+          instructions: buildCombinedPrompt(), // Your structured coach prompt
+          modalities: ["audio", "text"]
+        }
+      };
+      window.dc.send(JSON.stringify(sessionConfig));
+      logDebug("📝 Session configured with combined prompt");
+
+      const emptyUserMsg = {
+        type: "conversation.item.create",
+        item: {
+          type: "message",
+          role: "user",
+          content: [{ type: "input_text", text: "" }]
+        }
+      };
+      window.dc.send(JSON.stringify(emptyUserMsg));
+      logDebug("🟢 Sent empty user message to initialize speech input");
+
+      bindRealtimeMessageHandler();
+      updateVoiceStatus('ready');
+    };
+
+    // Create and send offer
+    const offer = await window.pc.createOffer({ offerToReceiveAudio: true });
+    await window.pc.setLocalDescription(offer);
+    await waitForIceGatheringComplete();
+    logDebug("📡 Sending SDP to OpenAI...");
+
+    const model = "gpt-4o-realtime-preview-2024-12-17";
+    const realtimeUrl = `https://api.openai.com/v1/realtime?model=${model}`;
+    const sdpResp = await fetch(realtimeUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${ephemeralKey}`,
+        "Content-Type": "application/sdp"
+      },
+      body: offer.sdp
+    });
+    const answerSdp = await sdpResp.text();
+    await window.pc.setRemoteDescription({ type: "answer", sdp: answerSdp });
+
+    isVoiceActive = true;
+    microphoneBtn.classList.add('active');
+    microphoneBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';   
+    showToast("Voice mode activated");
+    updateVoiceStatus('ready');
+
+  } catch (err) {
+    console.error("Voice setup error:", err);
+    showToast("Setup error: " + err.message);
+    stopVoiceMode();
+    updateVoiceStatus('off');
+    if (voiceVisualization) {
+      voiceVisualization.classList.remove('active', 'listening', 'speaking');
+    }
+  }
+}
+
+
+   function stopVoiceMode() {
+     console.log("Stopping voice mode...");
+     
+     // Close data channel
+     if (window.dc) {
+       window.dc.close();
+       window.dc = null;
+     }
+     
+     // Close peer connection
+     if (window.pc) {
+       window.pc.close();
+       window.pc = null;
+     }
+     
+     // Clean up audio element
+     if (window.remoteAudio) {
+       window.remoteAudio.pause();
+       window.remoteAudio.srcObject = null;
+       if (window.remoteAudio.parentNode) {
+         window.remoteAudio.parentNode.removeChild(window.remoteAudio);
+       }
+       window.remoteAudio = null;
+     }
+     
+     // Remove debug div
+     const debugDiv = document.getElementById('voice-debug');
+     if (debugDiv && debugDiv.parentNode) {
+       debugDiv.parentNode.removeChild(debugDiv);
+     }
+     
+     // Update UI state
+     isVoiceActive = false;
+     microphoneBtn.classList.remove('active');
+     microphoneBtn.innerHTML = '<i class="fa-microphone"></i>';
+     
+     // Update enhanced UI
+     updateVoiceStatus('off');
+     if (voiceVisualization) voiceVisualization.classList.remove('active', 'listening', 'speaking');
+   }
+   
+// Enhanced UI functions
+function updateVoiceStatus(state) {
+  if (!voiceStatus || !voiceVisualization) return;
+
+  // === Update text display
+  switch (state) {
+    case 'ready':
+      voiceStatus.textContent = 'Ready to begin';
+      break;
+    case 'listening':
+      voiceStatus.textContent = 'Listening…';
+      break;
+    case 'speaking':
+      voiceStatus.textContent = `${partnerName} is speaking…`;
+      break;
+    case 'muted':
+      voiceStatus.textContent = 'Microphone muted';
+      break;
+    case 'off':
+    default:
+      voiceStatus.textContent = 'Voice mode off';
+      break;
+  }
+
+  // === Reset state classes
+  voiceVisualization.classList.remove('listening', 'speaking', 'active');
+
+  // === Remove any previously injected pulse
+  const existingPulse = voiceVisualization.querySelector('.speaking-pulse');
+  if (existingPulse) {
+    voiceVisualization.removeChild(existingPulse);
+  }
+
+  // === Apply correct class and animation
+  if (state === 'listening') {
+    voiceVisualization.classList.add('listening');
+  } else if (state === 'speaking') {
+    voiceVisualization.classList.add('speaking');
+
+    // ✅ Inject the animated pulse
+    const pulse = document.createElement('div');
+    pulse.classList.add('speaking-pulse');
+    voiceVisualization.appendChild(pulse);
+  } else if (state === 'ready') {
+    voiceVisualization.classList.add('active');
+  }
+}
+
+
+
+
+function waitForIceGatheringComplete() {
+  return new Promise((resolve) => {
+    if (window.pc.iceGatheringState === "complete") return resolve();
+
+    const checkState = () => {
+      if (window.pc.iceGatheringState === "complete") {
+        window.pc.removeEventListener("icegatheringstatechange", checkState);
+        resolve();
+      }
+    };
+
+    window.pc.addEventListener("icegatheringstatechange", checkState);
+
+    // Safety timeout fallback
+    setTimeout(resolve, 5000);
+  });
+}
+
+
+function createDebugOverlay() {
+  const div = document.createElement("div");
+  div.id = "voice-debug";
+  div.style = "position:fixed;top:10px;left:10px;background:#333;color:#fff;padding:10px;z-index:9999;max-height:150px;overflow:auto;font-size:12px;";
+  document.body.appendChild(div);
+  return div;
+}
+function waitForIceGatheringComplete() {
+  return new Promise((resolve) => {
+    if (window.pc.iceGatheringState === "complete") return resolve();
+
+    const checkState = () => {
+      if (window.pc.iceGatheringState === "complete") {
+        window.pc.removeEventListener("icegatheringstatechange", checkState);
+        resolve();
+      }
+    };
+
+    window.pc.addEventListener("icegatheringstatechange", checkState);
+    setTimeout(resolve, 5000); // Fallback timeout
+  });
+}
+
+   function addMessageBubble(senderLabel, text, senderType) {
+     if (!messageBubbleTemplate) return;
+     const clone = messageBubbleTemplate.content.cloneNode(true);
+     const msgEl = clone.querySelector('.message');
+     const senderEl = clone.querySelector('.message-sender');
+     const timeEl = clone.querySelector('.message-time');
+     const contentEl = clone.querySelector('.message-content');
+   
+     msgEl.classList.add(senderType);
+     senderEl.textContent = senderLabel;
+     timeEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+     contentEl.textContent = text;
+   
+     conversationDisplay.appendChild(clone);
+     conversationDisplay.scrollTop = conversationDisplay.scrollHeight;
+   }
+   
+   function addTypingIndicator() {
+     if (!typingIndicatorTemplate) return null;
+     const clone = typingIndicatorTemplate.content.cloneNode(true);
+     conversationDisplay.appendChild(clone);
+     conversationDisplay.scrollTop = conversationDisplay.scrollHeight;
+     return conversationDisplay.lastElementChild;
+   }
+   
+   function removeTypingIndicator(el) {
+     if (el && conversationDisplay.contains(el)) {
+       conversationDisplay.removeChild(el);
+     }
+   }
+   
+   function showToast(msg, duration=2500) {
+     const existing = document.querySelector('.toast');
+     if (existing) existing.remove();
+   
+     const t = document.createElement('div');
+     t.className = 'toast';
+     t.textContent = msg;
+     document.body.appendChild(t);
+   
+     setTimeout(() => {
+       if (t.parentNode) t.parentNode.removeChild(t);
+     }, duration);
+   }
+// ===== API Communication =====
+async function fetchChatResponse(prompt) {
+  return new Promise((resolve, reject) => {
+    fetch('http://127.0.0.1:5506/api/chatgpt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      resolve(data.response);
+    })
+    .catch(error => {
+      console.error('API Error:', error);
+      reject(error);
+    });
+  });
+}
+
+
+
+// ===== UI Helpers =====
+function addMessageBubble(senderLabel, text, senderType) {
+  if (!messageBubbleTemplate || !conversationDisplay) return;
+  
+  const clone = messageBubbleTemplate.content.cloneNode(true);
+  const msgEl = clone.querySelector('.message');
+  const senderEl = clone.querySelector('.message-sender');
+  const timeEl = clone.querySelector('.message-time');
+  const contentEl = clone.querySelector('.message-content');
+
+  msgEl.classList.add(senderType);
+  senderEl.textContent = senderLabel;
+  timeEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  contentEl.textContent = text;
+
+  conversationDisplay.appendChild(clone);
+  conversationDisplay.scrollTop = conversationDisplay.scrollHeight;
+  
+  return msgEl;
+}
+
+function addTypingIndicator() {
+  if (!typingIndicatorTemplate || !conversationDisplay) return null;
+  
+  const clone = typingIndicatorTemplate.content.cloneNode(true);
+  conversationDisplay.appendChild(clone);
+  conversationDisplay.scrollTop = conversationDisplay.scrollHeight;
+  
+  return conversationDisplay.lastElementChild;
+}
+
+function removeTypingIndicator(el) {
+  if (el && conversationDisplay && conversationDisplay.contains(el)) {
+    conversationDisplay.removeChild(el);
+  }
+}
+
+function showToast(msg, duration=2500) {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+
+  setTimeout(() => {
+    if (t.parentNode) t.parentNode.removeChild(t);
+  }, duration);
+}
+
+// ===== Prompt Building =====
+// ===== Prompt Building =====
+function buildIntroPrompt() {
+  return `You are the communication skills coach for CommuniCoach. Begin with warmth and grounded presence. Speak as someone who already knows the user and their situation well. Say something like:
+Users can call you "Coach"
+> "Hi. I'm thrilled to meet up with you here in the role-play room. I'm your Coach and I'm here to teach some communication skills while I help you practice a real-life conversation."
+Briefly explain how the role-play works:
+- You'll play the role in character as ${partnerName}, based on the details they've provided.
+- The conversation will feel realistic—natural flow, tone, and even occasional tension.
+- The user can select the “pause for coaching” button at any time to stop the role-play and ask for guidance.
+- If there's a technical issue or confusion, they can select  “pause for coaching" and describe the issue”
+- After the conversation, they’ll receive **insights** on their communication style, with the option to replay the scenario or return to the Action Arena.
+
+Use the refined narrative and communication goal below to customize your tone and show the user that you understand what they’re working on:
+- Refined Narrative: ${refinedNarrative}
+- Communication Goal: ${communicationGoal}
+
+Keep it supportive and efficient. Avoid lengthy background info or repeating what the user already knows. Wrap up by clearly stating that you’re about to step into character as ${partnerName}, and begin when ready.`;
+}
+  
+function buildCoachingPrompt(question) {
+  // Construct a prompt for coaching mode
+  let prompt = `You are CommuniCoach, a professional communication coach. The user is practicing a role-play conversation and has paused to ask for coaching advice or feedback.
+
+The user's current situation: ${refinedNarrative}
+The user's communication goal: ${communicationGoal}
+The conversation partner is: ${partnerName} (${partnerMood}) in a ${conversationMedium} format.
+
+Conversation history so far:
+${formatConversationForPrompt()}
+
+The user has asked for coaching: "${question}"
+
+Provide helpful, specific communication advice that:
+1. Directly addresses their question
+2. Is tailored to their specific situation and goal
+3. Is actionable and practical
+4. References communication best practices or techniques when relevant
+5. Is encouraging and supportive
+
+Don't over-explain or be too academic. Focus on giving concrete advice they can immediately apply. 
+Keep your response concise and focused on their specific question.`;
+
+  return prompt;
+}
+
+function buildCombinedPrompt() {
+  const moodProfile = getPartnerMoodProfile(partnerMood); // ✅ FIXED: Add this line
+
+  return `
+You are CommuniCoach, a voice-based AI communication coach. Your purpose is to teach and guide users through realistic role-play conversations, 
+helping them practice and improve their communication skills in difficult situations.  
+These conversations are based on the user's previously confided real-life situations, allowing users to navigate their way through often challenging communication styles by practicing responses and reactions in a realistic environment.
+Your role is to guide the user through a fully immersive, real-time conversation practice session—from warm introduction to personalized role-play, followed by spoken coaching insights and next steps.
+
+You have access to the user's refined narrative and their communication goal. This session is built on a foundation of trust and emotional openness the user has already established with you in earlier exercises. You are not meeting them for the first time—you are continuing a shared journey.
+
+Use this structure:
+
+---
+
+🔹 **1. Spoken Coach Introduction**
+
+Begin with warmth and grounded presence. Speak as someone who already knows the user and their situation well. Say something like:
+
+> "Hi. I'm thrilled to meet up with you here in the role-play room—where we finally get to talk in real time. I'm your coach, and I'll be guiding you through this next step. Since we're speaking directly now, just call me Coach."
+
+Then explain:
+
+- This is a voice-only, immersive experience.
+- You will shift into the user's chosen character for a realistic role-play.
+- The user can say **"pause for coaching"** at any time for guidance or to redirect the exercise.
+- If they need to pause for a technical issue, they can say **"pause for coaching"** and describe the issue.
+- They can say "insights" to end early and move into insights mode.
+- You will naturally guide the conversation to a close and then offer spoken insights.
+
+Now, offer a brief, meaningful reflection on the user's refined narrative and goal. Avoid repeating the text word-for-word. Interpret tone, values, and emotional meaning.
+
+Then say:
+
+> "Let's begin. I'm becoming ${partnerName}, who's feeling ${partnerMood}, and we're speaking via ${conversationMedium}. 
+You can start the conversation whenever you're ready. I'll be here, in character, to respond as ${partnerName}."
+
+---
+
+🔹 **2. Role-Play Phase (In Character)**
+
+You are now acting as ${partnerName}.
+This person is typically: ${moodProfile.summary}
+Your communication style should reflect this behavior:
+"${moodProfile.behavior}"
+
+Stay completely in character. Be authentic, responsive, and emotionally reactive. Avoid artificially helpful or convenient dialogue. Include realism:
+- Small miscommunications
+- Agreements and disagreements
+- Emotional moments
+- Friction, if appropriate
+
+Keep responses under 30 seconds. Let the user do the work of navigating the conversation.
+
+---
+
+🔹 **3. Natural Closure**
+
+If the conversation winds down, end the role-play in character. Then switch to coach mode and guide the user through next steps.
+
+---
+
+🔹 **4. Spoken Coaching Insights (Voice Only)**
+
+Offer personalized spoken feedback based on the session. Highlight:
+- Strengths
+- Opportunities
+- Realistic patterns and takeaways
+- Emotional and communication insight
+
+Wrap up with:
+
+> "If you'd like to try this again, press Try Again. You can repeat this voice experience or switch to the typing version for a written record. Use the Try Again or Complete Exercise buttons to return to the Action Arena."
+
+---
+
+🔹 **Session Context:**
+Refined Narrative: "${refinedNarrative}"
+Communication Goal: "${communicationGoal}"
+`;
+}
+
+function formatConversationForPrompt() {
+  // Format conversation history for inclusion in prompts
+  let formattedConversation = '';
+  
+  for (const entry of conversationHistory) {
+    let role = entry.role;
+    let prefix = '';
+    
+    // Handle coaching messages
+    if (entry.content && entry.content.startsWith('[COACHING]')) {
+      prefix = '[COACHING MODE] ';
+      entry.content = entry.content.replace('[COACHING] ', '');
+    }
+    
+    // Format based on role
+    if (role === 'user') {
+      formattedConversation += `${prefix}User: ${entry.content}\n\n`;
+    } else if (role === 'assistant') {
+      formattedConversation += `${prefix}${partnerName}: ${entry.content}\n\n`;
+    } else if (role === 'system') {
+      formattedConversation += `${entry.content}\n\n`;
+    }
+  }
+  
+  return formattedConversation;
+}
+
+// Mobile menu toggle
+function toggleMenu() {
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks) {
+    navLinks.classList.toggle('active');
+  }
+}
+  </script>

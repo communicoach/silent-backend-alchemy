@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Advanced Tone Selection - CommuniCoach</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #2D4A3E;
+      --secondary-color: #1b4072;
+      --accent-color: #A1CE3E;
+      --highlight-color: #DCEFC6;
+      --energy-color: #74B49B;
+      --error-color: #FF6B6B;
+      --shadow-color: rgba(45, 74, 62, 0.15);
+      --gradient-bg: linear-gradient(135deg, rgba(45, 74, 62, 0.05), rgba(161, 206, 62, 0.07));
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background-image: url('.vscode/Images/pattern-bg5.png');
+      overflow-x: hidden;
+      position: relative;
+      color: var(--primary-color);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: -1;
+    }
+
+    /* Header and Navigation */
+    .header-wrapper {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      box-shadow: 0 2px 20px var(--shadow-color);
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 0;
+      color: var(--primary-color);
+      position: relative;
+    }
+
+    .top-nav a {
+      color: var(--primary-color);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .logo {
+      position: absolute;
+      left: 20px;
+    }
+
+    .logo img {
+      height: 40px;
+    }
+
+    .top-nav a:hover {
+      background: var(--highlight-color);
+    }
+
+    .top-nav a.current {
+      background: #136f6f;
+      color: white;
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+      width: 100%;
+      padding: 10px 0;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .progress-bar {
+      width: 80%;
+      margin: 0 auto;
+      height: 8px;
+      background: #7cbcca;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar .progress {
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(90deg, #136f6f, #136f6f);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu-button {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--primary-color);
+      position: absolute;
+      right: 20px;
+      top: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .top-nav {
+        flex-direction: column;
+        padding: 10px 0;
+      }
+
+      .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding-top: 10px;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .logo {
+        position: static;
+        margin-bottom: 10px;
+      }
+
+      .mobile-menu-button {
+        display: block;
+      }
+    }
+
+    /* Section Layout */
+    .section {
+      margin-top: 100px;
+      padding: 4rem 0;
+      background-color: #ffffff;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+    }
+
+    .content-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .text-content {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .content-card {
+      background: var(--highlight-color);
+      border-radius: 15px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 0;
+    }
+
+    .content-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      color: #ff221f;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      display: block;
+    }
+
+    .text-content h1 {
+      font-size: 1.75em;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .text-content p {
+      font-size: 1.1em;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    /* Tone Cards */
+    .tone-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 20px auto;
+      max-width: 1000px;
+    }
+
+    .tone-card {
+      background: rgb(255, 255, 255);
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid var(--secondary-color);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, background 0.3s ease;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .tone-card:hover {
+      transform: scale(1.05);
+    }
+
+    .tone-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: var(--primary-color);
+    }
+
+    .tone-description {
+      display: none; /* Show on hover or advanced? */
+      color: var(--primary-color);
+      font-size: 0.9em;
+      line-height: 1.4;
+      margin-top: 10px;
+    }
+
+    .tone-card:hover .tone-description {
+      display: block;
+    }
+
+    .tone-card.selected {
+      background: linear-gradient(135deg, #ffd588a6, #ed9f40af, #ff70288e);
+      color: white;
+      border-color: #ed9f40;
+    }
+    .tone-card.selected .tone-title {
+      color: white;
+    }
+
+    .tone-card.advanced:hover {
+      background: linear-gradient(135deg, #c8d6e5, #ffffff);
+    }
+
+    @media (max-width: 768px) {
+      .tone-options {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .modal {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      max-width: 600px;
+      width: 90%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      color: var(--primary-color);
+      font-size: 1.3rem;
+    }
+
+    .modal .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 1rem;
+    }
+
+    .slider-group label {
+      font-size: 0.9rem;
+      color: var(--primary-color);
+    }
+
+    .slider-group input[type="range"] {
+      width: 100%;
+    }
+
+    .slider-value {
+      font-size: 0.8rem;
+      color: var(--secondary-color);
+      text-align: right;
+    }
+
+    .modal button.save-btn {
+      background: linear-gradient(135deg, #5885bd, #1b4072, #011f46);
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      cursor: pointer;
+      align-self: flex-end;
+    }
+
+    .modal button.save-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    /* Continue Button */
+    .continue-btn {
+      display: block;
+      background: linear-gradient(135deg, #5885bd, #1b4072, #011f46);
+      color: white;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      margin: 2rem auto 0 auto;
+    }
+
+    .continue-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Footer */
+    .footer-nav {
+      width: 100%;
+      margin-top: auto;
+      color: #ffffff;
+      background: url('.vscode/Images/situationfooter.png') no-repeat center center;
+      background-size: cover;
+      min-height: 60px;
+      padding: 15px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-nav p {
+      margin: 0;
+    }
+
+    .footer-nav a {
+      color: white;
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .footer-nav a:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header-wrapper">
+    <div class="top-nav">
+      <a href="#" class="logo">
+        <img src=".vscode/Images/CClogo.png" alt="CommuniCoach">
+      </a>
+      <button class="mobile-menu-button" onclick="toggleMenu()">☰</button>
+      <div class="nav-links" id="navLinks">
+        <a href="welcome.html">Welcome</a>
+        <a href="tone-selection.html" class="current">Tone Selection</a>
+        <a href="situation-room.html">Situation Room</a>
+        <a href="refined-narrative.html">Refined Narrative</a>
+      </div>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Section -->
+  <section class="section">
+    <div class="container">
+      <div class="content-wrapper">
+        <div class="text-content">
+          <div class="content-card">
+            <i class="fa-solid fa-sliders section-icon"></i>
+            <h1>Deeper Tone Customization</h1>
+            <p>Select or create a tone that truly fits your unique style. You can pick from our standard set or delve into advanced settings to craft your own custom voice.</p>
+          </div>
+        </div>
+      </div>
+      <div class="tone-options">
+        <!-- Standard Tones -->
+        <div class="tone-card" data-tone="empathetic">
+          <div class="tone-title">Empathetic</div>
+          <div class="tone-description">
+            “Convey genuine understanding and compassion, but from your own perspective.”
+          </div>
+        </div>
+        <div class="tone-card" data-tone="clear">
+          <div class="tone-title">Clear</div>
+          <div class="tone-description">
+            “Cut out fluff and say exactly what you mean.”
+          </div>
+        </div>
+        <div class="tone-card" data-tone="balanced">
+          <div class="tone-title">Balanced</div>
+          <div class="tone-description">
+            “Acknowledge multiple sides and keep an even perspective.”
+          </div>
+        </div>
+        <div class="tone-card" data-tone="authentic">
+          <div class="tone-title">Authentic</div>
+          <div class="tone-description">
+            “Stay natural and genuine to your real feelings.”
+          </div>
+        </div>
+        <div class="tone-card" data-tone="structured">
+          <div class="tone-title">Structured</div>
+          <div class="tone-description">
+            “Organize ideas with a logical, clear flow.”
+          </div>
+        </div>
+        <!-- Create Custom Tone Card -->
+        <div class="tone-card advanced" data-tone="custom">
+          <div class="tone-title">Create Custom Tone</div>
+          <div class="tone-description">
+            “Define your own style in detail: warmth, directness, positivity, and more.”
+          </div>
+        </div>
+      </div>
+
+      <!-- Continue Button -->
+      <button class="continue-btn" id="continueButton">Continue to Next Step</button>
+    </div>
+  </section>
+
+  <!-- Advanced Tone Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="close-btn" id="closeModal">&times;</button>
+      <h2>Create Your Custom Tone</h2>
+      <p style="font-size:0.9rem; line-height:1.4;">
+        Adjust the sliders to shape your unique communication style. These settings will generate a custom “tone guidance” snippet for your refined narrative.
+      </p>
+
+      <!-- Example Sliders for deeper customization -->
+      <div class="slider-group">
+        <label for="warmthSlider">Warmth (0 = Cold, 100 = Very Warm)</label>
+        <input type="range" id="warmthSlider" min="0" max="100" value="50" step="1">
+        <div class="slider-value" id="warmthValue">50</div>
+      </div>
+      <div class="slider-group">
+        <label for="positivitySlider">Positivity (0 = Cynical, 100 = Optimistic)</label>
+        <input type="range" id="positivitySlider" min="0" max="100" value="50" step="1">
+        <div class="slider-value" id="positivityValue">50</div>
+      </div>
+      <div class="slider-group">
+        <label for="directnessSlider">Directness (0 = Subtle, 100 = Very Direct)</label>
+        <input type="range" id="directnessSlider" min="0" max="100" value="50" step="1">
+        <div class="slider-value" id="directnessValue">50</div>
+      </div>
+      <div class="slider-group">
+        <label for="humorSlider">Humor (0 = Serious, 100 = Very Humorous)</label>
+        <input type="range" id="humorSlider" min="0" max="100" value="50" step="1">
+        <div class="slider-value" id="humorValue">50</div>
+      </div>
+      <div class="slider-group">
+        <label for="assertivenessSlider">Assertiveness (0 = Passive, 100 = Very Assertive)</label>
+        <input type="range" id="assertivenessSlider" min="0" max="100" value="50" step="1">
+        <div class="slider-value" id="assertivenessValue">50</div>
+      </div>
+
+      <button class="save-btn" id="saveCustomTone">Save</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer-nav">
+    <p>&copy; 2025 CommuniCoach. All rights reserved.</p>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+  </footer>
+
+  <script>
+    // Mobile menu
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+
+    // Tone Selection + Advanced Editor
+    document.addEventListener('DOMContentLoaded', () => {
+      const toneCards = document.querySelectorAll('.tone-card');
+      const continueButton = document.getElementById('continueButton');
+      let selectedApproaches = []; // If you still allow multiple tones, store them here
+      const maxApproaches = 2;     // Or adjust as needed
+
+      // Modal
+      const modalOverlay = document.getElementById('modalOverlay');
+      const closeModalBtn = document.getElementById('closeModal');
+      const saveCustomToneBtn = document.getElementById('saveCustomTone');
+
+      // Sliders
+      const warmthSlider = document.getElementById('warmthSlider');
+      const warmthValue = document.getElementById('warmthValue');
+      const positivitySlider = document.getElementById('positivitySlider');
+      const positivityValue = document.getElementById('positivityValue');
+      const directnessSlider = document.getElementById('directnessSlider');
+      const directnessValue = document.getElementById('directnessValue');
+      const humorSlider = document.getElementById('humorSlider');
+      const humorValue = document.getElementById('humorValue');
+      const assertivenessSlider = document.getElementById('assertivenessSlider');
+      const assertivenessValue = document.getElementById('assertivenessValue');
+
+      // Display slider values
+      function updateSliderValue(slider, output) {
+        output.textContent = slider.value;
+      }
+      warmthSlider.addEventListener('input', () => updateSliderValue(warmthSlider, warmthValue));
+      positivitySlider.addEventListener('input', () => updateSliderValue(positivitySlider, positivityValue));
+      directnessSlider.addEventListener('input', () => updateSliderValue(directnessSlider, directnessValue));
+      humorSlider.addEventListener('input', () => updateSliderValue(humorSlider, humorValue));
+      assertivenessSlider.addEventListener('input', () => updateSliderValue(assertivenessSlider, assertivenessValue));
+
+      // Initialize displayed values
+      updateSliderValue(warmthSlider, warmthValue);
+      updateSliderValue(positivitySlider, positivityValue);
+      updateSliderValue(directnessSlider, directnessValue);
+      updateSliderValue(humorSlider, humorValue);
+      updateSliderValue(assertivenessSlider, assertivenessValue);
+
+      // Open/Close Modal
+      function openModal() {
+        modalOverlay.style.display = 'flex';
+      }
+      function closeModal() {
+        modalOverlay.style.display = 'none';
+      }
+
+      closeModalBtn.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+          closeModal();
+        }
+      });
+
+      // Tone Card Click
+      toneCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const tone = card.getAttribute('data-tone');
+          // If card is already selected, unselect
+          if (card.classList.contains('selected')) {
+            card.classList.remove('selected');
+            selectedApproaches = selectedApproaches.filter(a => a !== tone);
+          } else {
+            // If you only allow 1 tone, you could clear them all first
+            // If you allow 2, do the logic
+            if (selectedApproaches.length < maxApproaches) {
+              card.classList.add('selected');
+              selectedApproaches.push(tone);
+
+              // If user clicked the "Create Custom Tone" card, open modal
+              if (tone === 'custom') {
+                openModal();
+              }
+            } else {
+              // Replace first selection if max approaches is reached
+              const firstTone = selectedApproaches[0];
+              const firstCard = document.querySelector(`.tone-card[data-tone="${firstTone}"]`);
+              if (firstCard) firstCard.classList.remove('selected');
+              selectedApproaches.shift(); // remove first
+              card.classList.add('selected');
+              selectedApproaches.push(tone);
+
+              // If user clicked the "Create Custom Tone" card, open modal
+              if (tone === 'custom') {
+                openModal();
+              }
+            }
+          }
+          localStorage.setItem('selectedTones', JSON.stringify(selectedApproaches));
+        });
+      });
+
+      // Save custom tone
+      saveCustomToneBtn.addEventListener('click', () => {
+        // Create a custom tone guidance snippet from the slider values
+        const customToneGuidance = `
+You are refining the speaker's words into a custom tone with the following attributes:
+- Warmth Level: ${warmthSlider.value} / 100
+- Positivity: ${positivitySlider.value} / 100
+- Directness: ${directnessSlider.value} / 100
+- Humor: ${humorSlider.value} / 100
+- Assertiveness: ${assertivenessSlider.value} / 100
+
+While refining, maintain the user's first-person perspective and emotional truth. Adapt the style according to these specified levels:
+- "Warmth" influences how gentle and compassionate the language is
+- "Positivity" shapes overall optimism vs. cynicism
+- "Directness" adjusts how blunt or subtle the phrasing appears
+- "Humor" adds a lighthearted element or keeps it serious
+- "Assertiveness" influences how confidently or passively statements are made
+`;
+
+        localStorage.setItem('advancedToneSettings', customToneGuidance.trim());
+        closeModal();
+      });
+
+      // Continue Button
+      continueButton.addEventListener('click', () => {
+        // If no tone selected, prompt user
+        if (selectedApproaches.length === 0) {
+          alert('Please select at least one tone (or create a custom tone) before continuing.');
+          return;
+        }
+
+        // Example: If you want to combine multiple standard tones
+        let finalToneGuidance = '';
+        selectedApproaches.forEach(tone => {
+          if (tone === 'empathetic') {
+            finalToneGuidance += `
+You are refining the speaker's words into an empathetic tone:
+- Maintain warmth and compassion, from the speaker's own viewpoint
+- Do not shift to a coach perspective; stay first-person
+`;
+          } else if (tone === 'clear') {
+            finalToneGuidance += `
+You are refining the speaker's words into a clear tone:
+- Make the text concise and direct
+- Eliminate unnecessary fluff, preserve emotional truth
+`;
+          } else if (tone === 'balanced') {
+            finalToneGuidance += `
+You are refining the speaker's words into a balanced tone:
+- Show fairness and openness to multiple sides
+- Maintain first-person viewpoint, avoiding extremes
+`;
+          } else if (tone === 'authentic') {
+            finalToneGuidance += `
+You are refining the speaker's words into an authentic tone:
+- Preserve the speaker's natural style and emotional truth
+- Keep the narrative personal and relatable
+`;
+          } else if (tone === 'structured') {
+            finalToneGuidance += `
+You are refining the speaker's words into a structured tone:
+- Organize ideas logically (e.g., cause -> effect)
+- Maintain the speaker's personal voice
+`;
+          } else if (tone === 'custom') {
+            // Retrieve the advanced tone settings from localStorage
+            const advancedToneSettings = localStorage.getItem('advancedToneSettings') || '';
+            finalToneGuidance += advancedToneSettings;
+          }
+        });
+
+        // Store final combined tone guidance
+        localStorage.setItem('finalToneGuidance', finalToneGuidance.trim());
+
+        // Navigate to next page
+        window.location.href = 'situation-room.html';
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Action Arena - CommuniCoach</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2D4A3E;
+            --secondary-color: #1b4072;
+            --accent-color: #A1CE3E;
+            --highlight-color: #DCEFC6;
+            --energy-color: #74B49B;
+            --error-color: #FF6B6B;
+            --shadow-color: rgba(45, 74, 62, 0.15);
+            --badge-color: #136f6f;
+            --gradient-bg: linear-gradient(135deg, rgba(45, 74, 62, 0.05), rgba(161, 206, 62, 0.07));
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-image: url('.vscode/Images/pattern-bg5.png');
+            background-size: cover;
+            background-attachment: fixed;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: -1;
+        }
+
+        /* Header and Navigation */
+        .header-wrapper {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px var(--shadow-color);
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 0;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        .top-nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            position: absolute;
+            left: 20px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .top-nav a:hover {
+            background: var(--highlight-color);
+        }
+
+        .top-nav a.current {
+            background: #136f6f;
+            color: white;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .progress-bar {
+            width: 80%;
+            margin: 0 auto;
+            height: 8px;
+            background: #7cbcca;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar .progress {
+            width: 80%; /* Updated for action arena page */
+            height: 100%;
+            background: linear-gradient(90deg, #136f6f, #136f6f);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-button {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+            position: absolute;
+            right: 20px;
+            top: 15px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            margin-top: 100px;
+            padding: 4rem 0;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .hero-text {
+            flex: 1.2;
+        }
+
+        .hero-image {
+            flex: 1;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .content-card {
+            background-color: var(--highlight-color);
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+
+        .content-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-icon {
+            color: #ff221f;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+            text-align: center;
+        }
+
+        .hero-text h1 {
+            font-size: 1.75em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .hero-text p {
+            font-size: 1.1em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .italic-text {
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        /* Action Arena Experience Card */
+        .experience-section {
+            padding: 2rem 0 4rem;
+        }
+
+        .experience-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .experience-header h2 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            margin-bottom: 1rem;
+        }
+
+        .experience-header p {
+            color: var(--primary-color);
+            font-size: 1.1em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .experience-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .experience-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .experience-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px var(--shadow-color);
+        }
+
+        .experience-card-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .experience-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .experience-card:hover .experience-card-image img {
+            transform: scale(1.05);
+        }
+
+        .experience-card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .experience-card-content h3 {
+            color: var(--primary-color);
+            font-size: 1.3em;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .experience-card-content h3 i {
+            margin-right: 0.5rem;
+            color: #ff221f;
+        }
+
+        .experience-card-content p {
+            color: var(--primary-color);
+            font-size: 0.95em;
+            line-height: 1.5;
+            flex-grow: 1;
+            margin-bottom: 1rem;
+        }
+
+        .experience-tag {
+            display: inline-block;
+            background: var(--highlight-color);
+            color: var(--primary-color);
+            font-size: 0.8em;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .experience-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--badge-color);
+            color: white;
+            font-size: 0.8em;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .experience-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .experience-time {
+            font-size: 0.85em;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .experience-time i {
+            margin-right: 0.3rem;
+        }
+
+        .begin-experience-btn {
+            background: var(--gradient-bg);
+            color: var(--primary-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .begin-experience-btn:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Goal Setting Section */
+        .goal-setting-section {
+            padding: 3rem 0;
+            background-color: #f1f9e9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .goal-setting-section::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: url('.vscode/Images/pattern-bg4.png');
+            background-size: cover;
+            opacity: 0.05;
+            z-index: 0;
+        }
+
+        .goal-setting-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .goal-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            margin-bottom: 2rem;
+        }
+
+        .goal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .goal-header h2 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            margin-bottom: 1rem;
+        }
+
+        .goal-header p {
+            color: var(--primary-color);
+            font-size: 1.1em;
+        }
+
+        .goal-form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .goal-form-group label {
+            display: block;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .goal-form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .goal-form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+        }
+
+        .goal-examples {
+            background: var(--highlight-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .goal-examples h3 {
+            color: var(--primary-color);
+            font-size: 1.2em;
+            margin-bottom: 1rem;
+        }
+
+        .goal-examples ul {
+            padding-left: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .goal-examples li {
+            margin-bottom: 0.5rem;
+        }
+
+        .goal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .gradient-btn {
+            background: linear-gradient(135deg, #5885bd, #1b4072, #011f46);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .gradient-btn.big {
+            margin: 2rem auto;
+            display: block;
+            max-width: 250px;
+            width: 100%;
+        }
+
+        .gradient-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, #1b4072, #8AB0AB, #0a0a0a);
+            color: #f1f1f1;
+        }
+
+        .skip-btn {
+            background: none;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .skip-btn:hover {
+            background: var(--highlight-color);
+            transform: translateY(-5px);
+        }
+
+        /* Situation Summary Card */
+        .situation-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            margin-bottom: 2rem;
+        }
+
+        .situation-summary h3 {
+            color: var(--primary-color);
+            font-size: 1.3em;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .situation-summary h3 i {
+            margin-right: 0.5rem;
+            color: #ff221f;
+        }
+
+        .situation-summary-content {
+            position: relative;
+            padding: 1.5rem;
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            background: var(--highlight-color);
+            color: var(--primary-color);
+            font-size: 0.95em;
+            line-height: 1.6;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .situation-summary-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .edit-summary-btn {
+            background: none;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .edit-summary-btn:hover {
+            background: var(--highlight-color);
+        }
+        .goal-input-container {
+        position: relative;
+        margin-bottom: 0.5rem;
+    }
+    
+    .suggest-goal-btn {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        background: var(--accent-color);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9em;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .suggest-goal-btn:hover {
+        background: var(--energy-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .goal-loading-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary-color);
+        font-size: 0.9em;
+        margin-top: 0.5rem;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .spinner-small {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(45, 74, 62, 0.2);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s linear infinite;
+    }
+
+        /* Completion Status Section */
+        .completion-section {
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .completion-header {
+            margin-bottom: 2rem;
+        }
+
+        .completion-header h2 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            margin-bottom: 1rem;
+        }
+
+        .completion-header p {
+            color: var(--primary-color);
+            font-size: 1.1em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .completion-progress {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px var(--shadow-color);
+        }
+
+        .completion-circles {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .completion-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            margin: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .completion-circle.active {
+            background: var(--highlight-color);
+            transform: scale(1.05);
+        }
+
+        .completion-circle-number {
+            font-size: 2.5em;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .completion-circle-text {
+            font-size: 0.9em;
+            color: var(--primary-color);
+            text-align: center;
+            padding: 0 0.5rem;
+        }
+
+        .status-message {
+            color: var(--primary-color);
+            font-size: 1.1em;
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        .footer-nav {
+            width: 100%;
+            margin-top: auto;
+            color: #ffffff;
+            background: url('.vscode/Images/situationfooter.png') no-repeat center center;
+            background-size: cover;
+            min-height: 60px;
+            padding: 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-nav p {
+            margin: 0;
+        }
+
+        .footer-nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+        }
+
+        .delay-4 {
+            animation-delay: 0.8s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .top-nav {
+                flex-direction: column;
+                padding: 10px 0;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                padding-top: 10px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .logo {
+                position: static;
+                margin-bottom: 10px;
+            }
+
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .hero-content {
+                flex-direction: column-reverse;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 1.8em;
+            }
+
+            .hero-text p {
+                font-size: 1em;
+            }
+
+            .experience-cards {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+
+            .goal-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .gradient-btn, .skip-btn {
+                width: 100%;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .footer-nav {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px 0;
+                gap: 10px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .experience-cards {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 0 1.5rem;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header and Progress Indicator -->
+    <div class="header-wrapper">
+        <div class="top-nav">
+            <a href="#" class="logo">
+                <img src=".vscode/Images/CClogo.png" alt="CommuniCoach">
+            </a>
+            <button class="mobile-menu-button" onclick="toggleMenu()">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="welcome.html">Welcome</a>
+                <a href="tone-selection.html">Tone Selection</a>
+                <a href="situation-room.html">Situation Room</a>
+                <a href="refined-narrative.html">Refined Narrative</a>
+                <a href="action-arena.html" class="current">Action Arena</a>
+            </div>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text fade-in">
+                    <div class="content-card">
+                        <i class="fa-solid fa-gamepad section-icon"></i>
+                        <h1>Welcome to the Action Arena</h1>
+                        <p>This is your strategic playground for communication excellence. Here, your refined narrative transforms into interactive experiences designed to strengthen specific communication skills. Each experience is tailored to your unique situation and goals, providing practical, engaging ways to develop confidence and clarity.</p>
+                        <p>The skills you cultivate here extend beyond the screen, becoming powerful tools for your real-life interactions. Choose from the experiences below to begin your journey towards communication mastery.</p>
+                    </div>
+                </div>
+                <div class="hero-image fade-in delay-1">
+                    <img src=".vscode/Images/action preview1.png" alt="Action Arena">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Goal Setting Section -->
+    <section class="goal-setting-section">
+        <div class="goal-setting-container">
+            <!-- Situation Summary Card -->
+            <div class="situation-summary fade-in">
+                <h3><i class="fa-solid fa-file-lines"></i>Your Current Situation</h3>
+                <div class="situation-summary-content" id="situationSummary">
+                    <!-- Dynamic content loaded from localStorage -->
+                </div>
+                <div class="situation-summary-footer">
+                    <button class="edit-summary-btn" onclick="window.location.href='refined-narrative.html'">Edit Narrative</button>
+                </div>
+            </div>
+
+            <!-- Goal Setting Card -->
+            <div class="goal-card fade-in delay-1">
+                <div class="goal-header">
+                    <h2>Define Your Communication Goal</h2>
+                    <p>What do you hope to achieve with this conversation? Being clear about your objective will help tailor your Action Arena experiences.</p>
+                </div>
+
+                <div class="goal-examples">
+                    <h3>Example Goals:</h3>
+                    <ul>
+                        <li>I want to resolve the conflict with my colleague while maintaining a positive working relationship.</li>
+                        <li>I need to clearly express my boundaries without damaging our friendship.</li>
+                        <li>I want to persuade my manager to approve our new project proposal.</li>
+                    </ul>
+                </div>
+
+                <form id="goalForm">
+                    <!-- HTML Modification for the Goal Form -->
+                    <div class="goal-form-group">
+                        <label for="communicationGoal">Your Communication Goal:</label>
+                        <div class="goal-input-container">
+                            <textarea id="communicationGoal" placeholder="Describe what you'd like to accomplish..."></textarea>
+                            <button type="button" id="suggestGoalBtn" class="suggest-goal-btn">
+                                <i class="fa-solid fa-lightbulb"></i> Suggest Goal
+                            </button>
+                        </div>
+                        <div id="goalLoadingIndicator" class="goal-loading-indicator" style="display: none;">
+                            <div class="spinner-small"></div>
+                            <span>Generating suggestion...</span>
+                        </div>
+                    </div>
+                
+                    <div class="goal-buttons">
+                        <button type="button" class="gradient-btn" id="saveGoalBtn">Save Goal</button>
+                        <button type="button" class="skip-btn" id="skipGoalBtn">Skip for Now</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Cards Section -->
+    <section class="experience-section">
+        <div class="container">
+            <div class="experience-header fade-in">
+                <h2>Choose Your Experience</h2>
+                <p>Select from these interactive experiences to develop and practice your communication skills. Each experience is designed to help you master different aspects of effective communication.</p>
+            </div>
+
+            <div class="experience-cards">
+                <!-- Experience 1: Role Play -->
+                <div class="experience-card fade-in delay-1" onclick="startExperience('role-play')">
+                    <div class="experience-badge">Most Popular</div>
+                    <div class="experience-card-image">
+                        <img src=".vscode/Images/conversations.png" alt="Role Play">
+                    </div>
+                    <div class="experience-card-content">
+                        <h3><i class="fa-solid fa-users"></i>Role Play</h3>
+                        <p>Engage in simulated conversations with an AI that takes on roles relevant to your scenario. Receive real-time feedback and practice different approaches in a safe environment.</p>
+                        <div>
+                            <span class="experience-tag">Conversation Practice</span>
+                            <span class="experience-tag">Real-time Feedback</span>
+                        </div>
+                        <div class="experience-footer">
+                            <span class="experience-time"><i class="fa-regular fa-clock"></i>15-20 min</span>
+                            <button class="begin-experience-btn">Begin</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Experience X: Style Practice -->
+<div class="experience-card fade-in delay-4" onclick="startExperience('style-practice')">
+    <div class="experience-card-image">
+      <img src=".vscode/Images/conversation.png" alt="Style Practice">
+    </div>
+    <div class="experience-card-content">
+      <h3><i class="fa-solid fa-palette"></i>Style Practice</h3>
+      <p>Transform the tone and impact of your message using different communication styles. Explore how each style shapes the response and outcome.</p>
+      <div>
+        <span class="experience-tag">Tone Shaping</span>
+        <span class="experience-tag">Communication Styles</span>
+      </div>
+      <div class="experience-footer">
+        <span class="experience-time"><i class="fa-regular fa-clock"></i>10–15 min</span>
+        <button class="begin-experience-btn">Begin</button>
+      </div>
+    </div>
+  </div>
+  
+
+                <!-- Experience 2: Perspective Taking -->
+                <div class="experience-card fade-in delay-2" onclick="startExperience('perspective-taking')">
+                    <div class="experience-card-image">
+                        <img src=".vscode/Images/bg1.png" alt="Perspective Taking">
+                    </div>
+                    <div class="experience-card-content">
+                        <h3><i class="fa-solid fa-binoculars"></i>Perspective Taking</h3>
+                        <p>Experience your narrative from another's viewpoint to gain deeper insights into their feelings, motivations, and reactions. Develop empathy and understanding for more effective communication.</p>
+                        <div>
+                            <span class="experience-tag">Empathy Building</span>
+                            <span class="experience-tag">Understanding</span>
+                        </div>
+                        <div class="experience-footer">
+                            <span class="experience-time"><i class="fa-regular fa-clock"></i>10-15 min</span>
+                            <button class="begin-experience-btn">Begin</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 3: Gaming Out Scenarios -->
+                <div class="experience-card fade-in delay-3" onclick="startExperience('gaming-scenarios')">
+                    <div class="experience-card-image">
+                        <img src=".vscode/Images/conversation.png" alt="Gaming Out Scenarios">
+                    </div>
+                    <div class="experience-card-content">
+                        <h3><i class="fa-solid fa-diagram-project"></i>Conversation Pathways</h3>
+                        <p>Explore different communication paths using an interactive flowchart that branches based on your choices. See how different approaches lead to various outcomes.</p>
+                        <div>
+                            <span class="experience-tag">Decision Making</span>
+                            <span class="experience-tag">Strategy</span>
+                        </div>
+                        <div class="experience-footer">
+                            <span class="experience-time"><i class="fa-regular fa-clock"></i>15-20 min</span>
+                            <button class="begin-experience-btn">Begin</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 4: Strategizing the Best Approach -->
+                <div class="experience-card fade-in delay-2" onclick="startExperience('best-approach')">
+                    <div class="experience-card-image">
+                        <img src=".vscode/Images/image.svg" alt="Strategizing Best Approach">
+                    </div>
+                    <div class="experience-card-content">
+                        <h3><i class="fa-solid fa-chess"></i>Strategizing Approach</h3>
+                        <p>Focus on the tangible aspects of communication, like timing, setting, and medium. Develop a practical strategy tailored to your specific situation and communication preferences.</p>
+                        <div>
+                            <span class="experience-tag">Planning</span>
+                            <span class="experience-tag">Practical Tips</span>
+                        </div>
+                        <div class="experience-footer">
+                            <span class="experience-time"><i class="fa-regular fa-clock"></i>10-15 min</span>
+                            <button class="begin-experience-btn">Begin</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 5: Persuasion Puzzles -->
+                <div class="experience-card fade-in delay-3" onclick="startExperience('persuasion-puzzles')">
+                    <div class="experience-card-image">
+                        <img src=".vscode/Images/puzzle.png" alt="Persuasion Puzzles">
+                    </div>
+                    <div class="experience-card-content">
+                        <h3><i class="fa-solid fa-puzzle-piece"></i>Persuasion Puzzles</h3>
+                        <p>Master the art of influence through engaging scenarios that challenge you to apply persuasive techniques aligned with your communication goals.</p>
+                        <div>
+                            <span class="experience-tag">Influence</span>
+                            <span class="experience-tag">Persuasion</span>
+                        </div>
+                        <div class="experience-footer">
+                            <span class="experience-time"><i class="fa-regular fa-clock"></i>10-15 min</span>
+                            <button class="begin-experience-btn">Begin</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 6: Advice Column Simulator -->
+                <div class="experience-card fade-in delay-4" onclick="startExperience('advice-column')">
+                    <div class="experience-card-image">
+                        <img src=".vscode/Images/hook.png" alt="Advice Column Simulator">
+                    </div>
+                    <div class="experience-card-content">
+                        <h3><i class="fa-solid fa-newspaper"></i>Advice Column</h3>
+                        <p>Transform your narrative into an advice column query and receive tailored guidance. Optionally share your story with the CommuniCoach community to gain diverse perspectives.</p>
+                        <div>
+                            <span class="experience-tag">Guidance</span>
+                            <span class="experience-tag">Community</span>
+                        </div>
+                        <div class="experience-footer">
+                            <span class="experience-time"><i class="fa-regular fa-clock"></i>5-10 min</span>
+                            <button class="begin-experience-btn">Begin</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Experience 7: Script Creator -->
+<div class="experience-card fade-in delay-3" onclick="startExperience('script-creator')">
+    <div class="experience-card-image">
+        <img src=".vscode/Images/what you do.png" alt="Script Creator">
+    </div>
+    <div class="experience-card-content">
+        <h3><i class="fa-solid fa-pen-to-square"></i>Script Creator</h3>
+        <p>Transform your refined narrative into a practical, ready-to-use script for your real-world conversation. Choose your preferred format and customize your script to prepare for effective communication.</p>
+        <div>
+            <span class="experience-tag">Conversation Prep</span>
+            <span class="experience-tag">Practical Tool</span>
+        </div>
+        <div class="experience-footer">
+            <span class="experience-time"><i class="fa-regular fa-clock"></i>10-15 min</span>
+            <button class="begin-experience-btn">Begin</button>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+        
+    </section>
+
+    <!-- Completion Status Section -->
+    <section class="completion-section">
+        <div class="container">
+            <div class="completion-header fade-in">
+                <h2>Your Journey Progress</h2>
+                <p>Track your progress through the Action Arena. Complete at least 3 experiences to maximize your communication preparation.</p>
+            </div>
+
+            <div class="completion-progress fade-in delay-1">
+                <div class="completion-circles">
+                    <div class="completion-circle" id="circle1">
+                        <div class="completion-circle-number">1</div>
+                        <div class="completion-circle-text">Experience Completed</div>
+                    </div>
+                    <div class="completion-circle" id="circle2">
+                        <div class="completion-circle-number">2</div>
+                        <div class="completion-circle-text">Experiences Completed</div>
+                    </div>
+                    <div class="completion-circle active" id="circle3">
+                        <div class="completion-circle-number">3</div>
+                        <div class="completion-circle-text">Communication Mastery</div>
+                    </div>
+                </div>
+                <div class="status-message" id="statusMessage">
+                    You haven't completed any experiences yet. Start your journey by selecting an experience above.
+                </div>
+                <button class="gradient-btn big" id="downloadInsightsBtn" disabled>
+                    Download Your Communication Insights
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer-nav">
+        <p>&copy; 2024 CommuniCoach. All rights reserved.</p>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+    </footer>
+
+    <script>
+// Main functionality for Action Arena page
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize key elements
+    initializeSituationSummary();
+    initializeGoalForm();
+    updateCompletionStatus();
+    initializeAnimations();
+    initializeSuggestionButton();
+});
+
+// Function to toggle mobile menu
+function toggleMenu() {
+    const navLinks = document.getElementById('navLinks');
+    navLinks.classList.toggle('active');
+}
+
+// Function to initialize situation summary
+function initializeSituationSummary() {
+    const situationSummary = document.getElementById('situationSummary');
+    if (!situationSummary) return;
+    
+    // Try multiple sources to get the narrative
+    let refinedNarrative = localStorage.getItem('refinedNarrative');
+    
+    // If not found directly, try fallback options
+    if (!refinedNarrative || refinedNarrative.trim() === '') {
+        try {
+            // Try sessionStorage as fallback
+            refinedNarrative = sessionStorage.getItem('refinedNarrative');
+            
+            // If still not found, check for original narrative
+            if (!refinedNarrative || refinedNarrative.trim() === '') {
+                refinedNarrative = localStorage.getItem('originalNarrative');
+            }
+        } catch (e) {
+            console.error('Error accessing storage:', e);
+        }
+    }
+    
+    if (refinedNarrative && refinedNarrative.trim() !== '') {
+        // Display a shorter version (first 200 characters)
+        const maxLength = 200;
+        let summaryText = refinedNarrative.substring(0, maxLength);
+        
+        if (refinedNarrative.length > maxLength) {
+            summaryText += '...';
+        }
+        
+        situationSummary.textContent = summaryText;
+    } else {
+        situationSummary.textContent = 'No narrative found. Please return to the Situation Room to describe your situation.';
+    }
+}
+
+// Function to initialize goal form
+function initializeGoalForm() {
+    const saveGoalBtn = document.getElementById('saveGoalBtn');
+    const skipGoalBtn = document.getElementById('skipGoalBtn');
+    const communicationGoal = document.getElementById('communicationGoal');
+    
+    if (!saveGoalBtn || !skipGoalBtn || !communicationGoal) return;
+    
+    // Load existing goal if available
+    const savedGoal = localStorage.getItem('communicationGoal');
+    if (savedGoal) {
+        communicationGoal.value = savedGoal;
+    }
+    
+    // Set up save button
+    saveGoalBtn.addEventListener('click', function() {
+        const goal = communicationGoal.value.trim();
+        if (goal) {
+            localStorage.setItem('communicationGoal', goal);
+            showToast('Your communication goal has been saved!');
+            scrollToExperiences();
+        } else {
+            showToast('Please enter a communication goal or click "Skip for Now"', 'error');
+        }
+    });
+    
+    // Set up skip button
+    skipGoalBtn.addEventListener('click', function() {
+        scrollToExperiences();
+    });
+}
+
+// Initialize the suggest goal button
+function initializeSuggestionButton() {
+    const suggestGoalBtn = document.getElementById('suggestGoalBtn');
+    const communicationGoal = document.getElementById('communicationGoal');
+    const goalLoadingIndicator = document.getElementById('goalLoadingIndicator');
+    
+    if (!suggestGoalBtn || !communicationGoal || !goalLoadingIndicator) return;
+    
+    suggestGoalBtn.addEventListener('click', function() {
+        // Show loading indicator
+        goalLoadingIndicator.style.display = 'flex';
+        
+        // Get the refined narrative from localStorage
+        const refinedNarrative = localStorage.getItem('refinedNarrative') || '';
+        const originalNarrative = localStorage.getItem('originalNarrative') || '';
+        
+        // Construct the prompt for goal suggestion
+        const prompt = constructGoalPrompt(refinedNarrative, originalNarrative);
+        
+        console.log('Sending request to API with prompt length:', prompt.length);
+        
+        // Make API call to generate suggested goal
+        fetch('http://localhost:5506/api/chatgpt', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ prompt: prompt })
+        })
+        .then(response => {
+            console.log('API Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('API Response data received:', data);
+            if (data && data.response) {
+                // Update the textarea with the suggested goal
+                communicationGoal.value = data.response.trim();
+                showToast('Goal suggestion generated! Feel free to edit it to better match your intentions.');
+            } else {
+                console.error('Invalid response format:', data);
+                throw new Error('No valid response data received');
+            }
+        })
+        .catch(error => {
+            console.error('Error generating goal suggestion:', error);
+            console.log('Connection failed to API endpoint: http://localhost:5506/api/chatgpt');
+            showToast('Unable to connect to AI service. Using a template instead.', 'error');
+            
+            // Fallback suggestion if API call fails
+            generateFallbackGoalSuggestion(communicationGoal);
+        })
+        .finally(() => {
+            // Hide loading indicator
+            goalLoadingIndicator.style.display = 'none';
+        });
+    });
+}
+
+// Construct the prompt for the API call
+function constructGoalPrompt(refinedNarrative, originalNarrative) {
+    return `
+Based on the following narrative, suggest a clear, specific communication goal that the person might want to achieve. The goal should be actionable, focused on what they want to accomplish through communication, and written in first person (e.g., "I want to...").
+
+REFINED NARRATIVE:
+${refinedNarrative || "No refined narrative available"}
+
+${originalNarrative ? `ORIGINAL NARRATIVE (for additional context):
+${originalNarrative}` : ""}
+
+Please respond with ONLY the suggested communication goal, written as a complete sentence that begins with "I want to" or "I need to". Keep it concise (1-2 sentences maximum) and make it specific enough that it will help guide the person's communication strategy.
+`;
+}
+
+// Fallback function to generate a suggestion if the API call fails
+function generateFallbackGoalSuggestion(communicationGoal) {
+    const fallbackGoals = [
+        "I want to clearly express my boundaries while maintaining a positive relationship.",
+        "I need to resolve this conflict constructively while ensuring my concerns are addressed.",
+        "I want to persuade them to consider my perspective without damaging our relationship.",
+        "I need to communicate my expectations clearly to prevent future misunderstandings.",
+        "I want to rebuild trust through honest and transparent communication.",
+        "I need to advocate for my needs while being open to compromise."
+    ];
+    
+    const randomGoal = fallbackGoals[Math.floor(Math.random() * fallbackGoals.length)];
+    communicationGoal.value = randomGoal;
+    
+    showToast('Using a suggested goal template. Please customize it for your situation.');
+}
+
+// Function to start an experience
+function startExperience(experienceId) {
+    // Store the selected experience ID
+    localStorage.setItem('currentExperience', experienceId);
+    
+    // Map experience IDs to their corresponding HTML files
+    const experiencePages = {
+        'role-play': 'action-roleplay.html',
+        'perspective-taking': 'action-perspective.html',
+        'gaming-scenarios': 'action-flowchart.html',
+        'best-approach': 'action-strategy.html',
+        'persuasion-puzzles': 'action-persuasion.html',
+        'advice-column': 'action-advice.html',
+        'script-creator': 'action-scriptcreator.html',
+        'style-practice': 'style-practice.html'
+    };
+    
+    // Get the corresponding page URL
+    const pageUrl = experiencePages[experienceId];
+    
+    // Navigate to the experience page if it exists
+    if (pageUrl) {
+        window.location.href = pageUrl;
+    } else {
+        // Fallback for any unmapped experiences
+        showToast(`Starting experience: ${experienceId}. This page is currently under development.`);
+    }
+}
+
+// Function to update completion status
+function updateCompletionStatus() {
+    const statusMessage = document.getElementById('statusMessage');
+    const downloadBtn = document.getElementById('downloadInsightsBtn');
+    const circle1 = document.getElementById('circle1');
+    const circle2 = document.getElementById('circle2');
+    const circle3 = document.getElementById('circle3');
+    
+    if (!statusMessage || !downloadBtn || !circle1 || !circle2 || !circle3) return;
+    
+    // Get completed experiences from localStorage
+    let completedExperiences = [];
+    try {
+        const storedExperiences = localStorage.getItem('completedExperiences');
+        completedExperiences = storedExperiences ? JSON.parse(storedExperiences) : [];
+        
+        // Ensure it's an array
+        if (!Array.isArray(completedExperiences)) {
+            completedExperiences = [];
+        }
+    } catch (e) {
+        console.error('Error parsing completed experiences:', e);
+        completedExperiences = [];
+    }
+    
+    const completedCount = completedExperiences.length;
+    
+    // Update circles
+    circle1.classList.toggle('active', completedCount >= 1);
+    circle2.classList.toggle('active', completedCount >= 2);
+    circle3.classList.toggle('active', completedCount >= 3);
+    
+    // Update status message and download button
+    if (completedCount === 0) {
+        statusMessage.textContent = 'You haven\'t completed any experiences yet. Start your journey by selecting an experience above.';
+        downloadBtn.disabled = true;
+    } else if (completedCount < 3) {
+        statusMessage.textContent = `You've completed ${completedCount} experience${completedCount > 1 ? 's' : ''}. Complete ${3 - completedCount} more to reach communication mastery.`;
+        downloadBtn.disabled = true;
+    } else {
+        statusMessage.textContent = 'Congratulations! You completed 3 or more experiences and achieved communication mastery.';
+        downloadBtn.disabled = false;
+    }
+    
+    // Initialize download button if enabled
+    if (!downloadBtn.disabled) {
+        downloadBtn.addEventListener('click', generateInsightsDocument);
+    }
+}
+
+// Function to generate insights document
+function generateInsightsDocument() {
+    // This would generate a PDF or text document with insights
+    // For now, we'll just show a toast notification
+    showToast('Your communication insights are being prepared for download...');
+    
+    // Simulate download after 2 seconds
+    setTimeout(() => {
+        showToast('Download complete! Your insights have been saved.');
+    }, 2000);
+}
+
+// Function to scroll to the experiences section
+function scrollToExperiences() {
+    const experienceSection = document.querySelector('.experience-section');
+    if (experienceSection) {
+        experienceSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Function to initialize animations
+function initializeAnimations() {
+    const fadeElems = document.querySelectorAll('.fade-in');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    fadeElems.forEach(elem => {
+        elem.style.opacity = 0;
+        elem.style.transform = 'translateY(20px)';
+        elem.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        observer.observe(elem);
+    });
+}
+
+// Function to show toast notifications
+function showToast(message, type = 'success') {
+    // Remove any existing toast
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.padding = '12px 24px';
+    toast.style.borderRadius = '30px';
+    toast.style.color = 'white';
+    toast.style.zIndex = '1000';
+    toast.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)';
+    
+    // Animation
+    toast.style.animation = 'fadeIn 0.3s ease-in-out';
+    
+    // Type-specific styling
+    if (type === 'success') {
+        toast.style.background = '#2D4A3E';
+    } else if (type === 'error') {
+        toast.style.background = '#FF6B6B';
+    }
+    
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        if (document.body.contains(toast)) {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(-50%) translateY(20px)';
+            toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            
+            setTimeout(() => {
+                if (document.body.contains(toast)) {
+                    toast.remove();
+                }
+            }, 300);
+        }
+    }, 3000);
+}
+
+// Add keydown event for the goal textarea to save with Enter+Ctrl
+document.addEventListener('DOMContentLoaded', () => {
+    const communicationGoal = document.getElementById('communicationGoal');
+    if (communicationGoal) {
+        communicationGoal.addEventListener('keydown', (e) => {
+            // Ctrl+Enter to save
+            if (e.key === 'Enter' && e.ctrlKey) {
+                e.preventDefault();
+                const saveGoalBtn = document.getElementById('saveGoalBtn');
+                if (saveGoalBtn) {
+                    saveGoalBtn.click();
+                }
+            }
+        });
+    }
+});
+    </script>
+</body>
+</html>
