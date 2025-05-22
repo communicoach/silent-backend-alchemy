@@ -1099,7 +1099,6 @@
 <!-- Diagnostic Suggestion (Optional) -->
 <div class="coach-suggestion" id="diagnosticSuggestionBox" style="display: none;"></div>
 
-        <div id="diagnosticSuggestionBox" class="coach-suggestion" style="display: none;"></div>
 
         
         <!-- Coach Feedback for Style Identification -->
@@ -1370,20 +1369,26 @@ const userResponseEl = document.getElementById('userResponse');
 const responseMicBtn = document.getElementById('responseMicBtn');
 const micStatusText = document.getElementById('micStatusText');
 const generateResponseBtn = document.getElementById('generateResponseBtn');
-const confirmResponseBtn = document.getElementById('confirmResponseBtn');
 
-// Persuasion Remix (Transform)
-const transformOptionsRow = document.getElementById('transformOptionsRow');
-const previewResponseCard = document.getElementById('previewResponseCard');
-const previewResponseContent = document.getElementById('previewResponseContent');
-const useTransformedBtn = document.getElementById('useTransformedBtn');
+// Round Navigation
+const prevRoundBtn = document.getElementById('prevRoundBtn');
+const nextRoundBtn = document.getElementById('nextRoundBtn');
 
-// Final Insights
-const insightsSection = document.getElementById('insightsSection');
-const conversationSummary = document.getElementById('conversationSummary');
-const persuasionStrengths = document.getElementById('persuasionStrengths');
+// Feedback Elements
+const coachFeedback = document.getElementById('coachFeedback');
+const responseFeedbackContent = document.getElementById('responseFeedbackContent');
+const styleGuessFeedback = document.getElementById('styleGuessFeedback');
+const feedbackTitle = document.getElementById('feedbackTitle');
+const feedbackContent = document.getElementById('feedbackContent');
+const responseStyleRow = document.getElementById('responseStyleRow');
+
+// Summary Elements
+const summarySection = document.getElementById('summarySection');
+const overallPerformance = document.getElementById('overallPerformance');
+const recognitionStrengths = document.getElementById('recognitionStrengths');
+const expressionStrengths = document.getElementById('expressionStrengths');
+const practicalTips = document.getElementById('practicalTips');
 const growthOpportunities = document.getElementById('growthOpportunities');
-const nextStepsTips = document.getElementById('nextStepsTips');
 
 // Speech Recognition Globals
 let recognition = null;
@@ -1494,8 +1499,6 @@ function startRound(idx) {
   moodOptionsRow.innerHTML = '';
   moodFeedbackBox.style.display = 'none';
   diagnosticSuggestionBox.textContent = '';
-  previewResponseCard.style.display = 'none';
-  confirmResponseBtn.disabled = true;
 
   // Navigation
   prevRoundBtn.disabled = idx === 0;
@@ -1690,45 +1693,6 @@ Guidelines:
   
   
 
-  function renderStyleGuessButtons(correctStyle, distractors) {
-    styleGuessRow.innerHTML = '';
-    const combined = [correctStyle, ...distractors];
-    shuffleArray(combined);
-
-    combined.forEach(st => {
-      const btn = document.createElement('button');
-      btn.className = 'style-guess-button';
-      btn.textContent = st;
-      btn.addEventListener('click', () => guessPartnerStyle(st, correctStyle, btn));
-      styleGuessRow.appendChild(btn);
-    });
-  }
-  
-  function guessPartnerStyle(chosen, correctStyle, btn) {
-    const isCorrect = chosen === correctStyle;
-    
-    // Update UI based on result
-    if (isCorrect) {
-      btn.classList.add('correct');
-      // Disable all buttons after correct guess
-      styleGuessRow.querySelectorAll('button').forEach(b => b.disabled = true);
-      
-      // Store user's guess in state
-      exerciseState.rounds[roundIndex].userStyleGuess = chosen;
-      
-      // Generate and show coach feedback for correct guess
-      generateStyleFeedback(chosen, correctStyle, true);
-      
-      // Enable/render response style buttons after correct guess
-      renderResponseStyleButtons();
-      
-      showToast('Correct style identified!');
-    } else {
-      btn.classList.add('incorrect');
-      btn.disabled = true;
-      showToast('Not quite, try another.', 1500, true);
-    }
-  }
   function askCoach(type) {
   const narrative = localStorage.getItem('refinedNarrative') || '';
   const goal = localStorage.getItem('communicationGoal') || '';
@@ -1775,151 +1739,6 @@ If relevant, gently suggest details they might gather (like price comparisons, e
 }
 
   
-  function generateStyleFeedback(chosen, correctStyle, isCorrect) {
-    // Show loading in feedback area
-    styleGuessFeedback.style.display = 'block';
-    feedbackTitle.textContent = isCorrect ? 'Correct!' : 'Not Quite';
-    feedbackContent.textContent = 'Analyzing style characteristics...';
-    
-    // Generate detailed feedback through API
-    const prompt = `
-You are CommuniCoach, an expert communication coach.
-
-CONVERSATION CONTEXT:
-- The user is learning about different communication styles
-- They were shown this statement: "${exerciseState.rounds[roundIndex].partnerParagraph}"
-- The statement was written in ${correctStyle} style
-- The user guessed it was in ${chosen} style
-- Their guess was ${isCorrect ? 'correct' : 'incorrect'}
-
-TASK:
-Give brief feedback (2-3 sentences) explaining why this statement is an example of ${correctStyle} style.
-Point out 1-2 specific characteristics or phrases in the statement that exemplify this style.
-${!isCorrect ? `Briefly explain how this differs from ${chosen} style.` : ''}
-
-IMPORTANT:
-- Keep your response concise and educational
-- Focus on specific language features in the statement
-- Be conversational and encouraging
-`;
-
-    fetch('http://localhost:5506/api/chatgpt', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ prompt })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) throw new Error(data.error);
-      
-      // Update feedback content
-      feedbackContent.textContent = data.response.trim();
-      
-      // Store feedback in state
-      exerciseState.rounds[roundIndex].styleFeedback = data.response.trim();
-    })
-    .catch(err => {
-      console.error('Feedback generation error:', err);
-      feedbackContent.textContent = isCorrect ? 
-        `That's correct! This is a clear example of ${correctStyle} communication.` :
-        `This statement actually demonstrates ${correctStyle} communication, not ${chosen}.`;
-    });
-  }
-
-  function renderResponseStyleButtons() {
-    responseStyleRow.innerHTML = '';
-    
-    // Get a subset of styles for selection - include the correct answer from previous section
-    const correctStyle = exerciseState.rounds[roundIndex].correctStyle;
-    const allStyles = exerciseState.styleSubset;
-    
-    // Choose 3 additional random styles (different from correct style)
-    const otherStyles = allStyles.filter(s => s !== correctStyle);
-    shuffleArray(otherStyles);
-    const styleOptions = [correctStyle, ...otherStyles.slice(0, 3)];
-    
-    // Shuffle final array for display
-    shuffleArray(styleOptions);
-    
-    styleOptions.forEach(st => {
-      const btn = document.createElement('button');
-      btn.className = 'response-style-button';
-      btn.textContent = st;
-      btn.addEventListener('click', () => handleUserResponseStyle(st, btn));
-      responseStyleRow.appendChild(btn);
-    });
-  }
-  
-  function handleUserResponseStyle(selectedStyle, btn) {
-    // Highlight selected button
-    responseStyleRow.querySelectorAll('button').forEach(b => {
-      b.classList.remove('selected');
-    });
-    btn.classList.add('selected');
-
-    // Store user's selected style
-    exerciseState.rounds[roundIndex].userResponseStyle = selectedStyle;
-
-    const userText = userResponseEl.value.trim();
-    if (!userText) {
-      coachFeedback.style.display = 'none';
-      return;
-    }
-    
-    // Store user's response text
-    exerciseState.rounds[roundIndex].userResponseText = userText;
-    
-    // Generate feedback on response style
-    generateResponseFeedback(userText, selectedStyle);
-    
-    // Enable next button once user has selected a style
-    nextRoundBtn.disabled = false;
-  }
-  
-  function generateResponseFeedback(userText, selectedStyle) {
-    // Show loading in feedback area
-    coachFeedback.style.display = 'block';
-    responseFeedbackContent.textContent = 'Analyzing your response...';
-    
-    const prompt = `
-You are CommuniCoach, a communication styles expert.
-
-CONVERSATION CONTEXT:
-- User is practicing different communication styles
-- They're responding to: "${exerciseState.rounds[roundIndex].partnerParagraph}"
-- Their response: "${userText}"
-- They labeled their response as using a "${selectedStyle}" communication style
-
-TASK:
-Analyze whether their response matches their chosen style label.
-1. Identify if they accurately characterized their style (be honest but supportive)
-2. Point out 1-2 specific phrases or elements that support or contradict their style choice
-3. If their response better matches a different style, briefly suggest what style it actually demonstrates
-4. Provide one quick tip to strengthen the ${selectedStyle} style in their response
-
-Keep your response under 3 sentences. Be specific and constructive.
-`;
-
-    fetch('http://localhost:5506/api/chatgpt', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ prompt })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) throw new Error(data.error);
-      
-      // Update feedback content
-      responseFeedbackContent.textContent = data.response.trim();
-      
-      // Store feedback in state
-      exerciseState.rounds[roundIndex].responseFeedback = data.response.trim();
-    })
-    .catch(err => {
-      console.error('Response feedback error:', err);
-      responseFeedbackContent.textContent = `I can see elements of ${selectedStyle} style in your response. To strengthen this style further, consider being more explicit with your language choices.`;
-    });
-  }
   function formatHistory() {
   return state.conversationHistory
     .map((entry, i) => `${i + 1}. ${entry.speaker} (${entry.type || 'neutral'}): "${entry.message}"`)
@@ -1931,74 +1750,38 @@ Keep your response under 3 sentences. Be specific and constructive.
     // Disable button during generation
     generateResponseBtn.disabled = true;
     generateResponseBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
-    
-    // Get current round data
-    const partnerMessage = exerciseState.rounds[roundIndex].partnerParagraph;
-    const correctStyle = exerciseState.rounds[roundIndex].correctStyle;
-    
-    // Determine which style to use for the response
-    // Pick a random style from user's selected styles
-    const allStyles = exerciseState.styleSubset;
-    const responseStyle = allStyles[Math.floor(Math.random() * allStyles.length)];
-    
+
+    const partnerMessage = state.conversationHistory[state.conversationHistory.length - 1]?.message || '';
+
     const prompt = `
-You are CommuniCoach, helping a user practice communication styles.
+You are CommuniCoach helping a user craft a persuasive reply.
 
-CONVERSATION CONTEXT:
-- User's scenario: ${exerciseState.scenario}
-- User's goal: ${exerciseState.goal}
-- Partner just said: "${partnerMessage}" (in ${correctStyle} style)
+SCENARIO: ${state.refinedNarrative}
+GOAL: ${state.communicationGoal}
+PERSUASION GOAL: ${state.persuasionGoal}
+Partner just said: "${partnerMessage}"
 
-TASK:
-Generate a brief response (2-3 sentences) that the user could give, using the "${responseStyle}" communication style.
-
-CHARACTERISTICS OF ${responseStyle.toUpperCase()} STYLE:
-${getStyleCharacteristics(responseStyle)}
-
-Write ONLY the response, nothing else. Do not label the style in your response.
-`;
+Provide a short response (2-3 sentences) the user could say next.`;
 
     fetch('http://localhost:5506/api/chatgpt', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ prompt })
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) throw new Error(data.error);
-      
-      // Insert generated response in the textarea
-      userResponseEl.value = data.response.trim();
-      suggestionDiv.classList.add('loading');
-suggestionDiv.textContent = 'Processing...';
-
-
-  })
-
-  
-    // Highlight the corresponding style button if it exists
-    // const styleBtn = Array.from(responseStyleRow.querySelectorAll('button'))
-    //   .find(btn => btn.textContent === responseStyle);
-    
-    // if (styleBtn) {
-    //   styleBtn.click(); // Trigger the style selection
-    // }
-   
-    .catch(err => {
-
-
-      
-      showToast(`Generating a response`);
-    })
-    .catch(err => {
-      console.error('Response generation error:', err);
-      showToast('Error generating response', 2000, true);
-    })
-    .finally(() => {
-      // Re-enable button
-      generateResponseBtn.disabled = false;
-      generateResponseBtn.innerHTML = '<i class="fa-solid fa-magic"></i> Generate Response';
-    });
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) throw new Error(data.error);
+        userResponseEl.value = data.response.trim();
+        showToast('Response generated');
+      })
+      .catch(err => {
+        console.error('Response generation error:', err);
+        showToast('Error generating response', 2000, true);
+      })
+      .finally(() => {
+        generateResponseBtn.disabled = false;
+        generateResponseBtn.innerHTML = '<i class="fa-solid fa-magic"></i> Generate Response';
+      });
   }
 
   // Speech
@@ -2092,26 +1875,27 @@ suggestionDiv.textContent = 'Processing...';
 
   // Round Nav
   function handleNextRound() {
-    // Store current user inputs if not already stored
     const userText = userResponseEl.value.trim();
-    const userStyle = exerciseState.rounds[roundIndex].userResponseStyle;
-    
-    if (userText && !exerciseState.rounds[roundIndex].userResponseText) {
-      exerciseState.rounds[roundIndex].userResponseText = userText;
+    if (userText) {
+      state.conversationHistory.push({
+        speaker: 'You',
+        message: userText,
+        type: 'user'
+      });
     }
-    
-    if (roundIndex < 4) {
-      startRound(roundIndex + 1);
-      setProgress(20 + (roundIndex + 1) * 15);
+
+    if (state.currentRound < state.maxRounds - 1) {
+      startRound(state.currentRound + 1);
+      setProgress(20 + (state.currentRound + 1) * 15);
     } else {
       finishExercise();
     }
   }
-  
+
   function handlePrevRound() {
-    if (roundIndex > 0) {
-      startRound(roundIndex - 1);
-      setProgress(20 + (roundIndex - 1) * 15);
+    if (state.currentRound > 0) {
+      startRound(state.currentRound - 1);
+      setProgress(20 + (state.currentRound - 1) * 15);
     }
   }
 
@@ -2134,7 +1918,7 @@ suggestionDiv.textContent = 'Processing...';
         console.error('Error generating summary:', e);
         
         // Fallback content
-        overallPerformance.textContent = 'You completed 5 rounds of style awareness practice.';
+        overallPerformance.textContent = 'You completed 5 rounds of persuasion practice.';
         recognitionStrengths.textContent = 'You demonstrated ability to identify different communication styles.';
         expressionStrengths.textContent = 'You practiced expressing yourself in various styles.';
         growthOpportunities.textContent = 'Continue practicing to distinguish between similar styles.';
@@ -2164,51 +1948,27 @@ suggestionDiv.textContent = 'Processing...';
   
   async function generateSummary() {
     showToast('Generating your personalized insights...');
-    
-    // Format rounds data for the prompt
-    const roundsData = exerciseState.rounds.map((r, i) => {
-      return `
-Round ${i + 1}:
-- Partner statement (${r.correctStyle} style): "${r.partnerParagraph}"
-- User's style guess: ${r.userStyleGuess || 'Not completed'}
-- User's response: "${r.userResponseText || 'Not provided'}"
-- User's style label: ${r.userResponseStyle || 'Not selected'}
-`;
-    }).join('\n');
-    
+
+    const history = formatHistory();
     const prompt = `
-You are CommuniCoach, a communication styles expert providing personalized feedback after a 5-round style awareness exercise.
+You are CommuniCoach, a communication coach providing feedback after a persuasion practice session.
 
-EXERCISE CONTEXT:
-- User's scenario: ${exerciseState.scenario}
-- User's goal: ${exerciseState.goal}
-- Styles practiced: ${exerciseState.styleSubset.join(', ')}
+SCENARIO: ${state.refinedNarrative}
+GOAL: ${state.communicationGoal}
+PERSUASION GOAL: ${state.persuasionGoal}
 
-EXERCISE RESULTS:
-${roundsData}
+CONVERSATION HISTORY:
+${history}
 
 TASK:
-Provide a structured summary of the user's performance with these EXACT sections:
+Summarize the user's performance with these EXACT sections:
+1. OVERALL
+2. RECOGNITION STRENGTHS
+3. EXPRESSION STRENGTHS
+4. GROWTH OPPORTUNITIES
+5. PRACTICAL TIPS
 
-1. OVERALL: A brief 2-3 sentence overview of their performance and key insights.
-
-2. RECOGNITION STRENGTHS: List 2-3 specific strengths in how they recognized communication styles. Format as an array of distinct points.
-
-3. EXPRESSION STRENGTHS: List 2-3 specific strengths in how they expressed different communication styles. Format as an array of distinct points.
-
-4. GROWTH OPPORTUNITIES: List 2-3 specific ways they could improve their style awareness. Format as an array of growth suggestions.
-
-5. PRACTICAL TIPS: 2-3 sentences with practical advice they can apply immediately to improve their communication style awareness.
-
-FORMAT YOUR RESPONSE AS A JSON OBJECT with these exact keys:
-{
-  "overall": "text here",
-  "recognitionStrengths": ["point 1", "point 2", "point 3"],
-  "expressionStrengths": ["point 1", "point 2", "point 3"],
-  "growthOpportunities": ["point 1", "point 2", "point 3"],
-  "practicalTips": "text here"
-}
-`;
+Return your response as a JSON object with keys "overall", "recognitionStrengths", "expressionStrengths", "growthOpportunities", and "practicalTips".`;
 
     try {
       const resp = await fetch('http://localhost:5506/api/chatgpt', {
@@ -2230,7 +1990,7 @@ FORMAT YOUR RESPONSE AS A JSON OBJECT with these exact keys:
         // If JSON parsing fails, try to extract sections manually
         const rawText = data.response.trim();
         return {
-          overall: extractSection(rawText, 'OVERALL') || 'You completed the style awareness exercise.',
+          overall: extractSection(rawText, 'OVERALL') || 'You completed the persuasion practice exercise.',
           recognitionStrengths: [
             extractSection(rawText, 'RECOGNITION STRENGTHS') || 'You practiced identifying different communication styles.'
           ],
@@ -2246,7 +2006,7 @@ FORMAT YOUR RESPONSE AS A JSON OBJECT with these exact keys:
     } catch (e) {
       console.error('Summary generation error:', e);
       return {
-        overall: 'You completed all 5 rounds of the style awareness exercise, practicing both recognition and expression of different communication styles.',
+        overall: 'You completed all 5 rounds of the persuasion practice exercise.',
         recognitionStrengths: [
           'You successfully identified various communication styles in conversation.',
           'You gained practice distinguishing between similar-seeming styles.',
