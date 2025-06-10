@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Style Awareness - CommuniCoach</title>
+
+  <!-- Fonts + Icons -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- ======= COMBINED CSS ======= -->
+  <style>
+    :root {
+      --primary-color: #2d4a3e;
+      --secondary-color: #1b4072;
+      --accent-color: #a1ce3e;
+      --highlight-color: #dcefc6;
+      --energy-color: #74b49b;
+      --error-color: #ff6b6b;
+      --success-color: #4CAF50;
+      --shadow-color: rgba(45, 74, 62, 0.15);
+
+      --bg-color: #ffffff;
+      --bg-secondary: #f9fef3;
+      --bg-card: #ffffff;
+
+      --text-primary: #2d4a3e;
+      --text-secondary: #555;
+      --text-light: #ffffff;
+
+      --border-color: #e0e0e0;
+      --input-bg: #ffffff;
+
+      --progress-bg: #e0e0e0;
+      --progress-fill: #136f6f;
+
+      --user-bubble-bg: #e8f4f8;
+      --partner-bubble-bg: #f0f0f0;
+      --coach-bubble-bg: #dcefc6;
+
+      --gradient-bg: linear-gradient(
+        135deg,
+        rgba(45, 74, 62, 0.05),
+        rgba(161, 206, 62, 0.07)
+      );
+    }
+
+    [data-theme="dark"] {
+      --primary-color: #78a891;
+      --secondary-color: #60a3d9;
+      --accent-color: #a1ce3e; 
+      --highlight-color: #314a2e;
+      --shadow-color: rgba(0, 0, 0, 0.25);
+
+      --bg-color: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-card: #242424;
+
+      --text-primary: #e0e0e0;
+      --text-secondary: #aaaaaa;
+
+      --border-color: #444444;
+      --input-bg: #333333;
+
+      --progress-bg: #444444;
+      --progress-fill: #78c7ba;
+
+      --user-bubble-bg: #2d4a3e;
+      --partner-bubble-bg: #333333;
+      --coach-bubble-bg: #314a2e;
+    }
+
+    /* Global resets & transitions */
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      font-family: "Poppins", sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      transition: background-color 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: var(--bg-secondary);
+      opacity: 0.8;
+      z-index: -1;
+    }
+
+    /* Header & Nav */
+    .header-wrapper {
+      position: fixed; top: 0; left: 0;
+      width: 100%;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      box-shadow: 0 2px 20px var(--shadow-color);
+    }
+    .top-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 0;
+      color: var(--text-primary);
+      position: relative;
+    }
+    .top-nav a {
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    .top-nav a:hover {
+      background: var(--highlight-color);
+    }
+    .top-nav a.current {
+      background: #136f6f;
+      color: var(--text-light);
+    }
+    .logo {
+      position: absolute;
+      left: 20px;
+    }
+    .logo img {
+      height: 40px;
+    }
+    .mobile-menu-button {
+      display: none;
+      background: none; border: none; 
+      font-size: 1.5rem; cursor: pointer;
+      color: var(--text-primary);
+      position: absolute; right: 20px; top: 15px;
+    }
+    .nav-links.active { display: flex; }
+
+    /* Dark Mode Toggle */
+    .dark-mode-toggle {
+      position: absolute; right: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .toggle-label {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+    .switch {
+      position: relative; display: inline-block;
+      width: 50px; height: 24px;
+    }
+    .switch input {
+      opacity: 0; width: 0; height: 0;
+    }
+    .slider {
+      position: absolute; cursor: pointer; 
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc; transition: .4s;
+    }
+    .slider:before {
+      content: ""; position: absolute;
+      height: 16px; width: 16px;
+      left: 4px; bottom: 4px;
+      background-color: #fff;
+      transition: .4s;
+    }
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .slider.round {
+      border-radius: 34px;
+    }
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+      width: 100%; padding: 10px 0;
+      background: var(--bg-secondary);
+    }
+    .progress-bar {
+      width: 80%; margin: 0 auto;
+      height: 8px; background: var(--progress-bg);
+      border-radius: 4px; overflow: hidden;
+    }
+    .progress-bar .progress {
+      width: 10%;
+      height: 100%;
+      background: var(--progress-fill);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      margin-top: 100px;
+      padding: 4rem 0;
+    }
+    .container {
+      max-width:1200px; margin:0 auto;
+      padding: 0 2rem; position:relative;
+    }
+    .hero-content {
+      display: flex; gap: 3rem;
+      align-items: center;
+    }
+    .hero-text {
+      flex:1.2;
+    }
+    .hero-text h1 {
+      font-size: 1.8em; 
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .hero-text p {
+      font-size: 1em; margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+    .hero-image {
+      flex:1;
+    }
+    .hero-image img {
+      width: 100%; border-radius:15px;
+      box-shadow:0 4px 15px var(--shadow-color);
+    }
+    /* Persuasion Mini-Lesson Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  z-index: 1001;
+  padding: 2rem 1rem;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.lesson-modal {
+  background: var(--bg-card);
+  max-width: 800px;
+  width: 100%;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  animation: fadeIn 0.5s ease;
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+  font-size: 1.4em;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  font-size: 1.5em;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.lesson-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.lesson-card {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 2px 10px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+.lesson-card h3 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1em;
+  color: var(--primary-color);
+}
+
+.lesson-card-content {
+  display: none;
+  padding-top: 0.8rem;
+  font-size: 0.95em;
+  color: var(--text-secondary);
+}
+
+.lesson-card.open .lesson-card-content {
+  display: block;
+}
+
+.lesson-text-section {
+  font-size: 0.95em;
+  color: var(--text-primary);
+}
+
+.lesson-text-section h4 {
+  margin-top: 1.5rem;
+  font-size: 1.1em;
+  color: var(--primary-color);
+}
+.lesson-card-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+
+.lesson-card.open .lesson-card-content {
+  max-height: 200px;
+  opacity: 1;
+}
+.lesson-card.open {
+  background: var(--highlight-color);
+  border: 2px solid var(--accent-color);
+}
+
+
+.lesson-footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .lesson-modal {
+    padding: 1.5rem;
+  }
+
+  .lesson-card h3 {
+    font-size: 1em;
+  }
+
+  .modal-header h2 {
+    font-size: 1.2em;
+  }
+}
+  
+
+    /* Setup & scenario + goal */
+    .setup-section { padding: 2rem 0; }
+    .setup-card {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      margin-bottom: 2rem;
+    }
+    #persuasionGoalInput {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1em;
+  font-family: 'Poppins', sans-serif;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+#persuasionGoalInput:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+}
+#partnerNameInput {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1em;
+  font-family: 'Poppins', sans-serif;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+#partnerNameInput:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+}
+
+
+    .persuasion-card {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  box-shadow: 0 2px 12px var(--shadow-color);
+}
+
+.persuasion-card h3 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.persuasion-card p {
+  font-size: 0.95em;
+  color: var(--text-secondary);
+  margin-bottom: 0.8rem;
+}
+
+.coach-suggestion {
+  background: var(--highlight-color);
+  padding: 0.8rem;
+  border-radius: 10px;
+  font-size: 0.9em;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  display: none;
+}
+    .response-input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      font-family: "Poppins", sans-serif;
+    }
+    .response-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(161, 206, 62, 0.2);
+    }
+    
+
+    .setup-card h2 {
+        display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4em;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    }
+    .setup-card p {
+        padding: 1.5rem;
+    border: 2px solid var(--accent-color);
+    border-radius: 10px;
+    background: var(--highlight-color);
+    color: var(--text-primary);
+    font-size: 0.95em;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    }
+    .form-group { margin-bottom:1rem; }
+    .form-group label {
+      display:block;
+      margin-bottom:0.3rem;
+      font-weight:500;
+      color: var(--text-primary);
+    }
+    .form-group input[readonly] {
+      background: var(--bg-secondary);
+      border:2px solid var(--border-color);
+      border-radius:10px;
+      padding:0.7rem;
+      width:100%;
+      color: var(--text-primary);
+    }
+    
+    /* Style Categories Section */
+    .styles-category-heading {
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      font-size: 1em;
+      background: var(--highlight-color);
+      padding: 0.5rem;
+      border-radius: 8px;
+    }
+    
+    .styles-choices {
+      display:flex; flex-wrap:wrap;
+      gap:0.7rem;
+      margin-bottom:1rem;
+    }
+    .style-checkbox {
+      background: var(--bg-secondary);
+      border:1px solid var(--border-color);
+      border-radius:20px;
+      padding:0.5rem 1rem;
+      display: flex; align-items:center;
+      gap:0.5rem; cursor:pointer;
+      transition: all 0.2s ease;
+    }
+    .style-checkbox:hover {
+      background: var(--highlight-color);
+      border-color: var(--accent-color);
+    }
+    .style-checkbox.selected {
+      background: var(--highlight-color);
+      border-color: var(--accent-color);
+    }
+    
+    .validation-message {
+      color: var(--error-color);
+      font-size: 0.9em;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    .form-actions {
+      margin-top:2rem;
+      display:flex; gap:1rem;
+      justify-content:flex-end;
+    }
+    .btn {
+      padding:0.7rem 1.5rem;
+      border-radius:25px;
+      border:none; cursor:pointer;
+      font-family:"Poppins",sans-serif;
+      font-size:1rem;
+      transition:all 0.3s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:0.4rem;
+    }
+    .btn-primary {
+      background: var(--primary-color);
+      color:#fff;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      background: var(--secondary-color);
+    }
+    .coach-suggestion.loading::before {
+  content: '⏳ ';
+  animation: pulse 1.2s infinite alternate;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-outline {
+      background:none;
+      color: var(--text-primary);
+      border:2px solid var(--text-primary);
+    }
+    .btn-outline:hover {
+      background: var(--highlight-color);
+    }
+    .btn-outline:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* The main exercise rounds */
+    .exercise-section {
+      display:none;
+      padding:2rem 0;
+    }
+    .exercise-card {
+      background: var(--bg-card);
+      border-radius:15px;
+      box-shadow:0 4px 20px var(--shadow-color);
+      padding:2rem;
+      margin-bottom:2rem;
+      position:relative;
+    }
+    .exercise-header {
+      text-align:center;
+      margin-bottom:2rem;
+    }
+    .exercise-header h2 {
+      color: var(--text-primary);
+      font-size:1.4em;
+      margin-bottom:0.5rem;
+    }
+    .exercise-header p {
+      color: var(--text-secondary);
+      font-size:1em;
+    }
+    .round-indicator {
+      text-align:right; font-size:1em;
+      color: var(--secondary-color);
+      margin-bottom:1rem;
+    }
+
+    .partner-paragraph {
+      padding:1.5rem;
+      margin-bottom:1rem;
+      background: var(--bg-secondary);
+      border-left:4px solid var(--accent-color);
+      border-radius:10px;
+      color: var(--text-primary);
+    }
+    .style-guess-row {
+      display:flex; flex-wrap:wrap;
+      gap:1rem;
+      margin-bottom:2rem;
+    }
+    .style-guess-button {
+      padding:0.6rem 1rem;
+      border:2px solid var(--border-color);
+      border-radius:10px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor:pointer;
+      transition:all 0.3s ease;
+    }
+    .style-guess-button:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-color);
+      background: var(--highlight-color);
+    }
+    .style-guess-button.correct {
+      border-color: var(--success-color);
+      background:#E8F5E9;
+    }
+    .style-guess-button.incorrect {
+      border-color: var(--error-color);
+      background:#ffe8e8;
+    }
+    .style-guess-button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Coach Feedback */
+    .coach-feedback {
+      margin:1.5rem 0;
+      padding:1.2rem;
+      background: var(--coach-bubble-bg);
+      border-left:4px solid var(--accent-color);
+      border-radius:10px;
+      color: var(--text-primary);
+      display: none;
+    }
+    .coach-feedback h4 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .coach-feedback h4 i {
+      color: var(--accent-color);
+    }
+    .coach-feedback p {
+      margin-bottom: 0;
+    }
+
+    /* Response section */
+    .response-section {
+      margin-bottom:2rem;
+    }
+    .response-section label {
+      font-weight:500;
+      color: var(--text-primary);
+    }
+    .mic-row {
+      display:flex; gap:1rem; align-items:center;
+      margin-bottom:1rem;
+    }
+    .mic-button {
+      width:50px; height:50px; 
+      border:none; border-radius:50%;
+      background: var(--accent-color);
+      color:#fff; font-size:1.2rem;
+      cursor:pointer; box-shadow:0 2px 10px var(--shadow-color);
+      display:flex; align-items:center; justify-content:center;
+      transition:all 0.3s ease;
+    }
+    .mic-button:hover {
+      transform: scale(1.05);
+      background: var(--energy-color);
+    }
+    .mic-button.listening {
+      background: var(--error-color);
+      animation: pulseMic 1.2s infinite;
+    }
+    @keyframes pulseMic {
+      0% { box-shadow:0 0 0 0 rgba(255,0,0,0.4); }
+      70% { box-shadow:0 0 0 10px rgba(255,0,0,0); }
+      100% { box-shadow:0 0 0 0 rgba(255,0,0,0); }
+    }
+
+    .response-textarea {
+      width:100%;
+      padding:0.8rem;
+      min-height:100px;
+      border:2px solid var(--border-color);
+      border-radius:10px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      margin-bottom:1rem;
+      font-family:"Poppins",sans-serif;
+    }
+    .response-textarea:focus {
+      outline:none;
+      border-color: var(--accent-color);
+      box-shadow:0 0 0 3px rgba(161,206,62,0.2);
+    }
+    
+    /* Generate Response Button */
+    .generate-response-btn {
+      padding: 0.7rem 1.5rem;
+      border: 2px solid var(--primary-color);
+      border-radius: 25px;
+      background: none;
+      color: var(--primary-color);
+      font-family: "Poppins", sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+    .generate-response-btn:hover {
+      background: var(--highlight-color);
+      transform: translateY(-2px);
+    }
+    .generate-response-btn i {
+      font-size: 1rem;
+    }
+    
+    .style-selection-row {
+      display:flex; flex-wrap:wrap;
+      gap:0.7rem;
+      margin-bottom:1rem;
+    }
+    .response-style-button {
+      padding:0.6rem 1rem;
+      border:2px solid var(--border-color);
+      border-radius:10px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor:pointer;
+      transition:all 0.3s ease;
+    }
+    .response-style-button:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-color);
+      background: var(--highlight-color);
+    }
+    .response-style-button.selected {
+      border-color: var(--accent-color);
+      background: var(--highlight-color);
+    }
+
+    /* Next / Prev Round */
+    .round-nav {
+      display:flex; justify-content:space-between;
+    }
+    .round-nav button {
+      margin-top:1rem;
+    }
+
+    /* Summary */
+    .summary-section {
+      display:none; 
+      padding:2rem 0;
+    }
+    .summary-card {
+      background: var(--bg-card);
+      border-radius:15px;
+      box-shadow:0 4px 20px var(--shadow-color);
+      padding:2rem;
+      position:relative;
+      max-width:800px; margin:0 auto;
+    }
+    .summary-header {
+      text-align:center; margin-bottom:2rem;
+    }
+    .summary-header h2 {
+      font-size:1.5em;
+      color: var(--text-primary);
+      margin-bottom:1rem;
+    }
+    
+    /* Improved Summary Layout */
+    .summary-insights {
+      color: var(--text-primary);
+      line-height:1.6;
+      font-size:1em;
+      margin-bottom:2rem;
+    }
+    .summary-section-title {
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .summary-section-title i {
+      color: var(--accent-color);
+    }
+    .summary-section-content {
+      background: var(--bg-secondary);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+    .strength-item, .growth-item {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    .strength-item:before {
+      content: '✓';
+      color: var(--success-color);
+      position: absolute;
+      left: 0;
+    }
+    .growth-item:before {
+      content: '→';
+      color: var(--accent-color);
+      position: absolute;
+      left: 0;
+    }
+    
+    .back-toArena-btn {
+      text-align:center;
+    }
+
+    /* Toast Notifications */
+    .toast {
+      position:fixed;
+      bottom:20px; left:50%;
+      transform:translateX(-50%);
+      background: var(--primary-color);
+      color:#fff;
+      padding:12px 24px;
+      border-radius:30px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.2);
+      z-index:9999;
+      animation: fadeInUp 0.3s ease;
+    }
+    .toast.error {
+      background: var(--error-color);
+    }
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(20px);}
+      to { opacity:1; transform:translateY(0);}
+    }
+
+    /* Spinner */
+    @keyframes spin {
+      to { transform:rotate(360deg);}
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-content {
+        flex-direction:column-reverse;
+        text-align:center;
+        gap:2rem;
+      }
+      .nav-links {
+        display:none; width:100%;
+        flex-direction:column; gap:10px;
+        text-align:center; padding-top:10px;
+      }
+      .mobile-menu-button { display:block; }
+      .dark-mode-toggle {
+        position:static;
+        margin-top:10px;
+        justify-content:center;
+      }
+      .mic-row {
+        flex-direction:row;
+      }
+      .container {
+        padding:0 1rem;
+      }
+      .setup-card { padding:1.5rem; }
+      .exercise-card { padding:1.5rem; }
+      .round-nav { flex-direction:column; gap:1rem; }
+      .style-guess-row, .style-selection-row {
+        flex-direction:column;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+
+  <!-- CRITICAL: Move lesson functions to head so they're available immediately -->
+  <script>
+    // Global functions that need to be available immediately
+    function openPersuasionLesson() {
+      document.getElementById('persuasionLessonOverlay').classList.add('active');
+    }
+
+    function closePersuasionLesson() {
+      document.getElementById('persuasionLessonOverlay').classList.remove('active');
+    }
+
+    function toggleLessonCard(card) {
+      const all = document.querySelectorAll('.lesson-card');
+      all.forEach(c => {
+        if (c !== card) c.classList.remove('open');
+      });
+      card.classList.toggle('open');
+    }
+
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      if (navLinks) {
+        navLinks.classList.toggle('active');
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <div class="header-wrapper">
+    <div class="top-nav">
+      <a href="#" class="logo">
+        <img src=".vscode/Images/CClogo.png" alt="CommuniCoach" />
+      </a>
+      <button class="mobile-menu-button" onclick="toggleMenu()">☰</button>
+      <div class="nav-links" id="navLinks">
+        <a href="welcome.html">Welcome</a>
+        <a href="tone-selection.html">Tone Selection</a>
+        <a href="situation-room.html">Situation Room</a>
+        <a href="refined-narrative.html">Refined Narrative</a>
+        <a href="action-arena.html">Action Arena</a>
+      </div>
+
+      <!-- Dark Mode Toggle -->
+      <div class="dark-mode-toggle">
+        <span class="toggle-label">Dark Mode</span>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle" />
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar">
+        <div class="progress" id="progressBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero-section">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Master the Art of Influence</h1>
+        <p>Welcome to a space designed to sharpen one of the most powerful skills you can have: influence. In this arena, you'll learn how to blend Logos, Pathos, and Ethos—logic, emotion, and credibility—into persuasive conversations that feel natural, not scripted.</p>
+        <p>Persuade with confidence and authenticity. You'll build skills in identifying and responding to different communication styles, and you'll get personalized feedback on your own style. By the end, you'll have a clearer understanding of how to adapt your approach to different situations and people.</p>
+        <p>If you're eager, you can dive straight into the practice session and start solving real-world persuasion puzzles. But if you'd like to set yourself up for even greater success, we've built a quick and engaging mini-training that will walk you through the essentials—when to use logic, when to lead with emotion, how to build trust, and how to shift smoothly when the conversation changes.</p>
+        
+        <button class="btn btn-outline" onclick="openPersuasionLesson()">Start Training</button>
+      </div>
+      <div class="hero-image">
+        <img src=".vscode/Images/conversation.png" alt="Style Awareness" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Mini-Lesson Overlay -->
+  <div class="modal-overlay" id="persuasionLessonOverlay">
+    <div class="lesson-modal">
+      <div class="modal-header">
+        <h2><i class="fa-solid fa-brain"></i> Mini Lesson: Persuasion Foundations</h2>
+        <button class="modal-close" onclick="closePersuasionLesson()">×</button>
+      </div>
+
+      <!-- Expand/Collapse Cards -->
+      <div class="lesson-cards">
+        <div class="lesson-card" onclick="toggleLessonCard(this)">
+          <h3><i class="fa-solid fa-scale-balanced"></i> Logos (Logic)</h3>
+          <div class="lesson-card-content">
+            <p>Use facts, evidence, and structure to make your case. Logos persuades the mind. It's powerful when the other person values clarity, data, or logical cause-and-effect. But too much logic can feel cold if not balanced.</p>
+          </div>
+        </div>
+
+        <div class="lesson-card" onclick="toggleLessonCard(this)">
+          <h3><i class="fa-solid fa-heart"></i> Pathos (Emotion)</h3>
+          <div class="lesson-card-content">
+            <p>Appeal to emotions, values, and human truth. Pathos moves the heart and helps others feel your message. When used authentically, it connects deeply. When overdone, it can feel manipulative.</p>
+          </div>
+        </div>
+
+        <div class="lesson-card" onclick="toggleLessonCard(this)">
+          <h3><i class="fa-solid fa-handshake"></i> Ethos (Credibility)</h3>
+          <div class="lesson-card-content">
+            <p>Build trust by showing you are credible, experienced, or aligned with their values. Ethos persuades through character. It's especially important early in conversations or when trust is low.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Mini-Lesson Content -->
+      <div class="lesson-text-section">
+        <h4>Blending the Pieces</h4>
+        <p>Real persuasion is not one-note. It's a blend. Logos, Pathos, and Ethos work best when used together, depending on who you're speaking to and how the conversation evolves.</p>
+
+        <h4>Reading the Room</h4>
+        <p>Pay attention: Are they asking questions? Seeming emotional? Doubting your credibility? Their energy tells you what they need next—facts, reassurance, or connection.</p>
+
+        <h4>Shifting Naturally</h4>
+        <p>Use smooth transitions to change tone. "Let me explain why..." ➔ Logos. "Here's what really matters to me..." ➔ Pathos. "Based on what I've seen before..." ➔ Ethos.</p>
+
+        <h4>Diagnostic Questions (Optional)</h4>
+        <p>Not sure what they need? Ask. "Would it help if I broke it down step-by-step?" or "Can I share why I'm suggesting this?" Great persuasion often begins with a great question.</p>
+      </div>
+
+      <!-- Close Button -->
+      <div class="lesson-footer">
+        <button class="btn btn-primary" onclick="closePersuasionLesson()">Return to Setup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSUASION SETUP SECTION -->
+  <section class="exercise-setup-section" id="persuasionSetupSection">
+    <div class="container">
+      <div class="setup-card fade-in delay-1">
+        <h2><i class="fa-solid fa-lightbulb"></i> Prepare Your Persuasion Tools</h2>
+        <p>Based on your real scenario and communication goal, let's map out the persuasive tools you may want to use. You'll explore logic (Logos), emotion (Pathos), and credibility (Ethos). For each, we'll help you spot what's already in your narrative—and what might be missing.</p>
+  
+        <!-- Narrative Display -->
+        <div class="form-group">
+          <label for="scenarioDisplay">Your Current Scenario</label>
+          <input type="text" id="scenarioDisplay" readonly />
+        </div>
+  
+        <div class="form-group">
+          <label for="goalDisplay">Your Communication Goal</label>
+          <input type="text" id="goalDisplay" readonly />
+        </div>
+        <div class="form-group">
+            <label for="persuasionGoalInput">Persuasion Goal for This Exercise</label>
+            <input type="text" id="persuasionGoalInput" placeholder="Write your goal here..." />
+          </div>
+          <div class="form-group">
+            <label for="partnerNameInput">Who are you speaking with?</label>
+            <input type="text" id="partnerNameInput" placeholder="e.g. My dad" />
+          </div>
+  
+        <!-- Logos Card -->
+        <div class="persuasion-card">
+          <h3><i class="fa-solid fa-scale-balanced"></i> Logos (Logic)</h3>
+          <p>What facts, data, or logical points could help make your case?</p>
+          <button type="button" class="btn btn-outline" onclick="askCoach('logos')">Ask Coach for Help</button>
+         
+          <div class="coach-suggestion" id="logosSuggestion"></div>
+          <textarea id="logosInput" class="response-input" placeholder="Add logic-based examples or evidence you may want to use..."></textarea>
+        </div>
+  
+        <!-- Pathos Card -->
+        <div class="persuasion-card">
+          <h3><i class="fa-solid fa-heart"></i> Pathos (Emotion)</h3>
+          <p>What emotional truths or values do you want to convey?</p>
+          <button type="button" class="btn btn-outline" onclick="askCoach('pathos')">Ask Coach for Help</button>
+          <div class="coach-suggestion" id="pathosSuggestion"></div>
+          <textarea id="pathosInput" class="response-input" placeholder="Write what you feel or what matters emotionally..."></textarea>
+        </div>
+  
+        <!-- Ethos Card -->
+        <div class="persuasion-card">
+          <h3><i class="fa-solid fa-handshake"></i> Ethos (Credibility)</h3>
+          <p>What experience, character, or shared values can build trust?</p>
+          <button type="button" class="btn btn-outline" onclick="askCoach('ethos')">Ask Coach for Help</button>
+          <div class="coach-suggestion" id="ethosSuggestion"></div>
+          <textarea id="ethosInput" class="response-input" placeholder="Note your credibility, experience, or values..."></textarea>
+        </div>
+  
+        <!-- Start Button -->
+        <div class="form-actions">
+          <button class="btn btn-primary" onclick="beginPersuasionExercise()">Start Persuasion Practice</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXERCISE (5 ROUNDS) -->
+  <section class="exercise-section" id="persuasionExerciseSection">
+    <div class="container">
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <h2>Welcome to the Persuasion Practice Arena!</h2>  
+          <strong>In this exercise, you will identify persuasion challenges in your partner's statements and use 
+              the best persuasion strategy to respond effectively.</strong>
+        </div>
+        <div class="exercise-instructions">
+          <p>In each round, you'll:</p>
+          <ul>
+            <li>See a statement from your conversation partner</li>
+            <li>Guess their 'mood' or persuasion challenge</li>
+            <li>Respond with a persuasion strategy that fits the challenge</li>
+            <li>Instantly transform your response into an effective persuasion strategy for the challenge</li>
+            <li>Receive feedback on your response</li>
+          </ul>
+          <strong>Let's get started!</strong>
+        </div>    
+        
+        <p class="round-indicator">Round <span id="roundNumber">1</span> of 5</p>
+  
+        <!-- Partner Message -->
+        <div class="partner-paragraph" id="partnerParagraph">
+          <!-- AI partner statement will appear here -->
+        </div>
+  
+        <!-- Mood Recognition -->
+        <div class="exercise-instructions">
+          <p>Select the persuasion challenge you find reflected in your partner's statement. You can hover over each challenge for persuasion tips that will help you respond effectively.</p>
+        </div>
+
+        <div class="style-guess-row" id="moodOptionsRow">
+          <!-- Mood buttons will be generated here -->
+        </div>
+  
+        <!-- Mood Feedback (from Coach CC) -->
+        <div class="coach-feedback" id="moodFeedbackBox" style="display: none;">
+          <h4><i class="fa-solid fa-comment-dots"></i> <span id="moodFeedbackTitle">Partner Mood Insight</span></h4>
+          <p id="moodFeedbackContent"></p>
+        </div>
+  
+        <!-- Optional Coach Diagnostic Question -->
+        <div class="coach-suggestion" id="diagnosticSuggestionBox" style="display: none;"></div>
+  
+        <!-- User Response Input -->
+        <div class="response-section">
+          <label for="userResponse">Your Response:</label>
+          <div class="mic-row">
+            <button class="mic-button" id="responseMicBtn">
+              <i class="fa-solid fa-microphone"></i>
+            </button>
+            <span id="micStatusText">Click to speak</span>
+          </div>
+          
+          <textarea class="response-textarea" id="userResponse" placeholder="Type your response here..."></textarea>
+  
+          <!-- Coach-Suggested Response Button -->
+          <div class="exercise-instructions">
+            <p>Writers block? No worries- just ask Coach CC to get your response started. You can keep your Coach's response or edit it to reflect exactly what you want to say.</p>
+          </div>
+
+          <button class="generate-response-btn" id="generateResponseBtn">
+            <i class="fa-solid fa-magic"></i> Generate Response
+          </button>
+  
+          <!-- Remix Strategy Section -->
+          <div class="remix-section">
+            <h4>Want to try a different persuasion strategy?</h4>
+            <div id="transformOptionsRow" class="style-selection-row"></div>
+          </div>
+  
+          <!-- Remix Preview Card -->
+          <div class="coach-feedback" id="previewResponseCard" style="display: none;">
+            <h4><i class="fa-solid fa-magic"></i> Coach Remix</h4>
+            <p id="previewResponseContent"></p>
+            <button class="btn btn-outline" id="useTransformedBtn">Use This</button>
+          </div>
+  
+          <!-- Strategy Self-Labeling -->
+          <p>Select which <strong>persuasion strategy</strong> you think your response reflects:</p>
+          <div class="style-selection-row" id="responseStyleRow"></div>
+  
+          <!-- Coach Feedback on User's Strategy -->
+          <div class="coach-feedback" id="coachFeedback">
+            <h4><i class="fa-solid fa-comment-dots"></i> <span>Strategy Feedback</span></h4>
+            <p id="responseFeedbackContent"></p>
+          </div>
+
+          <!-- Confirm Button -->
+          <div class="form-actions">
+            <button class="btn btn-primary" id="confirmResponseBtn">
+              Confirm Response & Continue
+            </button>
+          </div>
+        </div>
+  
+        <!-- Round Navigation -->
+        <div class="round-nav">
+          <button class="btn btn-outline" id="prevRoundBtn" disabled>← Previous</button>
+          <button class="btn btn-primary" id="nextRoundBtn">Next →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- SUMMARY -->
+  <section class="summary-section" id="summarySection">
+    <div class="container">
+      <div class="summary-card">
+        <div class="summary-header">
+          <h2>Exercise Complete!</h2>
+          <p>You finished identifying styles and practicing your responses. 
+             Here's a detailed reflection on your performance.</p>
+        </div>
+        <div class="insights-container">
+          <div class="coach-summary">
+            <h4>Coach CC Summary</h4>
+            <p id="conversationSummary">(Summary will appear here)</p>
+          </div>
+        
+          <div class="coach-strengths">
+            <h4>What You Did Well</h4>
+            <div id="persuasionStrengths"></div>
+          </div>
+        
+          <div class="coach-growth">
+            <h4>Growth Opportunities</h4>
+            <div id="growthOpportunities"></div>
+          </div>
+        
+          <div class="coach-next-steps">
+            <h4>Next Step Tips</h4>
+            <p id="nextStepsTips"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer-nav">
+    <p>&copy; 2024 CommuniCoach. All rights reserved.</p>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+  </footer>
+
+  <script>
+   // ===== STATE & CONFIGURATION =====
+   const state = {
+      currentRound: 0,
+      maxRounds: 5,
+      refinedNarrative: localStorage.getItem('refinedNarrative') || '',
+      communicationGoal: localStorage.getItem('communicationGoal') || '',
+      persuasionGoal: localStorage.getItem('persuasionGoal') || '',
+      partnerName: localStorage.getItem('persuasionPartner') || '',
+      logosPrep: localStorage.getItem('logosPrep') || '',
+      pathosPrep: localStorage.getItem('pathosPrep') || '',
+      ethosPrep: localStorage.getItem('ethosPrep') || '',
+      conversationHistory: [],
+      selectedRemixStyle: '',
+      moodGuess: '',
+      previewText: '',
+      isListening: false
+    };
+    
+    const persuasionMatrix = {
+      "Logical Appeal": {
+        bucket: "Rational",
+        description: "Uses reasoning, evidence, data, and clear explanation to persuade.",
+        characteristics: "Structured, fact-based, example-driven, step-by-step.",
+        impact: "Builds clarity, satisfies questions, and convinces through logic."
+      },
+      "Emotional Appeal": {
+        bucket: "Emotional",
+        description: "Connects by expressing feelings, values, and personal stakes.",
+        characteristics: "Heartfelt, empathetic, story-based, sincere.",
+        impact: "Builds trust and resonance; helps partner feel seen and emotionally engaged."
+      },
+      "Credibility Appeal": {
+        bucket: "Trust-Building",
+        description: "Draws on trust, experience, shared values, or moral authority.",
+        characteristics: "Grounded, aligned, ethically confident, calm.",
+        impact: "Establishes trustworthiness and strengthens relational alignment."
+      },
+      "Empathy & Validation": {
+        bucket: "Soothing",
+        description: "Soothes tension by acknowledging feelings and showing understanding.",
+        characteristics: "Soft, affirming, gentle, nonjudgmental.",
+        impact: "De-escalates resistance; invites openness and defuses defensiveness."
+      },
+      "Collaborative Appeal": {
+        bucket: "Relational",
+        description: "Frames the conversation as mutual problem-solving or teamwork.",
+        characteristics: "Inclusive, inviting, shared-language, co-creative.",
+        impact: "Dismantles power struggles and encourages joint investment in outcome."
+      },
+      "Encouragement & Empowerment": {
+        bucket: "Motivational",
+        description: "Lifts the partner's confidence and sense of possibility.",
+        characteristics: "Uplifting, affirming, future-facing, respectful.",
+        impact: "Inspires action and reframes resistance as personal potential."
+      },
+      "Social Proof": {
+        bucket: "Contextual Logic",
+        description: "Cites what others are doing or what's normal/expected.",
+        characteristics: "Referential, situationally aware, comparison-based.",
+        impact: "Reduces uncertainty by showing alignment with others."
+      },
+      "Assertiveness": {
+        bucket: "Boundary Setting",
+        description: "Communicates clear expectations or limits with firmness and respect.",
+        characteristics: "Direct, confident, non-apologetic, clear.",
+        impact: "Builds respect, clarifies needs, and stops over-accommodation."
+      }
+    };
+    
+    const persuasionMap = {
+      "Skeptical": { approach: "Logical Appeal", tool: "Logos", description: "Offer clear, factual reasoning to earn credibility through logic." },
+      "Defensive": { approach: "Credibility Appeal", tool: "Ethos", description: "Establish trust and clarify your intent using shared values or experience." },
+      "Overwhelmed": { approach: "Empathy & Validation", tool: "Pathos", description: "Soothe stress by acknowledging how the partner is feeling before suggesting anything." },
+      "Resistant": { approach: "Collaborative Appeal", tool: "Ethos + Pathos", description: "Frame it as teamwork, not confrontation. Use shared language and curiosity." },
+      "Passive": { approach: "Assertiveness", tool: "Clarity + Confidence", description: "Respectfully assert your needs with confidence and warmth." },
+      "Indecisive": { approach: "Social Proof", tool: "Contextual Logos", description: "Give relatable examples of what others have done to normalize the decision." },
+      "Discouraged": { approach: "Encouragement & Empowerment", tool: "Pathos + Ethos", description: "Remind them of their past strengths and reframe the moment as a growth opportunity." },
+      "Receptive": { approach: "Emotional Appeal", tool: "Pathos", description: "Share personal stories or emotions to deepen rapport and make your point matter." },
+      "Vulnerable": { approach: "Emotional Appeal", tool: "Pathos", description: "Meet their openness with honesty, emotional depth, and relational care." },
+      "Anxious": { approach: "Empathy & Validation", tool: "Pathos", description: "Slow the pace and acknowledge their uncertainty to help them feel safe." },
+      "Guarded": { approach: "Credibility Appeal", tool: "Ethos", description: "Reduce their defenses by showing integrity, transparency, and stability." },
+      "Competitive": { approach: "Collaborative Appeal", tool: "Ethos + Strategy", description: "Position yourself as an ally — not a rival — and align with their values." },
+      "Detached": { approach: "Emotional Appeal", tool: "Pathos", description: "Reengage them by making the issue personal, meaningful, or emotionally relevant." },
+      "Analytical": { approach: "Logical Appeal", tool: "Logos", description: "Break your reasoning into steps with data, structure, or cause-effect clarity." },
+      "Insecure": { approach: "Encouragement & Empowerment", tool: "Pathos + Ethos", description: "Uplift them gently by reinforcing their value, potential, or shared human experience." }
+    };
+
+    function buildMoodToStrategyReference() {
+      return Object.entries(persuasionMap).map(([mood, entry]) => {
+        return `${mood} → ${entry.approach} (${entry.tool}) — ${entry.description}`;
+      }).join('\n');
+    }
+
+    function buildPersuasionMatrixReference() {
+      return Object.entries(persuasionMatrix).map(([approach, entry]) => {
+        return `${approach} (${entry.bucket}) — ${entry.description}`;
+      }).join('\n');
+    }
+    
+    function formatHistory() {
+      return state.conversationHistory.map((entry, i) => {
+        return `${i + 1}. ${entry.speaker}: "${entry.message}"`;
+      }).join('\n');
+    }
+
+    // ===== DOM REFERENCES =====
+    const setupSection = document.getElementById('persuasionSetupSection');
+    const exerciseSection = document.getElementById('persuasionExerciseSection');
+    const scenarioDisplay = document.getElementById('scenarioDisplay');
+    const goalDisplay = document.getElementById('goalDisplay');
+    const persuasionGoalInput = document.getElementById('persuasionGoalInput');
+    const partnerNameInput = document.getElementById('partnerNameInput');
+    const roundNumberEl = document.getElementById('roundNumber');
+    const partnerParagraphEl = document.getElementById('partnerParagraph');
+    const moodOptionsRow = document.getElementById('moodOptionsRow');
+    const moodFeedbackBox = document.getElementById('moodFeedbackBox');
+    const moodFeedbackTitle = document.getElementById('moodFeedbackTitle');
+    const moodFeedbackContent = document.getElementById('moodFeedbackContent');
+    const diagnosticSuggestionBox = document.getElementById('diagnosticSuggestionBox');
+    const userResponseEl = document.getElementById('userResponse');
+    const responseMicBtn = document.getElementById('responseMicBtn');
+    const generateResponseBtn = document.getElementById('generateResponseBtn');
+    const transformOptionsRow = document.getElementById('transformOptionsRow');
+    const previewResponseCard = document.getElementById('previewResponseCard');
+    const previewResponseContent = document.getElementById('previewResponseContent');
+    const useTransformedBtn = document.getElementById('useTransformedBtn');
+    const confirmResponseBtn = document.getElementById('confirmResponseBtn');
+    const nextRoundBtn = document.getElementById('nextRoundBtn');
+    const summarySection = document.getElementById('summarySection');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const progressBar = document.getElementById('progressBar');
+
+    // Speech Recognition Globals
+    let recognition = null;
+    let isListening = false;
+    let recognitionTimeout = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initDarkMode();
+      loadScenarioAndGoal();
+      initSpeechRecognition();
+    });
+
+    // ===== DARK MODE INIT =====
+    function initDarkMode() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        darkModeToggle.checked = true;
+      }
+      darkModeToggle.addEventListener('change', () => {
+        const mode = darkModeToggle.checked ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', mode);
+        localStorage.setItem('theme', mode);
+      });
+    }
+
+    function loadScenarioAndGoal() {
+      const refined = localStorage.getItem('refinedNarrative') || '(No scenario found)';
+      const goal = localStorage.getItem('communicationGoal') || '(No goal found)';
+      const persGoal = localStorage.getItem('persuasionGoal') || '';
+      const partner = localStorage.getItem('persuasionPartner') || '';
+
+      scenarioDisplay.value = refined.length > 120 ? refined.slice(0, 120) + '...' : refined;
+      goalDisplay.value = goal.length > 120 ? goal.slice(0, 120) + '...' : goal;
+      persuasionGoalInput.value = persGoal;
+      partnerNameInput.value = partner;
+    }
+
+    // ===== SPEECH TO TEXT SETUP =====
+    function initSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return;
+
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      let transcript = '';
+      let isListening = false;
+
+      responseMicBtn.addEventListener('click', () => {
+        if (isListening) {
+          recognition.stop();
+        } else {
+          recognition.start();
+        }
+      });
+
+      recognition.onstart = () => {
+        isListening = true;
+        responseMicBtn.classList.add('listening');
+      };
+
+      recognition.onend = () => {
+        isListening = false;
+        responseMicBtn.classList.remove('listening');
+      };
+
+      recognition.onresult = (event) => {
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            transcript += event.results[i][0].transcript + ' ';
+          } else {
+            userResponseEl.value = transcript + event.results[i][0].transcript;
+          }
+        }
+        userResponseEl.value = transcript.trim();
+      };
+    }
+
+    // ===== EXERCISE FLOW =====
+    function beginPersuasionExercise() {
+      const lp = document.getElementById('logosInput')?.value.trim() || '';
+      const pp = document.getElementById('pathosInput')?.value.trim() || '';
+      const ep = document.getElementById('ethosInput')?.value.trim() || '';
+      const specificGoal = document.getElementById('persuasionGoalInput')?.value.trim() || '';
+      const partnerName = document.getElementById('partnerNameInput')?.value.trim() || '';
+
+      // Save all to localStorage
+      localStorage.setItem('logosPrep', lp);
+      localStorage.setItem('pathosPrep', pp);
+      localStorage.setItem('ethosPrep', ep);
+      localStorage.setItem('persuasionGoal', specificGoal);
+      localStorage.setItem('persuasionPartner', partnerName);
+
+      // Load into state
+      state.logosPrep = lp;
+      state.pathosPrep = pp;
+      state.ethosPrep = ep;
+      state.persuasionGoal = specificGoal;
+      state.partnerName = partnerName;
+
+      setupSection.style.display = 'none';
+      exerciseSection.style.display = 'block';
+      startRound(0);
+    }
+
+    function startRound(idx) {
+      state.currentRound = idx;
+      roundNumberEl.textContent = idx + 1;
+      userResponseEl.value = '';
+      partnerParagraphEl.textContent = 'Loading...';
+      moodOptionsRow.innerHTML = '';
+      moodFeedbackBox.style.display = 'none';
+      diagnosticSuggestionBox.textContent = '';
+      previewResponseCard.style.display = 'none';
+
+      generatePartnerMessage(idx).then(({ message }) => {
+        partnerParagraphEl.textContent = message;
+        state.conversationHistory.push({ speaker: state.partnerName, message });
+        renderMoodOptions();
+      });
+    }
+
+    function generatePartnerMessage(roundIndex) {
+      const lastPartnerLine = [...state.conversationHistory].reverse().find(entry => entry.speaker === state.partnerName)?.message || '';
+      const coachingMap = buildMoodToStrategyReference();
+      const persuasionStrategy = buildPersuasionMatrixReference();
+
+      const prompt = `You are CommuniCoach — also known as Coach CC — an AI coach helping a user practice persuasive communication 
+      through an interactive training role play exercise designed to navigate the user through persuasion strategies 
+
+    You are playing the role of "${state.partnerName}" in a persuasive role-play exercise called Persuasion Puzzles.
+
+    The user's real-life situation is:
+    "${state.refinedNarrative}"
+
+    Their communication goal is:
+    "${state.communicationGoal}"
+
+    Their specific persuasion goal is:
+    "${state.persuasionGoal}"
+
+    Here's your coaching map for reference:
+    ${coachingMap}
+    Here's your persuasion matrix for reference:
+    ${persuasionStrategy}
+
+    This is round ${roundIndex + 1} of 5. Keep the conversation tone realistic. Feel free to show resistance, but do not escalate hostility.
+
+    Full conversation so far:
+    ${formatHistory()}
+    Your task is to play the role of the partner.
+    You will respond to the user's last message in a way that:
+    1. Reflects the partner's mood based on the conversation so far. 
+    1a. Uses the persuasionMap and persuasionMatrix to inform your response.
+    2. Allows the user to practice their persuasion skills by responding with a strategy that fits the partner's 
+    mood.
+    3. Builds on the conversation so far, either by agreeing, pushing back, or showing resistance.
+    4. Take note of the conversation round and the user's last message to ensure the conversation reaches a natural conclusion in the 5 allotted rounds. 
+    5. If the user responds to the challenge with the correct persuasion strategy, your responses should reflect that
+    they are making progress and that you are more receptive to their ideas.
+    5a. If the user does not respondates whether or not the user has made progress in persuading them. with an appropriate persuasion strategy, your responses should reflect that you are still resistant or skeptical.
+    5b. The 5th round should be a natural conclusion to the conversation, where the partner response clearly indicates 
+    that the user has made progress in persuading them toward the persuasion goal, or that they have reached an impasse.
+   
+    
+    6. If the user has already responded, build on their last message to keep the conversation flowing naturally.
+    7. If the user has not yet responded, provide a statement that reflects the partner's mood or resistance type based on 
+    the conversation so far.
+    8. Only offer a response as the user's partner, not as a coach or advisor.
+    9. Do not provide any coaching or advice in your response, just play the role of the partner.
+    `;
+
+      return fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      })
+        .then(res => res.json())
+        .then(data => ({ message: data.response.trim() }))
+        .catch(err => {
+          console.error('Partner generation error:', err);
+          return { message: '[Error fetching partner response]' };
+        });
+    }
+
+    // ===== MOOD INTERACTION =====
+    function renderMoodOptions() {
+      moodOptionsRow.innerHTML = '';
+      Object.keys(persuasionMap).forEach(mood => {
+        const btn = document.createElement('button');
+        btn.className = 'style-guess-button';
+        btn.textContent = mood;
+        btn.title = persuasionMap[mood].description;
+
+        btn.addEventListener('click', () => {
+          explainMoodWithAPI(mood);
+          generateDiagnosticQuestion(mood);
+          state.moodGuess = mood;
+        });
+
+        moodOptionsRow.appendChild(btn);
+      });
+    }
+
+    function explainMoodWithAPI(selectedMood) {
+      const lastPartnerLine = [...state.conversationHistory].reverse().find(entry => entry.speaker === state.partnerName)?.message || '';
+      const coachingMap = buildMoodToStrategyReference();
+
+      const prompt = `
+      You are CommuniCoach — also known as Coach CC — an AI coach helping a user learn persuasive communication through an interactive training tool navigating the user through persuasion strategies- 
+      specifically which strategy to use based on a partner's mood or resistance type (communication challenge).
+
+      They just identified this partner communication challenge based on the partner's statement:
+      "${selectedMood}"
+
+      Their partner's most recent statement was:
+      "${lastPartnerLine}"
+
+      Here's your coaching map for reference:
+      ${coachingMap}
+
+      The user just read a message from their conversation partner and selected an option they think best identifies the partner's communication challenge from the list of possible moods (mood). 
+      Their selection is not a test — it's a self-awareness tool to help them think more strategically. Your job is to support their learning.
+
+      You are warm, grounded, and insightful. Speak directly and coach-style — not robotic.
+      Now coach the user on how to understand or refine their choice
+
+      Here's what to do:
+      1. Think about the partner's message and the selected mood
+      2. If the mood makes sense, affirm and explain why it fits - 
+         reference specific language, tone, or phrasing that signals this mood
+      3. If it doesn't quite match, offer a gentle correction and explain why a different mood might be more accurate
+      4. Always teach how this mood connects to a persuasion strategy based on the map, What the user should watch for when this 
+      mood shows up in real life, and how to begin responding to it (without giving a full reply)
+      5. Keep your response concise (2-3 sentences) and focused on the user's learning`;
+
+      fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      })
+        .then(res => res.json())
+        .then(data => {
+          moodFeedbackBox.style.display = 'block';
+          moodFeedbackTitle.textContent = `Challenge: ${selectedMood}`;
+          moodFeedbackContent.textContent = data.response.trim();
+        })
+        .catch(err => {
+          console.error('Mood feedback error:', err);
+          moodFeedbackBox.style.display = 'block';
+          moodFeedbackContent.textContent = '[Coach CC unavailable right now.]';
+        });
+    }
+
+    function askCoach(type) {
+      const narrative = localStorage.getItem('refinedNarrative') || '';
+      const goal = localStorage.getItem('communicationGoal') || '';
+      const persuasionGoal = localStorage.getItem('persuasionGoal') || '';
+      const suggestionDiv = document.getElementById(`${type}Suggestion`);
+      if (!suggestionDiv) return;
+
+      suggestionDiv.textContent = 'Analyzing...';
+      suggestionDiv.style.display = 'block';
+
+      const prompt = `
+    You are the communication skills coach for CommuniCoach. You are coaching a user in preparing persuasive material for a real conversation based on their 
+    personal situation: "${narrative}"
+    • Communication Goal: "${goal}"
+    • Persuasion Goal: "${persuasionGoal}"
+
+    The user's situation may already contain seeds of Logos (logic), Pathos (emotion), and Ethos (credibility), 
+    but it may also have gaps.
+
+    Your task is to coach the user by identifying and strengthening these elements.
+
+    Briefly identify what persuasive material already exists under the user personal situation: ${narrative}.
+    If it's missing, briefly suggest what information could strengthen it. Provide specific information 
+    that would enhance the user's preparation. Write out a sample sentence in the ${type.toUpperCase()} style.
+
+    Be succinct, kind, practical, and guide the user naturally—like a coach helping them prepare, not like grading them.
+
+    If relevant, gently suggest details they might gather (like price comparisons, emotional impacts, credibility examples).
+    `;
+
+      fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      })
+        .then(res => res.json())
+        .then(data => {
+          suggestionDiv.textContent = data.response || 'Coach suggestion unavailable.';
+        })
+        .catch(err => {
+          suggestionDiv.textContent = 'Coach unavailable at the moment.';
+          console.error(err);
+        });
+    }
+
+    function generateDiagnosticQuestion(mood) {
+      const { refinedNarrative, communicationGoal, persuasionGoal, partnerName } = state;
+      const history = formatHistory();
+      const suggestionBox = diagnosticSuggestionBox;
+
+      if (!suggestionBox) return;
+
+      suggestionBox.textContent = 'Analyzing…';
+      suggestionBox.style.display = 'block';
+
+      const prompt = `
+    You are CommuniCoach preparing a user for the next step in a real-life persuasive interaction.
+
+    CONTEXT:
+    • Their real-world narrative: "${refinedNarrative}"
+    • Their communication goal: "${communicationGoal}"
+    • Their specific persuasion goal: "${persuasionGoal}"
+    • They are speaking to: ${partnerName}
+    • The partner's current mood is: ${mood}
+    • This is part of a realistic training exercise called Persuasion Puzzles.
+    • The full conversation so far:
+    ${history}
+
+    YOUR TASK:
+    1. Based on the partner's current mood, suggest one optional **diagnostic question** the user might ask.
+    2. The goal of this question is to better understand the partner's needs, hesitations, or perspective — **not** to persuade yet.
+    3. The question should be natural, non-confrontational, emotionally intelligent, and ideally match the partner's mood.
+
+    RETURN ONLY:
+    A single persuasive-appropriate diagnostic question the user could say aloud next.
+    Do NOT label it or add context — just return the text of the question.
+    `;
+
+      fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      })
+        .then(res => {
+          if (!res.ok) throw new Error(res.statusText);
+          return res.json();
+        })
+        .then(data => {
+          suggestionBox.textContent = data.response.trim() || 'No suggestion generated.';
+        })
+        .catch(err => {
+          console.error('Diagnostic question error:', err);
+          suggestionBox.textContent = 'Coach unavailable at the moment.';
+        });
+    }
+
+    // ===== COACH SUGGESTED RESPONSE =====
+    generateResponseBtn.addEventListener('click', handleGenerateResponse);
+
+    function handleGenerateResponse() {
+      const prompt = `
+    You are acting as a communication coach generating a helpful first-draft response for a user.
+
+    The user's real narrative:
+    "${state.refinedNarrative}"
+
+    Their persuasion goal:
+    "${state.persuasionGoal}"
+
+    Conversation so far:
+    ${formatHistory()}
+
+    PREP:
+    • Logos Prep: "${state.logosPrep}"
+    • Pathos Prep: "${state.pathosPrep}"
+    • Ethos Prep: "${state.ethosPrep}"
+
+    Generate a realistic persuasive sentence or two that fits the user's tone and context. Avoid being overly robotic or polished.
+    `;
+
+      fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      })
+        .then(res => res.json())
+        .then(data => {
+          userResponseEl.value = data.response.trim();
+        })
+        .catch(err => {
+          console.error('Coach response error:', err);
+        });
+    }
+
+    // ===== REMIX (TRANSFORM RESPONSE) =====
+    function renderTransformButtons() {
+      transformOptionsRow.innerHTML = '';
+      Object.keys(persuasionMatrix).forEach(style => {
+        const btn = document.createElement('button');
+        btn.className = 'style-guess-button';
+        btn.textContent = style;
+
+        btn.addEventListener('click', () => {
+          handleResponseTransform(style);
+        });
+
+        transformOptionsRow.appendChild(btn);
+      });
+    }
+
+    function handleResponseTransform(style) {
+      const original = userResponseEl.value.trim();
+      const matrix = persuasionMatrix[style];
+
+      const prompt = `
+    You are transforming the user's sentence into a persuasive version using this technique:
+    "${style}" - ${matrix.description}
+
+    Original user sentence:
+    "${original}"
+
+    Respond ONLY with the transformed sentence in the new style.
+    `;
+
+      fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      })
+        .then(res => res.json())
+        .then(data => {
+          state.selectedRemixStyle = style;
+          state.previewText = data.response.trim();
+          previewResponseContent.textContent = data.response.trim();
+          previewResponseCard.style.display = 'block';
+        })
+        .catch(err => {
+          console.error('Remix error:', err);
+          previewResponseCard.style.display = 'none';
+        });
+    }
+
+    useTransformedBtn.addEventListener('click', () => {
+      userResponseEl.value = state.previewText;
+      previewResponseCard.style.display = 'none';
+    });
+
+    // ===== CONFIRM & NEXT ROUND =====
+    confirmResponseBtn.addEventListener('click', handleConfirmResponse);
+
+    function handleConfirmResponse() {
+      const userMsg = userResponseEl.value.trim();
+      if (!userMsg) return;
+
+      state.conversationHistory.push({
+        speaker: "You",
+        message: userMsg,
+        persuasionTool: state.selectedRemixStyle || 'Natural'
+      });
+
+      if (state.currentRound < state.maxRounds - 1) {
+        startRound(state.currentRound + 1);
+      } else {
+        generateSummary();
+      }
+    }
+
+    // Initialize transform buttons
+    renderTransformButtons();
+
+    // ===== FINAL SUMMARY =====
+    function generateSummary() {
+      exerciseSection.style.display = 'none';
+      summarySection.style.display = 'block';
+
+      const conversationSummary = document.getElementById('conversationSummary');
+      const persuasionStrengths = document.getElementById('persuasionStrengths');
+      const growthOpportunities = document.getElementById('growthOpportunities');
+      const nextStepsTips = document.getElementById('nextStepsTips');
+
+      if (!conversationSummary || !persuasionStrengths || !growthOpportunities || !nextStepsTips) {
+        console.error('One or more summary elements not found.');
+        return;
+      }
+
+      conversationSummary.textContent = '';
+      persuasionStrengths.innerHTML = '';
+      growthOpportunities.innerHTML = '';
+      nextStepsTips.textContent = '';
+
+      const fullHistory = state.conversationHistory.map((entry, i) => {
+        return `${i + 1}. ${entry.speaker}: "${entry.message}" ${entry.persuasionTool ? `→ (${entry.persuasionTool})` : ''}`;
+      }).join('\n');
+
+      const prompt = `
+    You are a communication skills coach offering a closing reflection on the multi-round Persuasion Puzzles exercise.  
+    Reflect back what unfolded across the conversation in a way that helps the user recognize the persuasion matrix- specifically how maintaining focus on the conversation partner and recognizing their persuasion challenges can reveal effective persuasion strategies. 
+    Think of this persuasion conversation as a collaborative painting—each persuasion strategy choice adds color, shape, and motion to the shared canvas- motion leading the user toward or away from their persuasion goal. The most successful persuasion strategies are revealed when the user prioritizes focus on the partner helping to identify the persuasion challenges made evident in the partner's communication. 
+    Use a warm, conversational tone. Be specific and constructive. Don't evaluate—reflect.
+    speak directly and refer to the user as "you". Do not use "I" or speak from the user's perspective. Speak as an external coach analyzing from above.
+    Context:
+
+    The user's real narrative:
+    "${state.refinedNarrative}"
+
+    Their overall persuasion goal:
+    "${state.persuasionGoal}"
+
+    Conversation transcript:
+    ${fullHistory}
+
+    TASK: Return your insights in the following format:
+
+    1. Persuasion Dynamics
+    - [paragraph...]
+
+    2. Strengths
+    - [bullet item 1]
+    - [bullet item 2]
+
+    3. Growth Opportunities
+    - [bullet item 1]
+    - [bullet item 2]
+
+    4. Next Steps
+    [paragraph of practical suggestions]
+     
+    1. Persuasion Dynamics  
+    - Describe how the user's and partner's challenges and strategies interacted, noting where they harmonized or clashed.
+    - Express understanding of the user's experience and how the partner's challenges may have felt - How difficult was it to remain focused on uncovering the partner challenges and choose the correct wording to convey the persuasion strategy ?
+    - Point out the relational "pull" each challenge and strategy exerted 
+
+    2. Strengths
+    - Note where the user demonstrated insight, control, flexibility, or emotional intelligence.
+    - When possible List moments where the user's persuasion strategy helped neutralize the challenge.
+    - If no positive moments are present, note where the user's intent was good but the persuasion strategy was not effective.
+    - Reflect back to the user how their partner's challenges may have felt, how difficult it can be to retain focus, and how their strategy may have led toward successful persuasion.
+
+    Discuss the impact of the strategies on their goal.
+
+    3. Growth Opportunities  
+    - Mention where the user might explore a different strategies to better meet their goal, de-escalate tension, or guide the conversation more intentionally.
+    - Demonstrate understanding of why the user might want to react to a difficult challenge with a less productive strategy? Why isn't this usually effective? 
+    — Note moments where the user may have lost focus and missed an opportunity. Are they aware they lost focus? Was the distraction internal or external? Were they thinking of their own next words or focusing on their partner's words? 
+    - Note  moments where the user's persuasion strategy may have created friction, confusion, or emotional distance.
+
+    4. Next Steps  
+    - Offer  concrete, practice-focused suggestions for applying these insights in real future conversations.
+
+    Return only the full, structured insights text.`.trim();
+
+      fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      })
+        .then(res => res.json())
+        .then(data => {
+          const text = data.response.trim();
+          
+          conversationSummary.textContent = '';
+          persuasionStrengths.innerHTML = '';
+          growthOpportunities.innerHTML = '';
+          nextStepsTips.textContent = '';
+
+          const sections = text.split(/(?:^|\n)(?=\d\.|Persuasion Dynamics|Strengths|Growth Opportunities|Next Steps)/gi);
+
+          sections.forEach(section => {
+            const lower = section.toLowerCase();
+
+            if (lower.includes('persuasion dynamics')) {
+              conversationSummary.textContent = section.replace(/^\d?\.*\s*Persuasion Dynamics[:\-]?\s*/i, '').trim();
+            } else if (lower.includes('strengths')) {
+              section.split('\n').forEach(line => {
+                if (line.trim().startsWith('-')) {
+                  const item = document.createElement('div');
+                  item.className = 'strength-item';
+                  item.textContent = line.replace(/^[-–•]\s*/, '');
+                  persuasionStrengths.appendChild(item);
+                }
+              });
+            } else if (lower.includes('growth')) {
+              section.split('\n').forEach(line => {
+                if (line.trim().startsWith('-')) {
+                  const item = document.createElement('div');
+                  item.className = 'growth-item';
+                  item.textContent = line.replace(/^[-–•]\s*/, '');
+                  growthOpportunities.appendChild(item);
+                }
+              });
+            } else if (lower.includes('next step') || lower.includes('next steps')) {
+              nextStepsTips.textContent = section.replace(/^\d?\.*\s*Next Steps[:\-]?\s*/i, '').trim();
+            }
+          });
+        })
+        .catch(err => {
+          console.error('Summary generation error:', err);
+          conversationSummary.textContent = '[Error generating summary]';
+        });
+    }
+  </script>
+</body>
+</html>
