@@ -2299,28 +2299,28 @@ async function handleSendMessage() {
   const typingEl = addTypingIndicator();
   const moodProfile = getPartnerMoodProfile(partnerMood);
   
-  // Build the prompt directly here to ensure it works
-  const rolePlayPrompt = `Your name is Coach, and you are the communication skills coach for CommuniCoach, but for this portion, you must play the part of the user's conversation partner in a realistic role-play.
+// Build the prompt directly here to ensure it works
+const rolePlayPrompt = `Your name is Coach, and you are the communication skills coach for CommuniCoach, but for this portion, you must play the part of the user's conversation partner in a realistic role-play.
 
 The user is speaking with the conversation partner ${partnerName}, who is in a ${conversationMedium} scenario.
 This person is typically: ${moodProfile.summary}
 Your communication style should reflect this behavior:
 "${moodProfile.behavior}"
 
-The user has shared their following real-life situation and is practicing their approach for a real-life conversation:
+The user has shared their following real-life situation and is practicing their communication skills from the real-life conversation:
 "${refinedNarrative}"
 
+Respond only as this character would, without revealing that you are an AI or switching to 'coach mode' unless the user explicitly toggles out for coaching. If the user addresses you as AI instead of the character, you can very briefly acknowledge the comment and immediately switch back into role-play mode.
 And their communication goal is:
 "${communicationGoal}"
 
-Stay firmly in character, offering natural, authentic responses that someone with this personality, context, and mood might give. If appropriate to the character, incorporate small, realistic pitfalls: misunderstandings, slight defensiveness, casual distractions, etc. These nuances are often typical of real-life conversations.
-
-Respond only as this character would, without revealing that you are an AI or switching to 'coach mode' unless the user explicitly toggles out for coaching. If the user addresses you as AI instead of the character, you can very briefly acknowledge the comment and immediately switch back into role-play mode.
-
+Stay firmly in character
 Base your in-character behavior on the user's perspective of the character from the refined narrative: ${refinedNarrative}
 
 Keep responses brief, realistic, and conversational (under 30 seconds).
-React authentically to what the user says based on your character's perspective.
+React authentically to what the user says based on your character's perspective and the complete situation in the refined narrative."${refinedNarrative}"
+Keep your responses grounded in the scenario as written in the narrative "${refinedNarrative}"
+
 Don't be artificially helpful — respond as a real person would in this scenario.
 Guide the conversation toward a natural ending.
 
@@ -3080,6 +3080,9 @@ function bindRealtimeMessageHandler() {
     const ephemeralKey = ephemeralData.client_secret?.value;
     if (!ephemeralKey) throw new Error("Invalid ephemeral token");
 
+    // 🔧 FIX: Use the model from the session response, with fallback
+    const realtimeModel = (ephemeralData.model || "gpt-4o-realtime-preview").trim();
+
     // Create audio output
     window.remoteAudio = document.createElement("audio");
     window.remoteAudio.autoplay = true;
@@ -3133,7 +3136,7 @@ function bindRealtimeMessageHandler() {
         }
       };
       window.dc.send(JSON.stringify(sessionConfig));
-      logDebug("📝 Session configured with combined prompt");
+      logDebug("🔧 Session configured with combined prompt");
 
       const emptyUserMsg = {
         type: "conversation.item.create",
@@ -3156,22 +3159,35 @@ function bindRealtimeMessageHandler() {
     await waitForIceGatheringComplete();
     logDebug("📡 Sending SDP to OpenAI...");
 
-    const model = "gpt-4o-realtime-preview-2024-12-17";
-    const realtimeUrl = `https://api.openai.com/v1/realtime?model=${model}`;
+    const realtimeUrl = `https://api.openai.com/v1/realtime?model=${realtimeModel}`;
+
     const sdpResp = await fetch(realtimeUrl, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${ephemeralKey}`,
-        "Content-Type": "application/sdp"
+        Authorization: `Bearer ${ephemeralKey}`, // ephemeral token from /session
+        "OpenAI-Beta": "realtime=v1",            // REQUIRED for realtime
+        "Content-Type": "application/sdp"        // send raw SDP, not JSON
       },
       body: offer.sdp
     });
-    const answerSdp = await sdpResp.text();
-    await window.pc.setRemoteDescription({ type: "answer", sdp: answerSdp });
 
+    const answerText = await sdpResp.text();
+
+    // If HTTP failed, do NOT pass its body to setRemoteDescription (it's JSON error)
+    if (!sdpResp.ok) {
+      console.error("[Voice] Realtime POST failed:", sdpResp.status, sdpResp.statusText);
+      console.error("[Voice] Error body:", answerText);
+      throw new Error(`Realtime SDP exchange failed (${sdpResp.status}).`);
+    }
+
+    // OK: apply remote SDP answer
+    await window.pc.setRemoteDescription({ type: "answer", sdp: answerText });
+    logDebug("✅ Realtime connected (SDP answer applied)");
+
+    // Only now flip UI state to active
     isVoiceActive = true;
     microphoneBtn.classList.add('active');
-    microphoneBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';   
+    microphoneBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
     showToast("Voice mode activated");
     updateVoiceStatus('ready');
 
@@ -3185,7 +3201,6 @@ function bindRealtimeMessageHandler() {
     }
   }
 }
-
 
    function stopVoiceMode() {
      console.log("Stopping voice mode...");
