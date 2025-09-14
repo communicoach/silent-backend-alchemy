@@ -843,6 +843,60 @@
                 padding: 0 1.5rem;
             }
         }
+        /* Coach Goal widget (matches site look) */
+.goal-modes{ display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 12px; }
+.goal-pill{
+  border:1px solid var(--line); background:#fff; color:var(--primary-color);
+  padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:600; font-size:13px;
+  transition: box-shadow .18s ease, transform .06s ease, background .2s ease, border-color .2s ease;
+}
+.goal-pill:active{ transform:translateY(1px); }
+.goal-pill.active{
+  color:#fff; border-color:transparent;
+  background:linear-gradient(135deg, #FFA45B, #FF8667);
+  box-shadow:0 0 0 3px rgba(44,141,134,.20), 0 1px 2px rgba(0,0,0,.06);
+}
+.goal-output{
+  border:1px solid var(--line); background:#fff; border-radius:12px;
+  padding:12px; font-size:14px; line-height:1.45; min-height:68px; color:var(--primary-color);
+}
+
+/* Mobile tweaks */
+@media (max-width: 600px){
+  .goal-buttons{ display:flex; gap:8px; justify-content:space-between; flex-wrap:wrap; }
+}
+/* --- Goal input layout fixes --- */
+.goal-input-container{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+.goal-input-container textarea{
+  flex:1 1 auto;
+  min-height:110px; /* comfortable typing area */
+  padding:12px;
+  box-sizing:border-box;
+}
+.suggest-goal-btn{
+  flex:0 0 auto;
+  white-space:nowrap;
+}
+
+/* Mobile: stack button under the textarea (no overlap) */
+@media (max-width: 600px){
+  .goal-input-container{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .suggest-goal-btn{
+    width:100%;
+  }
+}
+
+/* Optionally hide the preview “goal-output” box when we’re using the textarea */
+.goal-output.is-hidden{ display:none; }
+
+
     </style>
 </head>
 <body>
@@ -903,44 +957,54 @@
             </div>
 
             <!-- Goal Setting Card -->
-            <div class="goal-card fade-in delay-1">
-                <div class="goal-header">
-                    <h2>Define Your Communication Goal</h2>
-                    <p>What do you hope to achieve with this conversation? Being clear about your objective will help tailor your Action Arena experiences.</p>
-                </div>
-
-                <div class="goal-examples">
-                    <h3>Example Goals:</h3>
-                    <ul>
-                        <li>I want to resolve the conflict with my colleague while maintaining a positive working relationship.</li>
-                        <li>I need to clearly express my boundaries without damaging our friendship.</li>
-                        <li>I want to persuade my manager to approve our new project proposal.</li>
-                    </ul>
-                </div>
-
-                <form id="goalForm">
-                    <!-- HTML Modification for the Goal Form -->
-                    <div class="goal-form-group">
-                        <label for="communicationGoal">Your Communication Goal:</label>
-                        <div class="goal-input-container">
-                            <textarea id="communicationGoal" placeholder="Describe what you'd like to accomplish..."></textarea>
-                            <button type="button" id="suggestGoalBtn" class="suggest-goal-btn">
-                                <i class="fa-solid fa-lightbulb"></i> Suggest Goal
-                            </button>
-                        </div>
-                        <div id="goalLoadingIndicator" class="goal-loading-indicator" style="display: none;">
-                            <div class="spinner-small"></div>
-                            <span>Generating suggestion...</span>
-                        </div>
-                    </div>
-                
-                    <div class="goal-buttons">
-                        <button type="button" class="gradient-btn" id="saveGoalBtn">Save Goal</button>
-                        <button type="button" class="skip-btn" id="skipGoalBtn">Skip for Now</button>
-                    </div>
-                </form>
-            </div>
+<div class="goal-card fade-in delay-1">
+    <div class="goal-header">
+      <h2>Define Your Communication Goal</h2>
+      <p>Pick a style below. The coach will review your situation and surface a goal that fits. You can edit your coach's suggestion, or if you have your goal ready you can write it directly.</p>
+    </div>
+  
+    <!-- Goal style pills -->
+    <div class="goal-modes" id="goalModeBar">
+      <button type="button" class="goal-pill active" data-mode="auto"        title="Let the coach infer latent intent if direct disclosure feels wrong right now.">Auto (Infer)</button>
+      <button type="button" class="goal-pill"        data-mode="direct"      title="Clear, respectful direct ask.">Direct Ask</button>
+      <button type="button" class="goal-pill"        data-mode="boundary"    title="Quietly re-balance via limits, pacing, availability.">Boundary-Led</button>
+      <button type="button" class="goal-pill"        data-mode="reflective"  title="Introspective, process-first; no immediate request.">Reflective</button>
+      <button type="button" class="goal-pill"        data-mode="strategic"   title="Plainly stated desired outcome; upfront and unambiguous.">Strategic</button>
+    </div>
+  
+    <!-- Generated goal -->
+    <div class="goal-output" id="goalText">Tap “Suggest Goal” to generate a one-sentence goal that matches your situation, edit your generated goal, or write your own goal.</div>
+  
+    <!-- Your editable goal field (kept for your flow) -->
+    <form id="goalForm" style="margin-top:12px;">
+      <div class="goal-form-group">
+        <label for="communicationGoal">Your Communication Goal:</label>
+        <div class="goal-input-container">
+          <textarea id="communicationGoal" placeholder="You can edit the suggested goal or write your own…"></textarea>
+  
+          <!-- We re-use your existing button & spinner IDs -->
+          <button type="button" id="suggestGoalBtn" class="suggest-goal-btn">
+            <i class="fa-solid fa-lightbulb"></i> Suggest Goal
+          </button>
         </div>
+  
+        <div id="goalLoadingIndicator" class="goal-loading-indicator" style="display:none;">
+          <div class="spinner-small"></div>
+          <span>Generating suggestion…</span>
+        </div>
+      </div>
+  
+      <div class="goal-buttons">
+        <!-- Keep your original Save/Skip buttons -->
+        <button type="button" class="gradient-btn" id="saveGoalBtn">Save Goal</button>
+        <button type="button" class="skip-btn" id="skipGoalBtn">Skip for Now</button>
+  
+        <!-- New: “Try Another” using the same style -->
+        <button type="button" class="skip-btn" id="tryAnotherGoalBtn" title="Another phrasing with the same intent">Try Another</button>
+      </div>
+    </form>
+  </div>
+  
     </section>
 
     <!-- Experience Cards Section -->
@@ -1156,8 +1220,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeGoalForm();
     updateCompletionStatus();
     initializeAnimations();
-    initializeSuggestionButton();
+    initializeGoalModes();         // NEW: wires the style pills (Auto/Direct/Boundary/Reflective/Strategic)
+    initializeSuggestionButton();  // updated logic below
 });
+
 
 // Function to toggle mobile menu
 function toggleMenu() {
@@ -1216,7 +1282,10 @@ function initializeGoalForm() {
     if (savedGoal) {
         communicationGoal.value = savedGoal;
     }
-    
+      // keep preview visibility in sync with the textarea
+  updateGoalPreviewVisibility();
+  communicationGoal.addEventListener('input', updateGoalPreviewVisibility);
+
     // Set up save button
     saveGoalBtn.addEventListener('click', function() {
         const goal = communicationGoal.value.trim();
@@ -1234,101 +1303,167 @@ function initializeGoalForm() {
         scrollToExperiences();
     });
 }
+// NEW: goal style pills wiring
+function initializeGoalModes() {
+    const modeBar = document.getElementById('goalModeBar');
+    if (!modeBar) return;
 
-// Initialize the suggest goal button
-function initializeSuggestionButton() {
-    const suggestGoalBtn = document.getElementById('suggestGoalBtn');
-    const communicationGoal = document.getElementById('communicationGoal');
-    const goalLoadingIndicator = document.getElementById('goalLoadingIndicator');
-    
-    if (!suggestGoalBtn || !communicationGoal || !goalLoadingIndicator) return;
-    
-    suggestGoalBtn.addEventListener('click', function() {
-        // Show loading indicator
-        goalLoadingIndicator.style.display = 'flex';
-        
-        // Get the refined narrative from localStorage
-        const refinedNarrative = localStorage.getItem('refinedNarrative') || '';
-        const originalNarrative = localStorage.getItem('originalNarrative') || '';
-        
-        // Construct the prompt for goal suggestion
-        const prompt = constructGoalPrompt(refinedNarrative, originalNarrative);
-        
-        console.log('Sending request to API with prompt length:', prompt.length);
-        
-        // Make API call to generate suggested goal
-        fetch('http://localhost:5506/api/chatgpt', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ prompt: prompt })
-        })
-        .then(response => {
-            console.log('API Response status:', response.status);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('API Response data received:', data);
-            if (data && data.response) {
-                // Update the textarea with the suggested goal
-                communicationGoal.value = data.response.trim();
-                showToast('Goal suggestion generated! Feel free to edit it to better match your intentions.');
-            } else {
-                console.error('Invalid response format:', data);
-                throw new Error('No valid response data received');
-            }
-        })
-        .catch(error => {
-            console.error('Error generating goal suggestion:', error);
-            console.log('Connection failed to API endpoint: http://localhost:5506/api/chatgpt');
-            showToast('Unable to connect to AI service. Using a template instead.', 'error');
-            
-            // Fallback suggestion if API call fails
-            generateFallbackGoalSuggestion(communicationGoal);
-        })
-        .finally(() => {
-            // Hide loading indicator
-            goalLoadingIndicator.style.display = 'none';
-        });
+    modeBar.addEventListener('click', (e) => {
+        const pill = e.target.closest('.goal-pill');
+        if (!pill) return;
+        modeBar.querySelectorAll('.goal-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
     });
 }
 
+function getCurrentGoalMode() {
+    const modeBar = document.getElementById('goalModeBar');
+    if (!modeBar) return 'auto';
+    const active = modeBar.querySelector('.goal-pill.active');
+    return active ? active.dataset.mode : 'auto';
+}
+
+// helpers to pull inputs saved by earlier pages
+function getRefinedNarrative() {
+    return localStorage.getItem('refinedNarrative')
+        || sessionStorage.getItem('refinedNarrative')
+        || localStorage.getItem('originalNarrative')
+        || '';
+}
+function getToneGuidance() {
+    return localStorage.getItem('finalToneGuidance') || '';
+}
+// Hide the preview box when the textarea has content; show it when empty
+function updateGoalPreviewVisibility(){
+  const preview = document.getElementById('goalText');           // the box above "Your Communication Goal"
+  const ta      = document.getElementById('communicationGoal');  // the textarea
+  if (!preview || !ta) return;
+
+  const hasText = ta.value.trim().length > 0;
+  if (hasText){
+    preview.classList.add('is-hidden');
+  } else {
+    preview.classList.remove('is-hidden');
+  }
+}
+
+
+// REPLACEMENT: suggestion flow (no generic fallbacks)
+function initializeSuggestionButton() {
+  const suggestGoalBtn = document.getElementById('suggestGoalBtn');
+  const tryAnotherBtn  = document.getElementById('tryAnotherGoalBtn'); // optional
+  const communicationGoal = document.getElementById('communicationGoal');
+  const goalLoadingIndicator = document.getElementById('goalLoadingIndicator');
+  const goalTextEl = document.getElementById('goalText');
+
+  if (!suggestGoalBtn || !communicationGoal || !goalLoadingIndicator) return;
+
+  async function requestGoal(varietyNudge = false) {
+    // Show loading
+    goalLoadingIndicator.style.display = 'flex';
+    if (goalTextEl) {
+      goalTextEl.textContent = 'Thinking…';
+      goalTextEl.classList.remove('is-hidden'); // ensure user sees status when textarea is empty
+    }
+
+    const refinedNarrative  = getRefinedNarrative();
+    const originalNarrative = localStorage.getItem('originalNarrative') || '';
+    const mode = getCurrentGoalMode();
+
+    // Guard: no narrative
+    if (!refinedNarrative.trim()) {
+      goalLoadingIndicator.style.display = 'none';
+      if (goalTextEl) goalTextEl.textContent = 'Add a refined narrative first, then try again.';
+      showToast('Please generate your refined narrative before asking for a goal.', 'error');
+      return;
+    }
+
+    const prompt = constructGoalPrompt(refinedNarrative, originalNarrative, mode, varietyNudge);
+
+    try {
+      const response = await fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const data = await response.json();
+      const text = (data && data.response ? data.response.trim() : '').replace(/\s+/g, ' ').trim();
+      if (!text) throw new Error('Empty goal returned');
+
+      // Mirror to preview + textarea; store
+      if (goalTextEl) goalTextEl.textContent = text;
+      communicationGoal.value = text;
+      localStorage.setItem('communicationGoal', text);
+      localStorage.setItem('coachGoal', text);
+
+      // Hide preview now that textarea has content
+      updateGoalPreviewVisibility();
+      showToast('Goal suggestion generated! Feel free to tweak wording.');
+    } catch (err) {
+      console.error('Goal generation error:', err);
+      // No templates—show an explicit, gentle error
+      if (goalTextEl) goalTextEl.textContent = 'Could not generate a goal right now. Please try again in a moment.';
+      showToast('Could not reach the AI service. Please try again in a moment.', 'error');
+    } finally {
+      goalLoadingIndicator.style.display = 'none';
+    }
+  }
+
+  suggestGoalBtn.addEventListener('click', () => requestGoal(false));
+  if (tryAnotherBtn) tryAnotherBtn.addEventListener('click', () => requestGoal(true));
+}
+
+
 // Construct the prompt for the API call
-function constructGoalPrompt(refinedNarrative, originalNarrative) {
-    return `
-Based on the following narrative, suggest a clear, specific communication goal that the person might want to achieve. The goal should be actionable, focused on what they want to accomplish through communication, and written in first person (e.g., "I want to...").
+// REPLACEMENT: latent-aware, first-person, tone-aware prompt
+function constructGoalPrompt(refinedNarrative, originalNarrative, mode, varietyNudge = false) {
+  const tone = getToneGuidance() || '(no extra tone constraints)';
+
+  // Gentle steering for each mode
+  const modeSteer = {
+    auto:       `Read for latent intention. If direct disclosure feels wrong, prefer an internal boundary or quiet behavioral shift.`,
+    direct:     `Craft a respectful, clear direct ask for a conversation or change.`,
+    boundary:   `Emphasize limits, pacing, and reciprocity. No blame. Focus on what I will and won’t do.`,
+    reflective: `Introspective and process-first; name patterns/needs; no request to the other person.`,
+    strategic:  `State a plain, concrete desired outcome up front that combines firm self-respect with preserved (ideally strengthened) healthy connection where plausible. Favor “both/and” phrasing over either/or. It may begin with “I want…/My goal is…/I intend…”. Keep it concise and unambiguous. Avoid rationale or backstory.`
+  }[mode || 'auto'];
+
+  return `
+You are a goal-crafting assistant that writes AS THE USER in first person.
+Return exactly one sentence; no labels, no bullet points, no meta-explanations.
+
+Rules:
+• Preserve my voice and nuance. Use first person “I …”.
+• The goal can be either an inner stance, boundary, desired outcome, or a conversation.
+• Surface latent intent when the narrative implies guardedness or fatigue.
+• Avoid starting with “I want to communicate …” unless style=direct. For style=strategic, “I want…/My goal is…” is fine.
+• Vary natural openings: “My goal is…”, “I intend…”, “I’m choosing…”, “For now…”, “I’ll…”.
+• Keep it concise (≤ 28 words).
+• Prefer “both/and” outcomes when plausible (e.g., firm boundaries AND preserved/strengthened connection).
+• Avoid fatalistic framings that presuppose loss when a balanced outcome seems achievable.
+
+Tone (soft constraints):
+${tone}
+
+GOAL STYLE (guidance):
+${modeSteer}
 
 REFINED NARRATIVE:
-${refinedNarrative || "No refined narrative available"}
+${refinedNarrative || 'No refined narrative available.'}
+${originalNarrative ? `
 
-${originalNarrative ? `ORIGINAL NARRATIVE (for additional context):
-${originalNarrative}` : ""}
+ORIGINAL NARRATIVE (for context):
+${originalNarrative}` : ''}
 
-Please respond with ONLY the suggested communication goal, written as a complete sentence that begins with "I want to" or "I need to". Keep it concise (1-2 sentences maximum) and make it specific enough that it will help guide the person's communication strategy.
-`;
+${varietyNudge ? '\nPlease vary the opening verb from any prior phrasing.\n' : ''}
+
+Reply with only the single sentence (no labels).
+`.trim();
+
 }
-
-// Fallback function to generate a suggestion if the API call fails
-function generateFallbackGoalSuggestion(communicationGoal) {
-    const fallbackGoals = [
-        "I want to clearly express my boundaries while maintaining a positive relationship.",
-        "I need to resolve this conflict constructively while ensuring my concerns are addressed.",
-        "I want to persuade them to consider my perspective without damaging our relationship.",
-        "I need to communicate my expectations clearly to prevent future misunderstandings.",
-        "I want to rebuild trust through honest and transparent communication.",
-        "I need to advocate for my needs while being open to compromise."
-    ];
-    
-    const randomGoal = fallbackGoals[Math.floor(Math.random() * fallbackGoals.length)];
-    communicationGoal.value = randomGoal;
-    
-    showToast('Using a suggested goal template. Please customize it for your situation.');
-}
-
 // Function to start an experience
 function startExperience(experienceId) {
     // Store the selected experience ID
@@ -1357,6 +1492,7 @@ function startExperience(experienceId) {
         showToast(`Starting experience: ${experienceId}. This page is currently under development.`);
     }
 }
+
 
 // Function to update completion status
 function updateCompletionStatus() {
