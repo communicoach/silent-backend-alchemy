@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Style Awareness - CommuniCoach</title>
+
+  <!-- Fonts + Icons -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- ======= COMBINED CSS ======= -->
+  <style>
+    :root {
+      --primary-color: #2d4a3e;
+      --secondary-color: #1b4072;
+      --accent-color: #a1ce3e;
+      --highlight-color: #dcefc6;
+      --energy-color: #74b49b;
+      --error-color: #ff6b6b;
+      --success-color: #4CAF50;
+      --shadow-color: rgba(45, 74, 62, 0.15);
+
+      --bg-color: #ffffff;
+      --bg-secondary: #f9fef3;
+      --bg-card: #ffffff;
+
+      --text-primary: #2d4a3e;
+      --text-secondary: #555;
+      --text-light: #ffffff;
+
+      --border-color: #e0e0e0;
+      --input-bg: #ffffff;
+
+      --progress-bg: #e0e0e0;
+      --progress-fill: #136f6f;
+
+      --user-bubble-bg: #e8f4f8;
+      --partner-bubble-bg: #f0f0f0;
+      --coach-bubble-bg: #dcefc6;
+
+      --gradient-bg: linear-gradient(
+        135deg,
+        rgba(45, 74, 62, 0.05),
+        rgba(161, 206, 62, 0.07)
+      );
+    }
+
+    [data-theme="dark"] {
+      --primary-color: #78a891;
+      --secondary-color: #60a3d9;
+      --accent-color: #a1ce3e; 
+      --highlight-color: #314a2e;
+      --shadow-color: rgba(0, 0, 0, 0.25);
+
+      --bg-color: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-card: #242424;
+
+      --text-primary: #e0e0e0;
+      --text-secondary: #aaaaaa;
+
+      --border-color: #444444;
+      --input-bg: #333333;
+
+      --progress-bg: #444444;
+      --progress-fill: #78c7ba;
+
+      --user-bubble-bg: #2d4a3e;
+      --partner-bubble-bg: #333333;
+      --coach-bubble-bg: #314a2e;
+    }
+
+    /* Global resets & transitions */
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      font-family: "Poppins", sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      transition: background-color 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: var(--bg-secondary);
+      opacity: 0.8;
+      z-index: -1;
+    }
+
+    /* Header & Nav */
+    .header-wrapper {
+      position: fixed; top: 0; left: 0;
+      width: 100%;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      box-shadow: 0 2px 20px var(--shadow-color);
+    }
+    .top-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 0;
+      color: var(--text-primary);
+      position: relative;
+    }
+    .top-nav a {
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    .top-nav a:hover {
+      background: var(--highlight-color);
+    }
+    .top-nav a.current {
+      background: #136f6f;
+      color: var(--text-light);
+    }
+    .logo {
+      position: absolute;
+      left: 20px;
+    }
+    .logo img {
+      height: 40px;
+    }
+    .mobile-menu-button {
+      display: none;
+      background: none; border: none; 
+      font-size: 1.5rem; cursor: pointer;
+      color: var(--text-primary);
+      position: absolute; right: 20px; top: 15px;
+    }
+    .nav-links.active { display: flex; }
+
+    /* Dark Mode Toggle */
+    .dark-mode-toggle {
+      position: absolute; right: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .toggle-label {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+    .switch {
+      position: relative; display: inline-block;
+      width: 50px; height: 24px;
+    }
+    .switch input {
+      opacity: 0; width: 0; height: 0;
+    }
+    .slider {
+      position: absolute; cursor: pointer; 
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc; transition: .4s;
+    }
+    .slider:before {
+      content: ""; position: absolute;
+      height: 16px; width: 16px;
+      left: 4px; bottom: 4px;
+      background-color: #fff;
+      transition: .4s;
+    }
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .slider.round {
+      border-radius: 34px;
+    }
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+      width: 100%; padding: 10px 0;
+      background: var(--bg-secondary);
+    }
+    .progress-bar {
+      width: 80%; margin: 0 auto;
+      height: 8px; background: var(--progress-bg);
+      border-radius: 4px; overflow: hidden;
+    }
+    .progress-bar .progress {
+      width: 10%;
+      height: 100%;
+      background: var(--progress-fill);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      margin-top: 100px;
+      padding: 4rem 0;
+    }
+    .container {
+      max-width:1200px; margin:0 auto;
+      padding: 0 2rem; position:relative;
+    }
+    .hero-content {
+      display: flex; gap: 3rem;
+      align-items: center;
+    }
+    .hero-text {
+      flex:1.2;
+    }
+    .hero-text h1 {
+      font-size: 1.8em; 
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .hero-text p {
+      font-size: 1em; margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+    .hero-image {
+      flex:1;
+    }
+    .hero-image img {
+      width: 100%; border-radius:15px;
+      box-shadow:0 4px 15px var(--shadow-color);
+    }
+
+    /* Setup & scenario + goal */
+    .setup-section { padding: 2rem 0; }
+    .setup-card {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      margin-bottom: 2rem;
+    }
+    .setup-card h2 {
+        display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4em;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    }
+    .setup-card p {
+        padding: 1.5rem;
+    border: 2px solid var(--accent-color);
+    border-radius: 10px;
+    background: var(--highlight-color);
+    color: var(--text-primary);
+    font-size: 0.95em;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    }
+    .form-group { margin-bottom:1rem; }
+    .form-group label {
+      display:block;
+      margin-bottom:0.3rem;
+      font-weight:500;
+      color: var(--text-primary);
+    }
+    .form-group input[readonly] {
+      background: var(--bg-secondary);
+      border:2px solid var(--border-color);
+      border-radius:10px;
+      padding:0.7rem;
+      width:100%;
+      color: var(--text-primary);
+    }
+    
+    /* Style Categories Section */
+    .styles-category-heading {
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      font-size: 1em;
+      background: var(--highlight-color);
+      padding: 0.5rem;
+      border-radius: 8px;
+    }
+    
+    .styles-choices {
+      display:flex; flex-wrap:wrap;
+      gap:0.7rem;
+      margin-bottom:1rem;
+    }
+    .style-checkbox {
+      background: var(--bg-secondary);
+      border:1px solid var(--border-color);
+      border-radius:20px;
+      padding:0.5rem 1rem;
+      display: flex; align-items:center;
+      gap:0.5rem; cursor:pointer;
+      transition: all 0.2s ease;
+    }
+    .style-checkbox:hover {
+      background: var(--highlight-color);
+      border-color: var(--accent-color);
+    }
+    .style-checkbox.selected {
+      background: var(--highlight-color);
+      border-color: var(--accent-color);
+    }
+    
+    .validation-message {
+      color: var(--error-color);
+      font-size: 0.9em;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    .form-actions {
+      margin-top:2rem;
+      display:flex; gap:1rem;
+      justify-content:flex-end;
+    }
+    .btn {
+      padding:0.7rem 1.5rem;
+      border-radius:25px;
+      border:none; cursor:pointer;
+      font-family:"Poppins",sans-serif;
+      font-size:1rem;
+      transition:all 0.3s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:0.4rem;
+    }
+    .btn-primary {
+      background: var(--primary-color);
+      color:#fff;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      background: var(--secondary-color);
+    }
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-outline {
+      background:none;
+      color: var(--text-primary);
+      border:2px solid var(--text-primary);
+    }
+    .btn-outline:hover {
+      background: var(--highlight-color);
+    }
+    .btn-outline:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* The main exercise rounds */
+    .exercise-section {
+      display:none;
+      padding:2rem 0;
+    }
+    .exercise-card {
+      background: var(--bg-card);
+      border-radius:15px;
+      box-shadow:0 4px 20px var(--shadow-color);
+      padding:2rem;
+      margin-bottom:2rem;
+      position:relative;
+    }
+    .exercise-header {
+      text-align:center;
+      margin-bottom:2rem;
+    }
+    .exercise-header h2 {
+      color: var(--text-primary);
+      font-size:1.4em;
+      margin-bottom:0.5rem;
+    }
+    .exercise-header p {
+      color: var(--text-secondary);
+      font-size:1em;
+    }
+    .round-indicator {
+      text-align:right; font-size:1em;
+      color: var(--secondary-color);
+      margin-bottom:1rem;
+    }
+
+    .partner-paragraph {
+      padding:1.5rem;
+      margin-bottom:1rem;
+      background: var(--bg-secondary);
+      border-left:4px solid var(--accent-color);
+      border-radius:10px;
+      color: var(--text-primary);
+    }
+    .style-guess-row {
+      display:flex; flex-wrap:wrap;
+      gap:1rem;
+      margin-bottom:2rem;
+    }
+    .style-guess-button {
+      padding:0.6rem 1rem;
+      border:2px solid var(--border-color);
+      border-radius:10px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor:pointer;
+      transition:all 0.3s ease;
+    }
+    .style-guess-button:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-color);
+      background: var(--highlight-color);
+    }
+    .style-guess-button.correct {
+      border-color: var(--success-color);
+      background:#E8F5E9;
+    }
+    .style-guess-button.incorrect {
+      border-color: var(--error-color);
+      background:#ffe8e8;
+    }
+    .style-guess-button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Coach Feedback */
+    .coach-feedback {
+      margin:1.5rem 0;
+      padding:1.2rem;
+      background: var(--coach-bubble-bg);
+      border-left:4px solid var(--accent-color);
+      border-radius:10px;
+      color: var(--text-primary);
+      display: none;
+    }
+    .coach-feedback h4 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .coach-feedback h4 i {
+      color: var(--accent-color);
+    }
+    .coach-feedback p {
+      margin-bottom: 0;
+    }
+
+    /* Response section */
+    .response-section {
+      margin-bottom:2rem;
+    }
+    .response-section label {
+      font-weight:500;
+      color: var(--text-primary);
+    }
+    .mic-row {
+      display:flex; gap:1rem; align-items:center;
+      margin-bottom:1rem;
+    }
+    .mic-button {
+      width:50px; height:50px; 
+      border:none; border-radius:50%;
+      background: var(--accent-color);
+      color:#fff; font-size:1.2rem;
+      cursor:pointer; box-shadow:0 2px 10px var(--shadow-color);
+      display:flex; align-items:center; justify-content:center;
+      transition:all 0.3s ease;
+    }
+    .mic-button:hover {
+      transform: scale(1.05);
+      background: var(--energy-color);
+    }
+    .mic-button.listening {
+      background: var(--error-color);
+      animation: pulseMic 1.2s infinite;
+    }
+    @keyframes pulseMic {
+      0% { box-shadow:0 0 0 0 rgba(255,0,0,0.4); }
+      70% { box-shadow:0 0 0 10px rgba(255,0,0,0); }
+      100% { box-shadow:0 0 0 0 rgba(255,0,0,0); }
+    }
+
+    .response-textarea {
+      width:100%;
+      padding:0.8rem;
+      min-height:100px;
+      border:2px solid var(--border-color);
+      border-radius:10px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      margin-bottom:1rem;
+      font-family:"Poppins",sans-serif;
+    }
+    .response-textarea:focus {
+      outline:none;
+      border-color: var(--accent-color);
+      box-shadow:0 0 0 3px rgba(161,206,62,0.2);
+    }
+    
+    /* Generate Response Button */
+    .generate-response-btn {
+      padding: 0.7rem 1.5rem;
+      border: 2px solid var(--primary-color);
+      border-radius: 25px;
+      background: none;
+      color: var(--primary-color);
+      font-family: "Poppins", sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+    .generate-response-btn:hover {
+      background: var(--highlight-color);
+      transform: translateY(-2px);
+    }
+    .generate-response-btn i {
+      font-size: 1rem;
+    }
+    
+    .style-selection-row {
+      display:flex; flex-wrap:wrap;
+      gap:0.7rem;
+      margin-bottom:1rem;
+    }
+    .response-style-button {
+      padding:0.6rem 1rem;
+      border:2px solid var(--border-color);
+      border-radius:10px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor:pointer;
+      transition:all 0.3s ease;
+    }
+    .response-style-button:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-color);
+      background: var(--highlight-color);
+    }
+    .response-style-button.selected {
+      border-color: var(--accent-color);
+      background: var(--highlight-color);
+    }
+
+    /* Next / Prev Round */
+    .round-nav {
+      display:flex; justify-content:space-between;
+    }
+    .round-nav button {
+      margin-top:1rem;
+    }
+
+    /* Summary */
+    .summary-section {
+      display:none; 
+      padding:2rem 0;
+    }
+    .summary-card {
+      background: var(--bg-card);
+      border-radius:15px;
+      box-shadow:0 4px 20px var(--shadow-color);
+      padding:2rem;
+      position:relative;
+      max-width:800px; margin:0 auto;
+    }
+    .summary-header {
+      text-align:center; margin-bottom:2rem;
+    }
+    .summary-header h2 {
+      font-size:1.5em;
+      color: var(--text-primary);
+      margin-bottom:1rem;
+    }
+    
+    /* Improved Summary Layout */
+    .summary-insights {
+      color: var(--text-primary);
+      line-height:1.6;
+      font-size:1em;
+      margin-bottom:2rem;
+    }
+    .summary-section-title {
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .summary-section-title i {
+      color: var(--accent-color);
+    }
+    .summary-section-content {
+      background: var(--bg-secondary);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+    .strength-item, .growth-item {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    .strength-item:before {
+      content: '✓';
+      color: var(--success-color);
+      position: absolute;
+      left: 0;
+    }
+    .growth-item:before {
+      content: '→';
+      color: var(--accent-color);
+      position: absolute;
+      left: 0;
+    }
+    
+    .back-toArena-btn {
+      text-align:center;
+    }
+
+    /* Toast Notifications */
+    .toast {
+      position:fixed;
+      bottom:20px; left:50%;
+      transform:translateX(-50%);
+      background: var(--primary-color);
+      color:#fff;
+      padding:12px 24px;
+      border-radius:30px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.2);
+      z-index:9999;
+      animation: fadeInUp 0.3s ease;
+    }
+    .toast.error {
+      background: var(--error-color);
+    }
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(20px);}
+      to { opacity:1; transform:translateY(0);}
+    }
+
+    /* Spinner */
+    @keyframes spin {
+      to { transform:rotate(360deg);}
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-content {
+        flex-direction:column-reverse;
+        text-align:center;
+        gap:2rem;
+      }
+      .nav-links {
+        display:none; width:100%;
+        flex-direction:column; gap:10px;
+        text-align:center; padding-top:10px;
+      }
+      .mobile-menu-button { display:block; }
+      .dark-mode-toggle {
+        position:static;
+        margin-top:10px;
+        justify-content:center;
+      }
+      .mic-row {
+        flex-direction:row;
+      }
+      .container {
+        padding:0 1rem;
+      }
+      .setup-card { padding:1.5rem; }
+      .exercise-card { padding:1.5rem; }
+      .round-nav { flex-direction:column; gap:1rem; }
+      .style-guess-row, .style-selection-row {
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <div class="header-wrapper">
+    <div class="top-nav">
+      <a href="#" class="logo">
+        <img src=".vscode/Images/CClogo.png" alt="CommuniCoach" />
+      </a>
+      <button class="mobile-menu-button" onclick="toggleMenu()">☰</button>
+      <div class="nav-links" id="navLinks">
+        <a href="welcome.html">Welcome</a>
+        <a href="tone-selection.html">Tone Selection</a>
+        <a href="situation-room.html">Situation Room</a>
+        <a href="refined-narrative.html">Refined Narrative</a>
+        <a href="action-arena.html">Action Arena</a>
+      </div>
+
+      <!-- Dark Mode Toggle -->
+      <div class="dark-mode-toggle">
+        <span class="toggle-label">Dark Mode</span>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle" />
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar">
+        <div class="progress" id="progressBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero-section">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Discover Your Communication Style </h1>
+        <p>
+            In every interaction, style shapes how you’re heard and how you react. This exercise helps you sharpen that awareness by stepping into a real conversation and identifying the styles at play—yours and theirs.
+
+            We’ll simulate a back-and-forth from your actual scenario. You’ll read what the other person might say, choose which style you think it reflects, and then respond with your own message. Each choice helps you decode intent, impact, and alignment. Think of this as your chance to build communication fluency with insight, not just instinct.
+            
+            
+        </p>
+        <p>
+          By developing style awareness, you'll gain flexibility and precision in your 
+          communication, allowing you to adapt your approach for maximum impact.
+        </p>
+      </div>
+      <div class="hero-image">
+        <img src=".vscode/Images/conversation.png" alt="Style Awareness" />
+      </div>
+    </div>
+  </section>
+
+  <!-- SETUP -->
+  <section class="setup-section" id="setupSection">
+    <div class="container">
+      <div class="setup-card">
+        <h2>Set Up Your Style Awareness Exercise</h2>
+        <p>
+          We'll use your current scenario and communication goal for this exercise.
+          Choose styles you want to practice identifying and using in your responses.
+        </p>
+        <div class="form-group">
+          <label for="scenarioDisplay">Your Current Scenario</label>
+          <input type="text" id="scenarioDisplay" readonly />
+        </div>
+        <div class="form-group">
+          <label for="goalDisplay">Your Communication Goal</label>
+          <input type="text" id="goalDisplay" readonly />
+        </div>
+        
+        <!-- Styles Selection - Reorganized into Categories -->
+        <p>
+          Choose 6 communication styles below (select 2 from each category), then begin the 5-round exercise.
+        </p>
+        
+        <!-- Productive Styles -->
+        <div class="styles-category-heading">Constructive Communication Styles</div>
+        <div class="styles-choices" id="productiveStylesContainer">
+          <!-- Productive styles will be inserted here -->
+        </div>
+        
+        <!-- Neutral Styles -->
+        <div class="styles-category-heading">Situational Communication Styles</div>
+        <div class="styles-choices" id="neutralStylesContainer">
+          <!-- Neutral styles will be inserted here -->
+        </div>
+        
+        <!-- Counterproductive Styles -->
+        <div class="styles-category-heading">Challenging Communication Styles</div>
+        <div class="styles-choices" id="counterproductiveStylesContainer">
+          <!-- Counterproductive styles will be inserted here -->
+        </div>
+        
+        <div class="validation-message" id="validationMessage">
+          Please select at least 2 styles from each category (total 6 styles).
+        </div>
+        
+        <div class="form-actions">
+          <button class="btn btn-primary" id="startQuizBtn">
+            Begin Style Awareness
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXERCISE (5 ROUNDS) -->
+  <section class="exercise-section" id="exerciseSection">
+    <div class="container">
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <h2>Round <span id="roundNumber">1</span> of 5</h2>
+          <p>You’ll see a statement that might come from your real conversation partner.
+
+            Select the communication style you think they are using.
+            
+            The AI coach will reveal the actual style and explain how it shows up in their words.
+            
+            Then, write your own response back.
+            
+            Once you respond, you’ll label your own style—and the coach will give feedback on how well it fits.
+            
+            After 5 rounds, you’ll get personalized insights on how you tend to engage and where you can flex or grow.
+            
+            This isn’t about being “right”—it’s about learning to see style, intention, and tone with sharper eyes.
+            
+            .</p>
+        </div>
+
+        <div class="round-indicator">
+          Focusing on: <span id="selectedStylesDisplay"></span>
+        </div>
+
+        <!-- Partner Paragraph -->
+        <div class="partner-paragraph" id="partnerParagraph">
+          <!-- AI text goes here -->
+        </div>
+
+        <!-- 6 guess buttons -->
+        <div class="style-guess-row" id="styleGuessRow"></div>
+        
+        <!-- Coach Feedback for Style Identification -->
+        <div class="coach-feedback" id="styleGuessFeedback">
+          <h4><i class="fa-solid fa-comment-dots"></i> <span id="feedbackTitle">Style Analysis</span></h4>
+          <p id="feedbackContent"></p>
+        </div>
+
+        <!-- User Response Section -->
+        <div class="response-section">
+          <label for="userResponse">Your Response:</label>
+          <div class="mic-row">
+            <button class="mic-button" id="responseMicBtn">
+              <i class="fa-solid fa-microphone"></i>
+            </button>
+            <span id="micStatusText">Click to speak</span>
+          </div>
+          <textarea class="response-textarea" id="userResponse" placeholder="Type your response here..."></textarea>
+          
+          <!-- Generate Response Button -->
+          <button class="generate-response-btn" id="generateResponseBtn">
+            <i class="fa-solid fa-magic"></i> Generate Response
+          </button>
+          
+          <p>Select which style you think your response matches:</p>
+          <div class="style-selection-row" id="responseStyleRow"></div>
+          
+          <!-- Coach Feedback for User's Response Style -->
+          <div class="coach-feedback" id="coachFeedback">
+            <h4><i class="fa-solid fa-comment-dots"></i> <span>Style Analysis</span></h4>
+            <p id="responseFeedbackContent"></p>
+          </div>
+        </div>
+
+        <!-- Round Nav -->
+        <div class="round-nav">
+          <button class="btn btn-outline" id="prevRoundBtn" disabled>← Previous</button>
+          <button class="btn btn-primary" id="nextRoundBtn">Next →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section class="summary-section" id="summarySection">
+    <div class="container">
+      <div class="summary-card">
+        <div class="summary-header">
+          <h2>Exercise Complete!</h2>
+          <p>You finished identifying styles and practicing your responses. 
+             Here's a detailed reflection on your performance.</p>
+        </div>
+        
+        <div class="summary-insights" id="summaryInsights">
+          <!-- Summary sections will be inserted here -->
+          <div class="summary-section-title">
+            <i class="fa-solid fa-star"></i> Overall Performance
+          </div>
+          <div class="summary-section-content" id="overallPerformance">
+            <!-- Overall performance content -->
+          </div>
+          
+          <div class="summary-section-title">
+            <i class="fa-solid fa-check-circle"></i> Style Recognition Strengths
+          </div>
+          <div class="summary-section-content" id="recognitionStrengths">
+            <!-- Recognition strengths content -->
+          </div>
+          
+          <div class="summary-section-title">
+            <i class="fa-solid fa-pen"></i> Style Expression Strengths
+          </div>
+          <div class="summary-section-content" id="expressionStrengths">
+            <!-- Expression strengths content -->
+          </div>
+          
+          <div class="summary-section-title">
+            <i class="fa-solid fa-arrow-trend-up"></i> Growth Opportunities
+          </div>
+          <div class="summary-section-content" id="growthOpportunities">
+            <!-- Growth opportunities content -->
+          </div>
+          
+          <div class="summary-section-title">
+            <i class="fa-solid fa-lightbulb"></i> Practical Tips
+          </div>
+          <div class="summary-section-content" id="practicalTips">
+            <!-- Practical tips content -->
+          </div>
+        </div>
+        
+        <div class="back-toArena-btn">
+          <a class="btn btn-primary" href="action-arena.html">
+            Return to Action Arena
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer-nav">
+    <p>&copy; 2024 CommuniCoach. All rights reserved.</p>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+  </footer>
+
+
+  <!-- ======= JS SCRIPT ======= -->
+  <script>
+  /******************************************************
+   * style-awareness-exercise.js - Enhanced Version
+   ******************************************************/
+
+  // DOM Refs
+  const progressBar = document.getElementById('progressBar');
+  const navLinks = document.getElementById('navLinks');
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const scenarioDisplay = document.getElementById('scenarioDisplay');
+  const goalDisplay = document.getElementById('goalDisplay');
+  
+  // Style Selection Containers
+  const productiveStylesContainer = document.getElementById('productiveStylesContainer');
+  const neutralStylesContainer = document.getElementById('neutralStylesContainer');
+  const counterproductiveStylesContainer = document.getElementById('counterproductiveStylesContainer');
+  const validationMessage = document.getElementById('validationMessage');
+  const startQuizBtn = document.getElementById('startQuizBtn');
+
+  // Exercise Elements
+  const setupSection = document.getElementById('setupSection');
+  const exerciseSection = document.getElementById('exerciseSection');
+  const roundNumberEl = document.getElementById('roundNumber');
+  const partnerParagraphEl = document.getElementById('partnerParagraph');
+  const styleGuessRow = document.getElementById('styleGuessRow');
+  const styleGuessFeedback = document.getElementById('styleGuessFeedback');
+  const feedbackTitle = document.getElementById('feedbackTitle');
+  const feedbackContent = document.getElementById('feedbackContent');
+  const userResponseEl = document.getElementById('userResponse');
+  const responseMicBtn = document.getElementById('responseMicBtn');
+  const micStatusText = document.getElementById('micStatusText');
+  const generateResponseBtn = document.getElementById('generateResponseBtn');
+  const responseStyleRow = document.getElementById('responseStyleRow');
+  const coachFeedback = document.getElementById('coachFeedback');
+  const responseFeedbackContent = document.getElementById('responseFeedbackContent');
+  const prevRoundBtn = document.getElementById('prevRoundBtn');
+  const nextRoundBtn = document.getElementById('nextRoundBtn');
+  const selectedStylesDisplay = document.getElementById('selectedStylesDisplay');
+  
+  // Summary Elements
+  const summarySection = document.getElementById('summarySection');
+  const overallPerformance = document.getElementById('overallPerformance');
+  const recognitionStrengths = document.getElementById('recognitionStrengths');
+  const expressionStrengths = document.getElementById('expressionStrengths');
+  const growthOpportunities = document.getElementById('growthOpportunities');
+  const practicalTips = document.getElementById('practicalTips');
+
+  // Globals
+  let recognition = null; 
+  let isListening = false;
+  let recognitionTimeout = null;
+  
+  // Categorized Styles
+  const styles = {
+    productive: [
+      "Assertive", "Collaborative", "Direct", "Diplomatic", "Empathetic",
+      "Encouraging", "Honest", "Patient", "Reflective", "Supportive", "Validating"
+    ],
+    neutral: [
+      "Analytical", "Firm", "Flexible", "Humorous", "Inquisitive", "Persuasive", "Vulnerable"
+    ],
+    counterproductive: [
+      "Aggressive", "Apologetic", "Critical", "Defensive", "Disengaged", 
+      "Dismissive", "Emotional", "Manipulative", "Passive", "Passive-Aggressive", "Sarcastic"
+    ]
+  };
+  
+  // State Management
+  let selectedStyles = {
+    productive: [],
+    neutral: [],
+    counterproductive: []
+  };
+  let roundIndex = 0;
+  let exerciseState = {
+    scenario: "",
+    goal: "",
+    styleSubset: [],
+    rounds: []
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initDarkMode();
+    loadScenarioAndGoal();
+    renderStyleChoices();
+    initSpeechRecognition();
+
+    startQuizBtn.addEventListener('click', handleStartQuiz);
+    prevRoundBtn.addEventListener('click', handlePrevRound);
+    nextRoundBtn.addEventListener('click', handleNextRound);
+    responseMicBtn.addEventListener('click', toggleMic);
+    generateResponseBtn.addEventListener('click', handleGenerateResponse);
+
+    exerciseSection.style.display = 'none';
+    summarySection.style.display = 'none';
+    setProgress(10);
+  });
+
+  function toggleMenu() {
+    navLinks.classList.toggle('active');
+  }
+
+  function initDarkMode() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if(savedTheme==='dark') {
+      document.documentElement.setAttribute('data-theme','dark');
+      darkModeToggle.checked = true;
+    }
+    darkModeToggle.addEventListener('change', ()=>{
+      const isDark = darkModeToggle.checked;
+      document.documentElement.setAttribute('data-theme', isDark?'dark':'light');
+      localStorage.setItem('theme', isDark?'dark':'light');
+    });
+  }
+
+  function loadScenarioAndGoal() {
+    const refined = localStorage.getItem('refinedNarrative') || '(No scenario found)';
+    const goal = localStorage.getItem('communicationGoal') || '(No goal found)';
+    
+    // Truncate if too long
+    const maxLength = 100;
+    const truncatedScenario = refined.length > maxLength ? 
+      refined.substring(0, maxLength) + '...' : refined;
+    const truncatedGoal = goal.length > maxLength ? 
+      goal.substring(0, maxLength) + '...' : goal;
+    
+    scenarioDisplay.value = truncatedScenario;
+    goalDisplay.value = truncatedGoal;
+    
+    // Save full versions to state
+    exerciseState.scenario = refined;
+    exerciseState.goal = goal;
+  }
+
+  function renderStyleChoices() {
+    // Render styles by category
+    renderStyleCategory(styles.productive, productiveStylesContainer, 'productive');
+    renderStyleCategory(styles.neutral, neutralStylesContainer, 'neutral');
+    renderStyleCategory(styles.counterproductive, counterproductiveStylesContainer, 'counterproductive');
+    
+    // Initially disable start button until valid selection
+    validateStyleSelection();
+  }
+  
+  function renderStyleCategory(stylesArray, container, category) {
+    if (!container) return;
+    
+    stylesArray.sort();
+    
+    container.innerHTML = '';
+    stylesArray.forEach(style => {
+      const label = document.createElement('label');
+      label.className = 'style-checkbox';
+      
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = style;
+      checkbox.dataset.category = category;
+      
+      checkbox.addEventListener('change', () => {
+        // Update selected styles when checkbox changes
+        if (checkbox.checked) {
+          selectedStyles[category].push(style);
+          label.classList.add('selected');
+        } else {
+          selectedStyles[category] = selectedStyles[category].filter(s => s !== style);
+          label.classList.remove('selected');
+        }
+        
+        validateStyleSelection();
+      });
+      
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(style));
+      container.appendChild(label);
+    });
+  }
+  
+  function validateStyleSelection() {
+    const productiveCount = selectedStyles.productive.length;
+    const neutralCount = selectedStyles.neutral.length;
+    const counterCount = selectedStyles.counterproductive.length;
+    const totalCount = productiveCount + neutralCount + counterCount;
+    
+    // Check if selection meets requirements
+    const isValid = productiveCount >= 2 && neutralCount >= 2 && counterCount >= 2 && totalCount <= 9;
+    
+    // Update UI based on validation
+    startQuizBtn.disabled = !isValid;
+    validationMessage.style.display = isValid ? 'none' : 'block';
+    
+    return isValid;
+  }
+
+  function handleStartQuiz() {
+    if (!validateStyleSelection()) {
+      showToast('Please select 2-3 styles from each category (6-9 total).', 2000, true);
+      return;
+    }
+    
+    // Flatten selected styles into a single array
+    const allSelectedStyles = [
+      ...selectedStyles.productive,
+      ...selectedStyles.neutral,
+      ...selectedStyles.counterproductive
+    ];
+    
+    exerciseState.styleSubset = allSelectedStyles;
+
+    setupSection.style.display = 'none';
+    exerciseSection.style.display = 'block';
+    selectedStylesDisplay.textContent = allSelectedStyles.join(', ');
+
+    setProgress(20);
+    startRound(0);
+  }
+
+  function startRound(idx) {
+    roundIndex = idx;
+    roundNumberEl.textContent = (roundIndex + 1).toString();
+    partnerParagraphEl.textContent = 'Loading partner message...';
+    styleGuessRow.innerHTML = '';
+    userResponseEl.value = '';
+    responseStyleRow.innerHTML = '';
+    
+    // Hide feedback elements
+    styleGuessFeedback.style.display = 'none';
+    coachFeedback.style.display = 'none';
+    
+    // Adjust navigation buttons
+    prevRoundBtn.disabled = roundIndex === 0;
+    nextRoundBtn.textContent = roundIndex >= 4 ? 'Finish' : 'Next →';
+    nextRoundBtn.disabled = true; // Enable after required actions completed
+
+    // Get partner paragraph from API
+    fetchPartnerParagraph(idx)
+      .then(data => {
+        partnerParagraphEl.textContent = data.paragraph;
+        renderStyleGuessButtons(data.correctStyle, data.distractors);
+        
+        // Store round data
+        if (!exerciseState.rounds[roundIndex]) {
+          exerciseState.rounds[roundIndex] = {
+            partnerParagraph: data.paragraph,
+            correctStyle: data.correctStyle,
+            distractors: data.distractors,
+            userStyleGuess: null,
+            userResponseText: '',
+            userResponseStyle: null,
+            styleFeedback: '',
+            responseFeedback: ''
+          };
+        } else {
+          // Update only the partner part if revisiting
+          exerciseState.rounds[roundIndex].partnerParagraph = data.paragraph;
+          exerciseState.rounds[roundIndex].correctStyle = data.correctStyle;
+          exerciseState.rounds[roundIndex].distractors = data.distractors;
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching partner paragraph:', err);
+        partnerParagraphEl.textContent = 'Error loading scenario text. Please try refreshing the page.';
+      });
+  }
+
+  async function fetchPartnerParagraph(roundIndex) {
+    // Determine which styles we're working with for this round
+    const allStyles = exerciseState.styleSubset;
+    
+    // Choose correct style randomly from subset
+    const correctIndex = Math.floor(Math.random() * allStyles.length);
+    const correctStyle = allStyles[correctIndex];
+    
+    // Choose distractors (different from correct style)
+    const possibleDistractors = allStyles.filter(s => s !== correctStyle);
+    shuffleArray(possibleDistractors);
+    const distractors = possibleDistractors.slice(0, 3);
+    
+    // Build conversation context based on previous rounds
+    let conversationContext = '';
+    if (roundIndex > 0) {
+      for (let i = 0; i < roundIndex; i++) {
+        if (exerciseState.rounds[i]) {
+          conversationContext += `Previous message: "${exerciseState.rounds[i].partnerParagraph}"\n`;
+          conversationContext += `User's response: "${exerciseState.rounds[i].userResponseText || '(No response provided)'}"\n\n`;
+        }
+      }
+    }
+    
+    // Create detailed prompt for the API
+    const systemPrompt = `
+You are CommuniCoach, an expert communication styles coach. Create a statement in the "${correctStyle}" communication style from the perspective of the person the user is communicating with, based on this scenario:
+
+USER'S SCENARIO: ${exerciseState.scenario}
+USER'S COMMUNICATION GOAL: ${exerciseState.goal}
+
+CONVERSATION HISTORY:
+${conversationContext}
+
+IMPORTANT GUIDELINES:
+1. Write as the person the user wants to communicate with (e.g., their partner, boss, friend, etc.)
+2. Use the "${correctStyle}" style distinctly and clearly
+3. Keep response to 2-3 sentences maximum
+4. Make the response contextually appropriate for round ${roundIndex + 1} of the conversation
+5. Ensure this continues naturally from any previous messages
+6. Do NOT label the style in your response
+7. Do NOT add any meta commentary
+
+CHARACTERISTICS OF ${correctStyle.toUpperCase()} STYLE:
+${getStyleCharacteristics(correctStyle)}
+
+Write ONLY the statement, nothing else.
+`;
+
+    const spinnerToast = showToast('Generating conversation...', 4000);
+
+    try {
+      const r = await fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ prompt: systemPrompt })
+      });
+      
+      hideToast(spinnerToast);
+      
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      
+      const data = await r.json();
+      return {
+        paragraph: data.response.trim() || "No text available.",
+        correctStyle,
+        distractors
+      };
+    } catch (e) {
+      hideToast(spinnerToast);
+      showToast("Connection error. Using fallback text.", 2000, true);
+      return {
+        paragraph: `[Partner's message in ${correctStyle} style would appear here.]`,
+        correctStyle,
+        distractors
+      };
+    }
+  }
+  
+  function getStyleCharacteristics(style) {
+    // Provide specific characteristics for each style to help the AI generate appropriate text
+    const characteristics = {
+      "Assertive": "Direct, confident, and clear while respecting others. States needs and boundaries without aggression.",
+      "Collaborative": "Inclusive, team-oriented, focusing on 'we' language. Seeks mutual solutions and shared input.",
+      "Direct": "Straightforward and to-the-point. Avoids ambiguity and states things clearly without excess explanation.",
+      "Diplomatic": "Tactful, considerate of different perspectives. Carefully phrases statements to avoid offense while maintaining clarity.",
+      "Empathetic": "Shows understanding of others' feelings. Uses validating statements and demonstrates emotional awareness.",
+      "Encouraging": "Supportive, focuses on strengths and possibilities. Uses positive reinforcement and uplifting language.",
+      "Honest": "Truthful without sugar-coating. Values integrity while maintaining respect.",
+      "Patient": "Calm, unhurried communication. Shows willingness to explain or repeat without frustration.",
+      "Reflective": "Thoughtful, considers past experiences. Often relates current situations to previous learnings.",
+      "Supportive": "Nurturing, offers assistance and encouragement. Focuses on being helpful.",
+      "Validating": "Acknowledges others' experiences and feelings as legitimate. Shows understanding without judgment.",
+      
+      "Analytical": "Logical, data-focused. Examines facts and evidence rather than emotions.",
+      "Firm": "Steadfast and unwavering. Maintains position while remaining respectful.",
+      "Flexible": "Adaptable, open to changing approach. Shows willingness to adjust based on feedback.",
+      "Humorous": "Uses appropriate levity and wit. Lightens mood without diminishing the importance of the topic.",
+      "Inquisitive": "Curious, asks questions to understand deeper. Seeks more information before making judgments.",
+      "Persuasive": "Uses compelling arguments and evidence. Tries to convince others of a viewpoint.",
+      "Vulnerable": "Shows authentic emotion and admits weaknesses. Shares personal feelings and challenges.",
+      
+      "Aggressive": "Forceful, may ignore others' rights or feelings. Can be confrontational or dominating.",
+      "Apologetic": "Overly sorry, self-diminishing. Takes blame unnecessarily or excessively.",
+      "Critical": "Judgmental, focuses on flaws. Points out mistakes or shortcomings without balance.",
+      "Defensive": "Protects self from perceived attacks. Justifies actions or denies responsibility.",
+      "Disengaged": "Withdrawn, minimal participation. Shows little interest or investment in the conversation.",
+      "Dismissive": "Invalidating, minimizes others' concerns. Brushes off or disregards others' input.",
+      "Emotional": "Highly expressive of feelings, may be overwhelming. Led by emotions rather than reason.",
+      "Manipulative": "Coercive, uses tactics to control others. May employ guilt, flattery, or other means to achieve goals.",
+      "Passive": "Indirect, avoids stating needs clearly. May hint at desires without explicitly expressing them.",
+      "Passive-Aggressive": "Indirectly expresses negative feelings. Shows resistance through subtle comments or behaviors.",
+      "Sarcastic": "Uses irony or mockery. May disguise criticism as humor."
+    };
+    
+    return characteristics[style] || "Common communication style with distinctive patterns.";
+  }
+
+  function renderStyleGuessButtons(correctStyle, distractors) {
+    styleGuessRow.innerHTML = '';
+    const combined = [correctStyle, ...distractors];
+    shuffleArray(combined);
+
+    combined.forEach(st => {
+      const btn = document.createElement('button');
+      btn.className = 'style-guess-button';
+      btn.textContent = st;
+      btn.addEventListener('click', () => guessPartnerStyle(st, correctStyle, btn));
+      styleGuessRow.appendChild(btn);
+    });
+  }
+  
+  function guessPartnerStyle(chosen, correctStyle, btn) {
+    const isCorrect = chosen === correctStyle;
+    
+    // Update UI based on result
+    if (isCorrect) {
+      btn.classList.add('correct');
+      // Disable all buttons after correct guess
+      styleGuessRow.querySelectorAll('button').forEach(b => b.disabled = true);
+      
+      // Store user's guess in state
+      exerciseState.rounds[roundIndex].userStyleGuess = chosen;
+      
+      // Generate and show coach feedback for correct guess
+      generateStyleFeedback(chosen, correctStyle, true);
+      
+      // Enable/render response style buttons after correct guess
+      renderResponseStyleButtons();
+      
+      showToast('Correct style identified!');
+    } else {
+      btn.classList.add('incorrect');
+      btn.disabled = true;
+      showToast('Not quite, try another.', 1500, true);
+    }
+  }
+  
+  function generateStyleFeedback(chosen, correctStyle, isCorrect) {
+    // Show loading in feedback area
+    styleGuessFeedback.style.display = 'block';
+    feedbackTitle.textContent = isCorrect ? 'Correct!' : 'Not Quite';
+    feedbackContent.textContent = 'Analyzing style characteristics...';
+    
+    // Generate detailed feedback through API
+    const prompt = `
+You are CommuniCoach, an expert communication coach.
+
+CONVERSATION CONTEXT:
+- The user is learning about different communication styles
+- They were shown this statement: "${exerciseState.rounds[roundIndex].partnerParagraph}"
+- The statement was written in ${correctStyle} style
+- The user guessed it was in ${chosen} style
+- Their guess was ${isCorrect ? 'correct' : 'incorrect'}
+
+TASK:
+Give brief feedback (2-3 sentences) explaining why this statement is an example of ${correctStyle} style.
+Point out 1-2 specific characteristics or phrases in the statement that exemplify this style.
+${!isCorrect ? `Briefly explain how this differs from ${chosen} style.` : ''}
+
+IMPORTANT:
+- Keep your response concise and educational
+- Focus on specific language features in the statement
+- Be conversational and encouraging
+`;
+
+    fetch('http://localhost:5506/api/chatgpt', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ prompt })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) throw new Error(data.error);
+      
+      // Update feedback content
+      feedbackContent.textContent = data.response.trim();
+      
+      // Store feedback in state
+      exerciseState.rounds[roundIndex].styleFeedback = data.response.trim();
+    })
+    .catch(err => {
+      console.error('Feedback generation error:', err);
+      feedbackContent.textContent = isCorrect ? 
+        `That's correct! This is a clear example of ${correctStyle} communication.` :
+        `This statement actually demonstrates ${correctStyle} communication, not ${chosen}.`;
+    });
+  }
+
+  function renderResponseStyleButtons() {
+    responseStyleRow.innerHTML = '';
+    
+    // Get a subset of styles for selection - include the correct answer from previous section
+    const correctStyle = exerciseState.rounds[roundIndex].correctStyle;
+    const allStyles = exerciseState.styleSubset;
+    
+    // Choose 3 additional random styles (different from correct style)
+    const otherStyles = allStyles.filter(s => s !== correctStyle);
+    shuffleArray(otherStyles);
+    const styleOptions = [correctStyle, ...otherStyles.slice(0, 3)];
+    
+    // Shuffle final array for display
+    shuffleArray(styleOptions);
+    
+    styleOptions.forEach(st => {
+      const btn = document.createElement('button');
+      btn.className = 'response-style-button';
+      btn.textContent = st;
+      btn.addEventListener('click', () => handleUserResponseStyle(st, btn));
+      responseStyleRow.appendChild(btn);
+    });
+  }
+  
+  function handleUserResponseStyle(selectedStyle, btn) {
+    // Highlight selected button
+    responseStyleRow.querySelectorAll('button').forEach(b => {
+      b.classList.remove('selected');
+    });
+    btn.classList.add('selected');
+
+    // Store user's selected style
+    exerciseState.rounds[roundIndex].userResponseStyle = selectedStyle;
+
+    const userText = userResponseEl.value.trim();
+    if (!userText) {
+      coachFeedback.style.display = 'none';
+      return;
+    }
+    
+    // Store user's response text
+    exerciseState.rounds[roundIndex].userResponseText = userText;
+    
+    // Generate feedback on response style
+    generateResponseFeedback(userText, selectedStyle);
+    
+    // Enable next button once user has selected a style
+    nextRoundBtn.disabled = false;
+  }
+  
+  function generateResponseFeedback(userText, selectedStyle) {
+    // Show loading in feedback area
+    coachFeedback.style.display = 'block';
+    responseFeedbackContent.textContent = 'Analyzing your response...';
+    
+    const prompt = `
+You are CommuniCoach, a communication styles expert.
+
+CONVERSATION CONTEXT:
+- User is practicing different communication styles
+- They're responding to: "${exerciseState.rounds[roundIndex].partnerParagraph}"
+- Their response: "${userText}"
+- They labeled their response as using a "${selectedStyle}" communication style
+
+TASK:
+Analyze whether their response matches their chosen style label.
+1. Identify if they accurately characterized their style (be honest but supportive)
+2. Point out 1-2 specific phrases or elements that support or contradict their style choice
+3. If their response better matches a different style, briefly suggest what style it actually demonstrates
+4. Provide one quick tip to strengthen the ${selectedStyle} style in their response
+
+Keep your response under 3 sentences. Be specific and constructive.
+`;
+
+    fetch('http://localhost:5506/api/chatgpt', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ prompt })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) throw new Error(data.error);
+      
+      // Update feedback content
+      responseFeedbackContent.textContent = data.response.trim();
+      
+      // Store feedback in state
+      exerciseState.rounds[roundIndex].responseFeedback = data.response.trim();
+    })
+    .catch(err => {
+      console.error('Response feedback error:', err);
+      responseFeedbackContent.textContent = `I can see elements of ${selectedStyle} style in your response. To strengthen this style further, consider being more explicit with your language choices.`;
+    });
+  }
+  
+  function handleGenerateResponse() {
+    // Disable button during generation
+    generateResponseBtn.disabled = true;
+    generateResponseBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
+    
+    // Get current round data
+    const partnerMessage = exerciseState.rounds[roundIndex].partnerParagraph;
+    const correctStyle = exerciseState.rounds[roundIndex].correctStyle;
+    
+    // Determine which style to use for the response
+    // Pick a random style from user's selected styles
+    const allStyles = exerciseState.styleSubset;
+    const responseStyle = allStyles[Math.floor(Math.random() * allStyles.length)];
+    
+    const prompt = `
+You are CommuniCoach, helping a user practice communication styles.
+
+CONVERSATION CONTEXT:
+- User's scenario: ${exerciseState.scenario}
+- User's goal: ${exerciseState.goal}
+- Partner just said: "${partnerMessage}" (in ${correctStyle} style)
+
+TASK:
+Generate a brief response (2-3 sentences) that the user could give, using the "${responseStyle}" communication style.
+
+CHARACTERISTICS OF ${responseStyle.toUpperCase()} STYLE:
+${getStyleCharacteristics(responseStyle)}
+
+Write ONLY the response, nothing else. Do not label the style in your response.
+`;
+
+    fetch('http://localhost:5506/api/chatgpt', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ prompt })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) throw new Error(data.error);
+      
+      // Insert generated response in the textarea
+      userResponseEl.value = data.response.trim();
+      
+    // Highlight the corresponding style button if it exists
+    // const styleBtn = Array.from(responseStyleRow.querySelectorAll('button'))
+    //   .find(btn => btn.textContent === responseStyle);
+    
+    // if (styleBtn) {
+    //   styleBtn.click(); // Trigger the style selection
+    // }
+      
+      showToast(`Generating a response`);
+    })
+    .catch(err => {
+      console.error('Response generation error:', err);
+      showToast('Error generating response', 2000, true);
+    })
+    .finally(() => {
+      // Re-enable button
+      generateResponseBtn.disabled = false;
+      generateResponseBtn.innerHTML = '<i class="fa-solid fa-magic"></i> Generate Response';
+    });
+  }
+
+  // Speech
+  function initSpeechRecognition(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+      console.warn("Speech Recognition not supported");
+      return;
+    }
+    
+    recognition = new SR();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      isListening = true;
+      responseMicBtn.classList.add('listening');
+      micStatusText.textContent = 'Listening...';
+    };
+    
+    recognition.onerror = (evt) => {
+      console.error('Speech rec error:', evt.error);
+      showToast('Mic error: ' + evt.error, 2000, true);
+      isListening = false;
+      responseMicBtn.classList.remove('listening');
+      micStatusText.textContent = 'Click to speak';
+    };
+    
+    recognition.onend = () => {
+      isListening = false;
+      responseMicBtn.classList.remove('listening');
+      micStatusText.textContent = 'Click to speak';
+    };
+    
+    recognition.onresult = (evt) => {
+      let finalText = '';
+      let interimText = '';
+      
+      for (let i = evt.resultIndex; i < evt.results.length; i++) {
+        const transcript = evt.results[i][0].transcript;
+        if (evt.results[i].isFinal) {
+          finalText += transcript;
+        } else {
+          interimText += transcript;
+        }
+      }
+      
+      // Update text area with final results
+      if (finalText) {
+        userResponseEl.value += finalText + ' ';
+      }
+      // Show interim results
+      else if (interimText) {
+        // Could show interim results in UI if desired
+      }
+    };
+  }
+
+  function toggleMic() {
+    if (!recognition) {
+      showToast('Speech recognition not supported in this browser', 2000, true);
+      return;
+    }
+    
+    if (isListening) {
+      recognition.stop();
+    } else {
+      try {
+        // Clear any previous transcription timeout
+        if (recognitionTimeout) {
+          clearTimeout(recognitionTimeout);
+          recognitionTimeout = null;
+        }
+        
+        recognition.start();
+        
+        // Set a longer timeout (30 seconds) to prevent cutoff
+        recognitionTimeout = setTimeout(() => {
+          if (isListening) {
+            recognition.stop();
+            showToast('Listening stopped automatically after 30 seconds.');
+          }
+        }, 90000);
+      } catch (e) {
+        console.error('mic start error:', e);
+        showToast('Mic error: ' + e.message, 2000, true);
+      }
+    }
+  }
+
+  // Round Nav
+  function handleNextRound() {
+    // Store current user inputs if not already stored
+    const userText = userResponseEl.value.trim();
+    const userStyle = exerciseState.rounds[roundIndex].userResponseStyle;
+    
+    if (userText && !exerciseState.rounds[roundIndex].userResponseText) {
+      exerciseState.rounds[roundIndex].userResponseText = userText;
+    }
+    
+    if (roundIndex < 4) {
+      startRound(roundIndex + 1);
+      setProgress(20 + (roundIndex + 1) * 15);
+    } else {
+      finishExercise();
+    }
+  }
+  
+  function handlePrevRound() {
+    if (roundIndex > 0) {
+      startRound(roundIndex - 1);
+      setProgress(20 + (roundIndex - 1) * 15);
+    }
+  }
+
+  function finishExercise() {
+    exerciseSection.style.display = 'none';
+    summarySection.style.display = 'block';
+    setProgress(100);
+    
+    // Generate structured summary
+    generateSummary()
+      .then(summaryData => {
+        // Populate summary sections
+        overallPerformance.innerHTML = summaryData.overall;
+        recognitionStrengths.innerHTML = formatStrengthsList(summaryData.recognitionStrengths);
+        expressionStrengths.innerHTML = formatStrengthsList(summaryData.expressionStrengths);
+        growthOpportunities.innerHTML = formatGrowthList(summaryData.growthOpportunities);
+        practicalTips.innerHTML = summaryData.practicalTips;
+      })
+      .catch(e => {
+        console.error('Error generating summary:', e);
+        
+        // Fallback content
+        overallPerformance.textContent = 'You completed 5 rounds of style awareness practice.';
+        recognitionStrengths.textContent = 'You demonstrated ability to identify different communication styles.';
+        expressionStrengths.textContent = 'You practiced expressing yourself in various styles.';
+        growthOpportunities.textContent = 'Continue practicing to distinguish between similar styles.';
+        practicalTips.textContent = 'Review the characteristics of each style and practice using them in your daily communications.';
+      });
+  }
+  
+  function formatStrengthsList(strengths) {
+    if (!strengths || !Array.isArray(strengths) || strengths.length === 0) {
+      return 'No specific strengths identified.';
+    }
+    
+    return strengths.map(strength => 
+      `<div class="strength-item">${strength}</div>`
+    ).join('');
+  }
+  
+  function formatGrowthList(opportunities) {
+    if (!opportunities || !Array.isArray(opportunities) || opportunities.length === 0) {
+      return 'No specific growth opportunities identified.';
+    }
+    
+    return opportunities.map(opportunity => 
+      `<div class="growth-item">${opportunity}</div>`
+    ).join('');
+  }
+  
+  async function generateSummary() {
+    showToast('Generating your personalized insights...');
+    
+    // Format rounds data for the prompt
+    const roundsData = exerciseState.rounds.map((r, i) => {
+      return `
+Round ${i + 1}:
+- Partner statement (${r.correctStyle} style): "${r.partnerParagraph}"
+- User's style guess: ${r.userStyleGuess || 'Not completed'}
+- User's response: "${r.userResponseText || 'Not provided'}"
+- User's style label: ${r.userResponseStyle || 'Not selected'}
+`;
+    }).join('\n');
+    
+    const prompt = `
+You are CommuniCoach, a communication styles expert providing personalized feedback after a 5-round style awareness exercise.
+
+EXERCISE CONTEXT:
+- User's scenario: ${exerciseState.scenario}
+- User's goal: ${exerciseState.goal}
+- Styles practiced: ${exerciseState.styleSubset.join(', ')}
+
+EXERCISE RESULTS:
+${roundsData}
+
+TASK:
+Provide a structured summary of the user's performance with these EXACT sections:
+
+1. OVERALL: A brief 2-3 sentence overview of their performance and key insights.
+
+2. RECOGNITION STRENGTHS: List 2-3 specific strengths in how they recognized communication styles. Format as an array of distinct points.
+
+3. EXPRESSION STRENGTHS: List 2-3 specific strengths in how they expressed different communication styles. Format as an array of distinct points.
+
+4. GROWTH OPPORTUNITIES: List 2-3 specific ways they could improve their style awareness. Format as an array of growth suggestions.
+
+5. PRACTICAL TIPS: 2-3 sentences with practical advice they can apply immediately to improve their communication style awareness.
+
+FORMAT YOUR RESPONSE AS A JSON OBJECT with these exact keys:
+{
+  "overall": "text here",
+  "recognitionStrengths": ["point 1", "point 2", "point 3"],
+  "expressionStrengths": ["point 1", "point 2", "point 3"],
+  "growthOpportunities": ["point 1", "point 2", "point 3"],
+  "practicalTips": "text here"
+}
+`;
+
+    try {
+      const resp = await fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ prompt })
+      });
+      
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      
+      const data = await resp.json();
+      
+      // Parse the JSON response
+      try {
+        return JSON.parse(data.response.trim());
+      } catch (parseError) {
+        console.error('Error parsing summary JSON:', parseError);
+        
+        // If JSON parsing fails, try to extract sections manually
+        const rawText = data.response.trim();
+        return {
+          overall: extractSection(rawText, 'OVERALL') || 'You completed the style awareness exercise.',
+          recognitionStrengths: [
+            extractSection(rawText, 'RECOGNITION STRENGTHS') || 'You practiced identifying different communication styles.'
+          ],
+          expressionStrengths: [
+            extractSection(rawText, 'EXPRESSION STRENGTHS') || 'You practiced expressing yourself in various styles.'
+          ],
+          growthOpportunities: [
+            extractSection(rawText, 'GROWTH OPPORTUNITIES') || 'Continue practicing to distinguish between similar styles.'
+          ],
+          practicalTips: extractSection(rawText, 'PRACTICAL TIPS') || 'Pay attention to the specific language patterns that define each communication style.'
+        };
+      }
+    } catch (e) {
+      console.error('Summary generation error:', e);
+      return {
+        overall: 'You completed all 5 rounds of the style awareness exercise, practicing both recognition and expression of different communication styles.',
+        recognitionStrengths: [
+          'You successfully identified various communication styles in conversation.',
+          'You gained practice distinguishing between similar-seeming styles.',
+          'You developed awareness of style characteristics in real dialogue.'
+        ],
+        expressionStrengths: [
+          'You practiced adapting your communication style intentionally.',
+          'You experienced how different styles can achieve different outcomes.',
+          'You developed flexibility in your communication approach.'
+        ],
+        growthOpportunities: [
+          'Continue practicing identifying subtle style differences.',
+          'Experiment with styles that feel less natural to you.',
+          'Practice adapting your style based on your conversation partner.'
+        ],
+        practicalTips: 'Start noticing the communication styles of people around you in daily life. When preparing for important conversations, consider which style would be most effective for your goals.'
+      };
+    }
+  }
+  
+  function extractSection(text, sectionName) {
+    const regex = new RegExp(`${sectionName}:\\s*(.+?)(?=\\w+:|$)`, 'is');
+    const match = text.match(regex);
+    return match ? match[1].trim() : null;
+  }
+
+  // Utility
+  function setProgress(percent) {
+    progressBar.style.width = percent + '%';
+  }
+  
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  let toastCount = 0;
+  function showToast(msg, duration = 2000, isError = false) {
+    toastCount++;
+    const tid = 'toast-' + toastCount;
+    const el = document.createElement('div');
+    el.className = 'toast';
+    if (isError) el.classList.add('error');
+    el.id = tid;
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => hideToast(tid), duration);
+    return tid;
+  }
+  
+  function hideToast(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+  </script>
+</body>
+</html>
+
+    
+    
