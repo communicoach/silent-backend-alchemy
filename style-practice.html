@@ -1114,13 +1114,8 @@
           <!-- Messages will be dynamically added here -->
         </div>
          Speak or type your response below or have your coach generate a response for you. Then instatnly transform your response by choosing any of the communication styles listed below and selecting the "Use This" button. You can try out as many styles as you like. Once your transformed response reflects the style you want to use, click the confirm button and notice how your chosen communication style influences your partner's next response. As the conversation progresses, take note of how different communication styles can influence the overall shape or outcome of the conversation.</div>
-        <!-- Style Options -->
-        <div class="style-options-container" id="styleOptionsContainer">
-          <div class="style-options-title">Speak or type your response below - or ask your coach
-          <div class="style-options" id="styleOptions">
-            <!-- Style buttons will be dynamically added here -->
-          </div>
-        </div>
+      
+        
         
         <!-- Response Section -->
         <div class="response-section" id="responseSection">
@@ -1151,7 +1146,13 @@
             <div class="preview-content" id="previewContent"></div>
           </div>
         </div>
-        
+        <!-- Style Options -->
+        <div class="style-options-container" id="styleOptionsContainer">
+          <div class="style-options-title">Choose a style to transform your response:</div>
+          <div class="style-options" id="styleOptions">
+            <!-- Style buttons will be dynamically added here -->
+          </div>
+        </div>
         <!-- Navigation Actions -->
         <div class="navigation-actions">
           <button class="btn btn-outline" id="restartBtn">
@@ -1733,51 +1734,64 @@ Return only the message text.`.trim();
     }
   }
   
-  // 2. Automatic neutral response
   async function generateAutomaticResponse() {
-    const rn = localStorage.getItem('refinedNarrative') || '';
-    const cg = localStorage.getItem('communicationGoal') || '';
-    const last = state.conversationHistory.slice(-1)[0] || {};
-    const history = formatHistory();
-    
-    const prompt = `You are CommuniCoach, role-playing in the role of the user and replying to the partner. 
+  const history = formatHistory();
+  const rn = localStorage.getItem('refinedNarrative') || '';
+  const cg = localStorage.getItem('communicationGoal') || '';
+  const text = state.lastPartnerMessage || '[Partner message not found]';
+  const style = state.partnerOpeningStyle || 'neutral';
+  const pChar = getStyleCharacteristics(style);
+  const pBucket = bucketOf(style);
+
+  const prompt = `
+You are CommuniCoach — the user’s expert communication coach inside the Style Practice exercise (an immersive module in the Action Arena of CommuniCoach).
+
+You have full context of the app’s timeline:
+- The user began by venting their real-life situation in Session Space.
+- Their story was refined into a cohesive, emotionally grounded narrative.
+- They set a specific communication goal to work towards.
+- They selected a conversation partner and medium.
+- They chose a partner opening style.
+- They are now engaging in a multi-round dialogue with a simulated partner.
+
+You are now generating a response to the partner's last statement in the user’s voice — something they might say next in this unfolding conversation.
+
 Context:
-• Narrative: "${rn}"
-• Goal: "${cg}"
-• Partner's last message: "${last.content || '[none]'}" (Style: ${last.style || '[none]'})
-• Full history:
+• Partner: ${state.partnerName}
+• Refined Narrative: "${rn}"
+• Communication Goal: "${cg}"
+• Partner Opening Style: ${style}
+• Style Description: ${pChar.description}
+• Typical Relational Pull: ${pChar.likelyImpact}
+• Full conversation so far:
 ${history}
 
-TASK: You are conducting a role play exercise teaching how communication styles affect conversation dynamics.
-- This is one reply in a longer conversation string. Keep your reply brief - around 4 - 6 sentences.
-- The partner's last message was "${last.content || '[none]'}" in the style of "${last.style || '[none]'}". 
-- ** IMPORTANT** Don't sound like a coach, Sound realistic: React as the user would.
-- This response will be transformed by the user into a chosen style later, so the response needs to make sense in any style.
+The partner just said:
+"${text}"
 
-- It is okay if some of the content may be a bit negative or critical, The user needs this for the practice.
-- Use a conversational tone, as if you were the user. 
-- Use details from the user's situation "${rn}"in your reaction.
-- Try to understand the user on a deeper level so that the response makes them feel justified in their feelings.
+TASK:
+- Write a reply the user might say next.
+- Use a conversational, real-life tone.
+- Make the message feel natural and emotionally aligned with their narrative and goal.
+- Avoid sounding robotic, clinical, or overly polished.
+- Do NOT summarize or analyze. Write as if you're the user.
 
-Return only the message text.`.trim();
-
-
-    
-    try {
-      const res = await fetch(state.apiEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
-      });
-      if (!res.ok) throw new Error(res.status);
-      const { response } = await res.json();
-      return response.trim();
-    } catch (err) {
-      console.error('Base user response error', err);
-      return '';
-    }
-  }
+Return only the user’s message.`;
   
+  try {
+    const res = await fetch(state.apiEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    const { response } = await res.json();
+    return response.trim();
+  } catch (err) {
+    console.error('Base user response error', err);
+    return '';
+  }
+}
+
   // 3. Coach Insight After Partner
   async function generateCoachInsightAfterPartner(text, style) {
     const rn = localStorage.getItem('refinedNarrative') || '';
@@ -1792,9 +1806,6 @@ Context:
 • Full history so far:
 ${history}
 
-The partner just said:
-"${text}" (Style: ${style})
-• This style is a ${bucketOf(style)} style, which tends to ${getStyleCharacteristics(style).likelyImpact}
 
 TASK (2–3 sentences):
 - Identify the emotional tone set.
@@ -2157,20 +2168,39 @@ Return only the full, structured insights text.`.trim();
   }
   
   function handleGenerateResponse() {
-    const btn = document.getElementById('generateResponseBtn');
-    btn.disabled = true; 
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
-    generateAutomaticResponse()
-      .then(txt => {
-        const ur = document.getElementById('userResponse');
-        if (ur) ur.value = txt;
-      })
-      .catch(() => showToast('Error generating response', 2000, true))
-      .finally(() => {
-        btn.disabled = false; 
-        btn.innerHTML = '<i class="fa-solid fa-magic"></i> Generate Response';
-      });
-  }
+  const btn = document.getElementById('generateResponseBtn');
+  const ur = document.getElementById('userResponse');
+  if (!btn || !ur) return;
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
+
+  generateAutomaticResponse()
+    .then(txt => {
+      if (!txt || txt.toLowerCase().startsWith("as a coach")) {
+        showToast("Unexpected response received. Please try again.", 3000, true);
+        return;
+      }
+
+      // ✅ Set the textarea and internal state
+      ur.value = txt;
+      state.currentUserResponse = txt;
+      state.currentSelectedStyle = null;  // reset any previously applied style
+
+      // ✅ Hide preview section if it was visible
+      const preview = document.getElementById('previewResponse');
+      if (preview) preview.style.display = 'none';
+    })
+    .catch(err => {
+      console.error('Generate response failed:', err);
+      showToast('Error generating response', 2000, true);
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-magic"></i> Generate Response';
+    });
+}
+
   
   async function handleCompleteExercise() {
     const btn = document.getElementById('completeExerciseBtn');

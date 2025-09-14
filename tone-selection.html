@@ -415,315 +415,418 @@
     .footer-nav a:hover {
       opacity: 0.8;
     }
+    /* --- Tone page patch: visual active state + mobile polish --- */
+
+/* Active pill style (works with the JS class toggle) */
+label.ck.active{
+  color:#fff !important;
+  border-color:transparent !important;
+  background:linear-gradient(135deg, #ffa45b, #ff8667) !important;
+  box-shadow: 0 0 0 3px rgba(44,141,134,.20), 0 1px 2px rgba(0,0,0,.06) !important;
+}
+
+/* Ensure grid collapses nicely on narrow screens */
+@media (max-width: 900px){
+  .grid{ display:grid; grid-template-columns: 1fr !important; gap:14px !important; }
+}
+
+/* Compact controls for small phones */
+@media (max-width: 540px){
+  .tone-list{ grid-template-columns:repeat(2, minmax(0,1fr)) !important; gap:8px !important; }
+  label.ck{ padding:10px 8px !important; border-radius:12px !important; font-size:13px !important; }
+  .slider-row{ grid-template-columns: 100px 1fr 36px !important; gap:8px !important; }
+  .card{ padding:12px !important; border-radius:14px !important; }
+  .btn{ padding:10px 12px !important; border-radius:10px !important; font-size:13px !important; }
+  .footer{ justify-content:space-between !important; }
+}
+
+/* Slider thumb readability (WebKit) */
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
+  background:#2c8d86; box-shadow:0 0 0 2px #fff inset;
+}
+
   </style>
+  <!-- ========== CSS SECTION (END) ========== -->
 </head>
+
 <body>
-
-  <!-- Header -->
-  <div class="header-wrapper">
-    <div class="top-nav">
-      <a href="#" class="logo">
-        <img src=".vscode/Images/CClogo.png" alt="CommuniCoach">
-      </a>
-      <button class="mobile-menu-button" onclick="toggleMenu()">☰</button>
-      <div class="nav-links" id="navLinks">
-        <a href="welcome.html">Welcome</a>
-        <a href="tone-selection.html" class="current">Tone Selection</a>
-        <a href="situation-room.html">Situation Room</a>
-        <a href="refined-narrative.html">Refined Narrative</a>
-      </div>
-    </div>
-    <div class="progress-bar-container">
-      <div class="progress-bar">
-        <div class="progress"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main Section -->
-  <section class="section">
-    <div class="container">
-      <div class="content-wrapper">
-        <div class="text-content">
-          <div class="content-card">
-            <i class="fa-solid fa-sliders section-icon"></i>
-            <h1>Deeper Tone Customization</h1>
-            <p>Select or create a tone that truly fits your unique style. You can pick from our standard set or delve into advanced settings to craft your own custom voice.</p>
+  <!-- ========== HTML SECTION (BEGIN) ========== -->
+    <!-- Header -->
+    <div class="header-wrapper">
+        <div class="top-nav">
+          <a href="#" class="logo">
+            <img src=".vscode/Images/CClogo.png" alt="CommuniCoach">
+          </a>
+          <button class="mobile-menu-button" onclick="toggleMenu()">☰</button>
+          <div class="nav-links" id="navLinks">
+            <a href="welcome.html">Welcome</a>
+            <a href="tone-selection.html" class="current">Tone Selection</a>
+            <a href="situation-room.html">Situation Room</a>
+            <a href="refined-narrative.html">Refined Narrative</a>
+          </div>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar">
+            <div class="progress"></div>
           </div>
         </div>
       </div>
-      <div class="tone-options">
-        <!-- Standard Tones -->
-        <div class="tone-card" data-tone="empathetic">
-          <div class="tone-title">Empathetic</div>
-          <div class="tone-description">
-            “Convey genuine understanding and compassion, but from your own perspective.”
+    
+      <!-- Main Section -->
+      <section class="section">
+        <div class="container">
+          <div class="content-wrapper">
+            <div class="text-content">
+              <div class="content-card">
+                <i class="fa-solid fa-sliders section-icon"></i>
+                <h1>Deeper Tone Customization</h1>
+                <p>Select or create a tone that truly fits your unique style. You can pick from our standard set or delve into advanced settings to craft your own custom voice.</p>
+              </div>
+            </div>
           </div>
+          <div class="tone-options">
+            <!-- Standard Tones -->
+            <div class="tone-card" data-tone="empathetic">
+              <div class="tone-title">Empathetic</div>
+              <div class="tone-description">
+                “Convey genuine understanding and compassion, but from your own perspective.”
+              </div>
+            </div>
+            <div class="tone-card" data-tone="clear">
+              <div class="tone-title">Clear</div>
+              <div class="tone-description">
+                “Cut out fluff and say exactly what you mean.”
+              </div>
+            </div>
+            <div class="tone-card" data-tone="balanced">
+              <div class="tone-title">Balanced</div>
+              <div class="tone-description">
+                “Acknowledge multiple sides and keep an even perspective.”
+              </div>
+            </div>
+            <div class="tone-card" data-tone="authentic">
+              <div class="tone-title">Authentic</div>
+              <div class="tone-description">
+                “Stay natural and genuine to your real feelings.”
+              </div>
+            </div>
+            <div class="tone-card" data-tone="structured">
+              <div class="tone-title">Structured</div>
+              <div class="tone-description">
+                “Organize ideas with a logical, clear flow.”
+              </div>
+            </div>
+            <!-- Create Custom Tone Card -->
+            <div class="tone-card advanced" data-tone="custom">
+              <div class="tone-title">Create Custom Tone</div>
+              <div class="tone-description">
+                “Define your own style in detail: warmth, directness, positivity, and more.”
+              </div>
+            </div>
+          </div>
+    
+          <!-- Continue Button -->
+          <button class="continue-btn" id="continueButton">Continue to Next Step</button>
         </div>
-        <div class="tone-card" data-tone="clear">
-          <div class="tone-title">Clear</div>
-          <div class="tone-description">
-            “Cut out fluff and say exactly what you mean.”
+      </section>
+    
+      <!-- Advanced Tone Modal -->
+      <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+          <button class="close-btn" id="closeModal">&times;</button>
+          <h2>Create Your Custom Tone</h2>
+          <p style="font-size:0.9rem; line-height:1.4;">
+            Adjust the sliders to shape your unique communication style. These settings will generate a custom “tone guidance” snippet for your refined narrative.
+          </p>
+    
+          <!-- Example Sliders for deeper customization -->
+          <div class="slider-group">
+            <label for="warmthSlider">Warmth (0 = Cold, 100 = Very Warm)</label>
+            <input type="range" id="warmthSlider" min="0" max="100" value="50" step="1">
+            <div class="slider-value" id="warmthValue">50</div>
           </div>
-        </div>
-        <div class="tone-card" data-tone="balanced">
-          <div class="tone-title">Balanced</div>
-          <div class="tone-description">
-            “Acknowledge multiple sides and keep an even perspective.”
+          <div class="slider-group">
+            <label for="positivitySlider">Positivity (0 = Cynical, 100 = Optimistic)</label>
+            <input type="range" id="positivitySlider" min="0" max="100" value="50" step="1">
+            <div class="slider-value" id="positivityValue">50</div>
           </div>
-        </div>
-        <div class="tone-card" data-tone="authentic">
-          <div class="tone-title">Authentic</div>
-          <div class="tone-description">
-            “Stay natural and genuine to your real feelings.”
+          <div class="slider-group">
+            <label for="directnessSlider">Directness (0 = Subtle, 100 = Very Direct)</label>
+            <input type="range" id="directnessSlider" min="0" max="100" value="50" step="1">
+            <div class="slider-value" id="directnessValue">50</div>
           </div>
-        </div>
-        <div class="tone-card" data-tone="structured">
-          <div class="tone-title">Structured</div>
-          <div class="tone-description">
-            “Organize ideas with a logical, clear flow.”
+          <div class="slider-group">
+            <label for="humorSlider">Humor (0 = Serious, 100 = Very Humorous)</label>
+            <input type="range" id="humorSlider" min="0" max="100" value="50" step="1">
+            <div class="slider-value" id="humorValue">50</div>
           </div>
-        </div>
-        <!-- Create Custom Tone Card -->
-        <div class="tone-card advanced" data-tone="custom">
-          <div class="tone-title">Create Custom Tone</div>
-          <div class="tone-description">
-            “Define your own style in detail: warmth, directness, positivity, and more.”
+          <div class="slider-group">
+            <label for="assertivenessSlider">Assertiveness (0 = Passive, 100 = Very Assertive)</label>
+            <input type="range" id="assertivenessSlider" min="0" max="100" value="50" step="1">
+            <div class="slider-value" id="assertivenessValue">50</div>
           </div>
+    
+          <button class="save-btn" id="saveCustomTone">Save</button>
         </div>
       </div>
+    
+      <!-- Footer -->
+      <footer class="footer-nav">
+        <p>&copy; 2025 CommuniCoach. All rights reserved.</p>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </footer>
+  <!-- ========== HTML SECTION (END) ========== -->
 
-      <!-- Continue Button -->
-      <button class="continue-btn" id="continueButton">Continue to Next Step</button>
-    </div>
-  </section>
-
-  <!-- Advanced Tone Modal -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <button class="close-btn" id="closeModal">&times;</button>
-      <h2>Create Your Custom Tone</h2>
-      <p style="font-size:0.9rem; line-height:1.4;">
-        Adjust the sliders to shape your unique communication style. These settings will generate a custom “tone guidance” snippet for your refined narrative.
-      </p>
-
-      <!-- Example Sliders for deeper customization -->
-      <div class="slider-group">
-        <label for="warmthSlider">Warmth (0 = Cold, 100 = Very Warm)</label>
-        <input type="range" id="warmthSlider" min="0" max="100" value="50" step="1">
-        <div class="slider-value" id="warmthValue">50</div>
-      </div>
-      <div class="slider-group">
-        <label for="positivitySlider">Positivity (0 = Cynical, 100 = Optimistic)</label>
-        <input type="range" id="positivitySlider" min="0" max="100" value="50" step="1">
-        <div class="slider-value" id="positivityValue">50</div>
-      </div>
-      <div class="slider-group">
-        <label for="directnessSlider">Directness (0 = Subtle, 100 = Very Direct)</label>
-        <input type="range" id="directnessSlider" min="0" max="100" value="50" step="1">
-        <div class="slider-value" id="directnessValue">50</div>
-      </div>
-      <div class="slider-group">
-        <label for="humorSlider">Humor (0 = Serious, 100 = Very Humorous)</label>
-        <input type="range" id="humorSlider" min="0" max="100" value="50" step="1">
-        <div class="slider-value" id="humorValue">50</div>
-      </div>
-      <div class="slider-group">
-        <label for="assertivenessSlider">Assertiveness (0 = Passive, 100 = Very Assertive)</label>
-        <input type="range" id="assertivenessSlider" min="0" max="100" value="50" step="1">
-        <div class="slider-value" id="assertivenessValue">50</div>
-      </div>
-
-      <button class="save-btn" id="saveCustomTone">Save</button>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="footer-nav">
-    <p>&copy; 2025 CommuniCoach. All rights reserved.</p>
-    <a href="#">Privacy Policy</a>
-    <a href="#">Terms of Service</a>
-  </footer>
-
-  <script>
-    // Mobile menu
-    function toggleMenu() {
-      const navLinks = document.getElementById('navLinks');
-      navLinks.classList.toggle('active');
+  <!-- ========== JS SECTION (BEGIN) ========== -->
+<script>
+    /*************************
+     * Mobile menu (your HTML calls toggleMenu)
+     *************************/
+    function toggleMenu(){
+      const nav = document.getElementById('navLinks');
+      if (nav) nav.classList.toggle('active');
     }
-
-    // Tone Selection + Advanced Editor
-    document.addEventListener('DOMContentLoaded', () => {
-      const toneCards = document.querySelectorAll('.tone-card');
-      const continueButton = document.getElementById('continueButton');
-      let selectedApproaches = []; // If you still allow multiple tones, store them here
-      const maxApproaches = 2;     // Or adjust as needed
-
-      // Modal
-      const modalOverlay = document.getElementById('modalOverlay');
-      const closeModalBtn = document.getElementById('closeModal');
-      const saveCustomToneBtn = document.getElementById('saveCustomTone');
-
-      // Sliders
-      const warmthSlider = document.getElementById('warmthSlider');
-      const warmthValue = document.getElementById('warmthValue');
-      const positivitySlider = document.getElementById('positivitySlider');
-      const positivityValue = document.getElementById('positivityValue');
-      const directnessSlider = document.getElementById('directnessSlider');
-      const directnessValue = document.getElementById('directnessValue');
-      const humorSlider = document.getElementById('humorSlider');
-      const humorValue = document.getElementById('humorValue');
-      const assertivenessSlider = document.getElementById('assertivenessSlider');
-      const assertivenessValue = document.getElementById('assertivenessValue');
-
-      // Display slider values
-      function updateSliderValue(slider, output) {
-        output.textContent = slider.value;
-      }
-      warmthSlider.addEventListener('input', () => updateSliderValue(warmthSlider, warmthValue));
-      positivitySlider.addEventListener('input', () => updateSliderValue(positivitySlider, positivityValue));
-      directnessSlider.addEventListener('input', () => updateSliderValue(directnessSlider, directnessValue));
-      humorSlider.addEventListener('input', () => updateSliderValue(humorSlider, humorValue));
-      assertivenessSlider.addEventListener('input', () => updateSliderValue(assertivenessSlider, assertivenessValue));
-
-      // Initialize displayed values
-      updateSliderValue(warmthSlider, warmthValue);
-      updateSliderValue(positivitySlider, positivityValue);
-      updateSliderValue(directnessSlider, directnessValue);
-      updateSliderValue(humorSlider, humorValue);
-      updateSliderValue(assertivenessSlider, assertivenessValue);
-
-      // Open/Close Modal
-      function openModal() {
-        modalOverlay.style.display = 'flex';
-      }
-      function closeModal() {
-        modalOverlay.style.display = 'none';
-      }
-
-      closeModalBtn.addEventListener('click', closeModal);
-      modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) {
-          closeModal();
-        }
-      });
-
-      // Tone Card Click
+  
+    /*************************
+     * Slider readouts (your ids: warmthValue, etc.)
+     *************************/
+    function bindSlider(sliderId, valueId){
+      const s = document.getElementById(sliderId);
+      const v = document.getElementById(valueId);
+      if (!s || !v) return;
+      const update = () => v.textContent = s.value;
+      s.addEventListener('input', update);
+      update();
+    }
+    ['warmth','positivity','directness','humor','assertiveness']
+      .forEach(n => bindSlider(n+'Slider', n+'Value'));
+  
+    /*************************
+     * Tone selection via tiles (.tone-card)
+     *************************/
+    const toneCards = Array.from(document.querySelectorAll('.tone-card'));
+    const customCard = toneCards.find(c => c.dataset.tone === 'custom');
+  
+    // Restore previous selection (if any)
+    function restoreSelections(){
+      let selected = [];
+      try {
+        selected = JSON.parse(localStorage.getItem('selectedApproaches') || '[]');
+      } catch(e){ selected = []; }
+      // apply .selected to matching tiles
       toneCards.forEach(card => {
-        card.addEventListener('click', () => {
-          const tone = card.getAttribute('data-tone');
-          // If card is already selected, unselect
-          if (card.classList.contains('selected')) {
-            card.classList.remove('selected');
-            selectedApproaches = selectedApproaches.filter(a => a !== tone);
-          } else {
-            // If you only allow 1 tone, you could clear them all first
-            // If you allow 2, do the logic
-            if (selectedApproaches.length < maxApproaches) {
-              card.classList.add('selected');
-              selectedApproaches.push(tone);
-
-              // If user clicked the "Create Custom Tone" card, open modal
-              if (tone === 'custom') {
-                openModal();
-              }
-            } else {
-              // Replace first selection if max approaches is reached
-              const firstTone = selectedApproaches[0];
-              const firstCard = document.querySelector(`.tone-card[data-tone="${firstTone}"]`);
-              if (firstCard) firstCard.classList.remove('selected');
-              selectedApproaches.shift(); // remove first
-              card.classList.add('selected');
-              selectedApproaches.push(tone);
-
-              // If user clicked the "Create Custom Tone" card, open modal
-              if (tone === 'custom') {
-                openModal();
-              }
-            }
-          }
-          localStorage.setItem('selectedTones', JSON.stringify(selectedApproaches));
-        });
+        const val = card.dataset.tone;
+        card.classList.toggle('selected', selected.includes(val));
       });
-
-      // Save custom tone
-      saveCustomToneBtn.addEventListener('click', () => {
-        // Create a custom tone guidance snippet from the slider values
-        const customToneGuidance = `
-You are refining the speaker's words into a custom tone with the following attributes:
-- Warmth Level: ${warmthSlider.value} / 100
-- Positivity: ${positivitySlider.value} / 100
-- Directness: ${directnessSlider.value} / 100
-- Humor: ${humorSlider.value} / 100
-- Assertiveness: ${assertivenessSlider.value} / 100
-
-While refining, maintain the user's first-person perspective and emotional truth. Adapt the style according to these specified levels:
-- "Warmth" influences how gentle and compassionate the language is
-- "Positivity" shapes overall optimism vs. cynicism
-- "Directness" adjusts how blunt or subtle the phrasing appears
-- "Humor" adds a lighthearted element or keeps it serious
-- "Assertiveness" influences how confidently or passively statements are made
-`;
-
-        localStorage.setItem('advancedToneSettings', customToneGuidance.trim());
-        closeModal();
-      });
-
-      // Continue Button
-      continueButton.addEventListener('click', () => {
-        // If no tone selected, prompt user
-        if (selectedApproaches.length === 0) {
-          alert('Please select at least one tone (or create a custom tone) before continuing.');
+    }
+  
+    function saveSelections(arr){
+      localStorage.setItem('selectedApproaches', JSON.stringify(arr));
+    }
+  
+    // Click behavior:
+    // - Presets toggle on/off
+    // - Custom opens modal and becomes exclusive
+    toneCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const val = card.dataset.tone;
+        // If custom was clicked -> open modal and set exclusive selection
+        if (val === 'custom'){
+          openCustomModal();
+          // visually mark custom and clear others
+          toneCards.forEach(c => c.classList.toggle('selected', c === card));
+          saveSelections(['custom']);
           return;
         }
-
-        // Example: If you want to combine multiple standard tones
-        let finalToneGuidance = '';
-        selectedApproaches.forEach(tone => {
-          if (tone === 'empathetic') {
-            finalToneGuidance += `
-You are refining the speaker's words into an empathetic tone:
-- Maintain warmth and compassion, from the speaker's own viewpoint
-- Do not shift to a coach perspective; stay first-person
-`;
-          } else if (tone === 'clear') {
-            finalToneGuidance += `
-You are refining the speaker's words into a clear tone:
-- Make the text concise and direct
-- Eliminate unnecessary fluff, preserve emotional truth
-`;
-          } else if (tone === 'balanced') {
-            finalToneGuidance += `
-You are refining the speaker's words into a balanced tone:
-- Show fairness and openness to multiple sides
-- Maintain first-person viewpoint, avoiding extremes
-`;
-          } else if (tone === 'authentic') {
-            finalToneGuidance += `
-You are refining the speaker's words into an authentic tone:
-- Preserve the speaker's natural style and emotional truth
-- Keep the narrative personal and relatable
-`;
-          } else if (tone === 'structured') {
-            finalToneGuidance += `
-You are refining the speaker's words into a structured tone:
-- Organize ideas logically (e.g., cause -> effect)
-- Maintain the speaker's personal voice
-`;
-          } else if (tone === 'custom') {
-            // Retrieve the advanced tone settings from localStorage
-            const advancedToneSettings = localStorage.getItem('advancedToneSettings') || '';
-            finalToneGuidance += advancedToneSettings;
-          }
-        });
-
-        // Store final combined tone guidance
-        localStorage.setItem('finalToneGuidance', finalToneGuidance.trim());
-
-        // Navigate to next page
-        window.location.href = 'situation-room.html';
+        // If we currently have 'custom' selected, turn it off when choosing a preset
+        let selected = [];
+        try { selected = JSON.parse(localStorage.getItem('selectedApproaches') || '[]'); } catch(e){}
+  
+        if (selected.includes('custom')){
+          selected = []; // custom is exclusive, so reset
+          // also deselect custom tile
+          toneCards.forEach(c => {
+            if (c.dataset.tone === 'custom') c.classList.remove('selected');
+          });
+        }
+  
+        // Toggle this preset
+        const isSelected = card.classList.toggle('selected');
+        if (isSelected) {
+          if (!selected.includes(val)) selected.push(val);
+        } else {
+          selected = selected.filter(x => x !== val);
+        }
+        saveSelections(selected);
       });
     });
+  
+    /*************************
+     * Modal: open/close + save custom
+     *************************/
+    const overlay = document.getElementById('modalOverlay');
+    const closeBtn = document.getElementById('closeModal');
+    const saveCustomBtn = document.getElementById('saveCustomTone');
+  
+    function openCustomModal(){
+      if (!overlay) return;
+      overlay.style.display = 'flex';
+      overlay.setAttribute('aria-hidden','false');
+    }
+    function closeCustomModal(){
+      if (!overlay) return;
+      overlay.style.display = 'none';
+      overlay.setAttribute('aria-hidden','true');
+    }
+  
+    closeBtn?.addEventListener('click', closeCustomModal);
+    overlay?.addEventListener('click', (e)=>{
+      if (e.target === overlay) closeCustomModal(); // click outside to dismiss
+    });
+  
+    // Tone contract helpers
+    function levelDescriptor(name, v) {
+      const n = parseInt(v, 10);
+      const B = (lo, hi)=> n >= lo && n <= hi;
+      if (B(0,10)) return `${name}: none`;
+      if (B(11,25)) return `${name}: minimal`;
+      if (B(26,40)) return `${name}: low`;
+      if (B(41,60)) return `${name}: moderate`;
+      if (B(61,80)) return `${name}: high`;
+      return `${name}: very high`;
+    }
+  
+    const approachGuidance = {
+      empathetic: `
+  • Empathetic: Keep tenderness without platitudes. Name feelings plainly. No therapist/coach voice.`,
+      clear: `
+  • Clear: Trim filler and hedging; keep nuance. Prefer concrete over abstract.`,
+      balanced: `
+  • Balanced: Hold multiple truths (my needs & theirs). Avoid extremes and moralizing.`,
+      authentic: `
+  • Authentic: Preserve my cadence/colloquialisms. Keep specific, memory-textured detail.`,
+      structured: `
+  • Structured: Sequence softly (what happened → what I felt → what I want) only if clarity improves.`
+    };
+  
+    function buildToneContract(opts) {
+      const {
+        warmth=50, positivity=50, directness=50, humor=0, assertiveness=50,
+        selectedApproaches=[], customOverrideText=''
+      } = opts || {};
+  
+      const warmthD        = levelDescriptor('Warmth', warmth);
+      const positivityD    = levelDescriptor('Positivity', positivity);
+      const directnessD    = levelDescriptor('Directness', directness);
+      const humorD         = levelDescriptor('Humor', humor);
+      const assertivenessD = levelDescriptor('Assertiveness', assertiveness);
+  
+      const selectedText = (selectedApproaches||[])
+        .filter(a => approachGuidance[a])
+        .map(a => approachGuidance[a])
+        .join('');
+  
+      const toneContract = `
+  [TONE CONTRACT — STRICTLY ENFORCED]
+  
+  1) Voice & Perspective
+  • Speak AS ME, in first person. No summaries, no second person, no coaching voice.
+  • Preserve contradictions and emotional grain. Keep vivid, specific details.
+  
+  2) Meaning-Forward
+  • Organize without sanitizing. Let grief/anger/longing coexist without judgment.
+  • Surface latent truths gently where it helps clarity and self-respect.
+  
+  3) Selected Approaches${selectedText || ': (none)'}
+    
+  4) Dials (soft constraints → shape wording, not content)
+  • ${warmthD}
+  • ${positivityD}
+  • ${directnessD}
+  • ${humorD}
+  • ${assertivenessD}
+  
+  5) Output Shape
+  • I still sound like me—just clearer, as if I took a breath and found the exact words.
+  • Avoid clichés, toxic positivity, therapy-speak, and corporate polish I didn’t use.
+  
+  (If any tone request conflicts with preserving voice/nuance/truth, favor voice/nuance/truth.)
+  ${customOverrideText ? `
+  
+  [Custom Notes]
+  ${customOverrideText.trim()}
+  ` : ''}`.trim();
+  
+      return toneContract;
+    }
+  
+    // Save Custom: writes advancedToneSettings, selects only 'custom'
+    function saveCustomTone(){
+      const notes = ''; // you can add a notes textarea later if you want
+      const contract = buildToneContract({
+        warmth: document.getElementById('warmthSlider')?.value ?? 50,
+        positivity: document.getElementById('positivitySlider')?.value ?? 50,
+        directness: document.getElementById('directnessSlider')?.value ?? 50,
+        humor: document.getElementById('humorSlider')?.value ?? 0,
+        assertiveness: document.getElementById('assertivenessSlider')?.value ?? 50,
+        selectedApproaches: [], // custom overrides presets
+        customOverrideText: notes ? notes + '\n(These are soft style constraints; honor the system rules first.)' :
+          'Custom tone using current dial settings. Honor system rules first; treat these as soft style constraints.'
+      });
+  
+      localStorage.setItem('advancedToneSettings', contract);
+      // visually mark only 'custom'
+      toneCards.forEach(c => c.classList.toggle('selected', c.dataset.tone === 'custom'));
+      saveSelections(['custom']);
+      alert('Custom tone saved.');
+    }
+    saveCustomBtn?.addEventListener('click', ()=>{
+      saveCustomTone();
+      closeCustomModal();
+    });
+  
+    /*************************
+     * Continue → compose finalToneGuidance with correct precedence
+     *************************/
+    document.getElementById('continueButton')?.addEventListener('click', ()=>{
+      let selected = [];
+      try { selected = JSON.parse(localStorage.getItem('selectedApproaches') || '[]'); } catch(e){ selected = []; }
+      const adv = localStorage.getItem('advancedToneSettings') || '';
+      const useCustom = Array.isArray(selected) && selected.includes('custom') && !!adv;
+  
+      if ((!selected || selected.length === 0) && !adv){
+        alert('Please select at least one preset or create a custom tone before continuing.');
+        return;
+      }
+  
+      const finalContract = useCustom
+        ? buildToneContract({
+            warmth: document.getElementById('warmthSlider')?.value ?? 50,
+            positivity: document.getElementById('positivitySlider')?.value ?? 50,
+            directness: document.getElementById('directnessSlider')?.value ?? 50,
+            humor: document.getElementById('humorSlider')?.value ?? 0,
+            assertiveness: document.getElementById('assertivenessSlider')?.value ?? 50,
+            selectedApproaches: [],        // presets suppressed
+            customOverrideText: adv
+          })
+        : buildToneContract({
+            warmth: document.getElementById('warmthSlider')?.value ?? 50,
+            positivity: document.getElementById('positivitySlider')?.value ?? 50,
+            directness: document.getElementById('directnessSlider')?.value ?? 50,
+            humor: document.getElementById('humorSlider')?.value ?? 0,
+            assertiveness: document.getElementById('assertivenessSlider')?.value ?? 50,
+            selectedApproaches: selected,  // use chosen presets
+            customOverrideText: ''
+          });
+  
+      localStorage.setItem('finalToneGuidance', finalContract);
+      window.location.href = 'situation-room.html';
+    });
+  
+    // Initial paint
+    restoreSelections();
+  
   </script>
-</body>
-</html>
+  <!-- ========== JS SECTION (END) ========== -->

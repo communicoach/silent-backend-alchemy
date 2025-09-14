@@ -6,7 +6,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   />
-  <title>Style Awareness - CommuniCoach</title>
+  <title>persuasion-puzzles-backup - CommuniCoach</title>
 
   <!-- Fonts + Icons -->
   <link
@@ -928,7 +928,39 @@
         flex-direction:column;
       }
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
+
+  <!-- CRITICAL: Move lesson functions to head so they're available immediately -->
+  <script>
+    // Global functions that need to be available immediately
+    function openPersuasionLesson() {
+      document.getElementById('persuasionLessonOverlay').classList.add('active');
+    }
+
+    function closePersuasionLesson() {
+      document.getElementById('persuasionLessonOverlay').classList.remove('active');
+    }
+
+    function toggleLessonCard(card) {
+      const all = document.querySelectorAll('.lesson-card');
+      all.forEach(c => {
+        if (c !== card) c.classList.remove('open');
+      });
+      card.classList.toggle('open');
+    }
+
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      if (navLinks) {
+        navLinks.classList.toggle('active');
+      }
+    }
+  </script>
 </head>
 
 <body>
@@ -968,18 +1000,11 @@
     <div class="container hero-content">
       <div class="hero-text">
         <h1>Master the Art of Influence</h1>
-<p>Welcome to a space designed to sharpen one of the most powerful skills you can have: influence. In this arena, you'll learn how to blend Logos, Pathos, and Ethos—logic, emotion, and credibility—into persuasive conversations that feel natural, not scripted.</p>
-<p>Persuade with confidence and authenticity. You’ll build skills in identifying and responding to different communication styles, and you’ll get personalized feedback on your own style. By the end, you’ll have a clearer understanding of how to adapt your approach to different situations and people.</p>
-<p>If you're eager, you can dive straight into the practice session and start solving real-world persuasion puzzles. But if you'd like to set yourself up for even greater success, we've built a quick and engaging mini-training that will walk you through the essentials—when to use logic, when to lead with emotion, how to build trust, and how to shift smoothly when the conversation changes.</p>
-
-            
-        </p>
-        <p>
-         
+        <p>Welcome to a space designed to sharpen one of the most powerful skills you can have: influence. In this arena, you'll learn how to blend Logos, Pathos, and Ethos—logic, emotion, and credibility—into persuasive conversations that feel natural, not scripted.</p>
+        <p>Persuade with confidence and authenticity. You'll build skills in identifying and responding to different communication styles, and you'll get personalized feedback on your own style. By the end, you'll have a clearer understanding of how to adapt your approach to different situations and people.</p>
+        <p>If you're eager, you can dive straight into the practice session and start solving real-world persuasion puzzles. But if you'd like to set yourself up for even greater success, we've built a quick and engaging mini-training that will walk you through the essentials—when to use logic, when to lead with emotion, how to build trust, and how to shift smoothly when the conversation changes.</p>
+        
         <button class="btn btn-outline" onclick="openPersuasionLesson()">Start Training</button>
-
-          
-        </p>
       </div>
       <div class="hero-image">
         <img src=".vscode/Images/conversation.png" alt="Style Awareness" />
@@ -987,13 +1012,66 @@
     </div>
   </section>
 
-  <!-- SETUP -->
+  <!-- Mini-Lesson Overlay -->
+  <div class="modal-overlay" id="persuasionLessonOverlay">
+    <div class="lesson-modal">
+      <div class="modal-header">
+        <h2><i class="fa-solid fa-brain"></i> Mini Lesson: Persuasion Foundations</h2>
+        <button class="modal-close" onclick="closePersuasionLesson()">×</button>
+      </div>
+
+      <!-- Expand/Collapse Cards -->
+      <div class="lesson-cards">
+        <div class="lesson-card" onclick="toggleLessonCard(this)">
+          <h3><i class="fa-solid fa-scale-balanced"></i> Logos (Logic)</h3>
+          <div class="lesson-card-content">
+            <p>Use facts, evidence, and structure to make your case. Logos persuades the mind. It's powerful when the other person values clarity, data, or logical cause-and-effect. But too much logic can feel cold if not balanced.</p>
+          </div>
+        </div>
+
+        <div class="lesson-card" onclick="toggleLessonCard(this)">
+          <h3><i class="fa-solid fa-heart"></i> Pathos (Emotion)</h3>
+          <div class="lesson-card-content">
+            <p>Appeal to emotions, values, and human truth. Pathos moves the heart and helps others feel your message. When used authentically, it connects deeply. When overdone, it can feel manipulative.</p>
+          </div>
+        </div>
+
+        <div class="lesson-card" onclick="toggleLessonCard(this)">
+          <h3><i class="fa-solid fa-handshake"></i> Ethos (Credibility)</h3>
+          <div class="lesson-card-content">
+            <p>Build trust by showing you are credible, experienced, or aligned with their values. Ethos persuades through character. It's especially important early in conversations or when trust is low.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Mini-Lesson Content -->
+      <div class="lesson-text-section">
+        <h4>Blending the Pieces</h4>
+        <p>Real persuasion is not one-note. It's a blend. Logos, Pathos, and Ethos work best when used together, depending on who you're speaking to and how the conversation evolves.</p>
+
+        <h4>Reading the Room</h4>
+        <p>Pay attention: Are they asking questions? Seeming emotional? Doubting your credibility? Their energy tells you what they need next—facts, reassurance, or connection.</p>
+
+        <h4>Shifting Naturally</h4>
+        <p>Use smooth transitions to change tone. "Let me explain why..." ➔ Logos. "Here's what really matters to me..." ➔ Pathos. "Based on what I've seen before..." ➔ Ethos.</p>
+
+        <h4>Diagnostic Questions (Optional)</h4>
+        <p>Not sure what they need? Ask. "Would it help if I broke it down step-by-step?" or "Can I share why I'm suggesting this?" Great persuasion often begins with a great question.</p>
+      </div>
+
+      <!-- Close Button -->
+      <div class="lesson-footer">
+        <button class="btn btn-primary" onclick="closePersuasionLesson()">Return to Setup</button>
+      </div>
+    </div>
+  </div>
+
   <!-- PERSUASION SETUP SECTION -->
-<section class="exercise-setup-section" id="persuasionSetupSection">
+  <section class="exercise-setup-section" id="persuasionSetupSection">
     <div class="container">
       <div class="setup-card fade-in delay-1">
         <h2><i class="fa-solid fa-lightbulb"></i> Prepare Your Persuasion Tools</h2>
-        <p>Based on your real scenario and communication goal, let’s map out the persuasive tools you may want to use. You’ll explore logic (Logos), emotion (Pathos), and credibility (Ethos). For each, we’ll help you spot what’s already in your narrative—and what might be missing.</p>
+        <p>Based on your real scenario and communication goal, let's map out the persuasive tools you may want to use. You'll explore logic (Logos), emotion (Pathos), and credibility (Ethos). For each, we'll help you spot what's already in your narrative—and what might be missing.</p>
   
         <!-- Narrative Display -->
         <div class="form-group">
@@ -1013,8 +1091,6 @@
             <label for="partnerNameInput">Who are you speaking with?</label>
             <input type="text" id="partnerNameInput" placeholder="e.g. My dad" />
           </div>
-          
-                 
   
         <!-- Logos Card -->
         <div class="persuasion-card">
@@ -1051,64 +1127,54 @@
       </div>
     </div>
   </section>
-  
-        
-        
 
   <!-- EXERCISE (5 ROUNDS) -->
   <section class="exercise-section" id="persuasionExerciseSection">
     <div class="container">
       <div class="exercise-card">
         <div class="exercise-header">
-          <h2>Round <span id="roundNumber">1</span> of 5</h2>
-          <p>You’ll see a statement that might come from your real conversation partner.
-
-            Select the communication style you think they are using.
-            
-            The AI coach will reveal the actual style and explain how it shows up in their words.
-            
-            Then, write your own response back.
-            
-            Once you respond, you’ll label your own style—and the coach will give feedback on how well it fits.
-            
-            After 5 rounds, you’ll get personalized insights on how you tend to engage and where you can flex or grow.
-            
-            This isn’t about being “right”—it’s about learning to see style, intention, and tone with sharper eyes.</p>
+          <h2>Welcome to the Persuasion Practice Arena!</h2>  
+          <strong>In this exercise, you will identify persuasion challenges in your partner's statements and use 
+              the best persuasion strategy to respond effectively.</strong>
         </div>
-
-        <div class="round-indicator">
-          Focusing on: <span id="selectedStylesDisplay"></span>
-        </div>
-
-        <!-- Partner Paragraph -->
-        <div class="partner-paragraph" id="partnerParagraph">
-          <!-- AI text goes here -->
-        </div>
-
-        <!-- Partner Mood Recognition -->
-<div class="style-guess-row" id="moodOptionsRow">
-  <!-- Mood buttons will be generated here dynamically -->
-</div>
-
-<!-- Mood Feedback -->
-<div class="coach-feedback" id="moodFeedbackBox" style="display: none;">
-  <h4><i class="fa-solid fa-comment-dots"></i> <span id="moodFeedbackTitle">Partner Mood Insight</span></h4>
-  <p id="moodFeedbackContent"></p>
-</div>
-
-<!-- Diagnostic Suggestion (Optional) -->
-<div class="coach-suggestion" id="diagnosticSuggestionBox" style="display: none;"></div>
-
-        <div id="diagnosticSuggestionBox" class="coach-suggestion" style="display: none;"></div>
-
+        <div class="exercise-instructions">
+          <p>In each round, you'll:</p>
+          <ul>
+            <li>See a statement from your conversation partner</li>
+            <li>Guess their 'mood' or persuasion challenge</li>
+            <li>Respond with a persuasion strategy that fits the challenge</li>
+            <li>Instantly transform your response into an effective persuasion strategy for the challenge</li>
+            <li>Receive feedback on your response</li>
+          </ul>
+          <strong>Let's get started!</strong>
+        </div>    
         
-        <!-- Coach Feedback for Style Identification -->
-        <div class="coach-feedback" id="styleGuessFeedback">
-          <h4><i class="fa-solid fa-comment-dots"></i> <span id="feedbackTitle">Style Analysis</span></h4>
-          <p id="feedbackContent"></p>
+        <p class="round-indicator">Round <span id="roundNumber">1</span> of 5</p>
+  
+        <!-- Partner Message -->
+        <div class="partner-paragraph" id="partnerParagraph">
+          <!-- AI partner statement will appear here -->
+        </div>
+  
+        <!-- Mood Recognition -->
+        <div class="exercise-instructions">
+          <p>Select the persuasion challenge you find reflected in your partner's statement. You can hover over each challenge for persuasion tips that will help you respond effectively.</p>
         </div>
 
-        <!-- User Response Section -->
+        <div class="style-guess-row" id="moodOptionsRow">
+          <!-- Mood buttons will be generated here -->
+        </div>
+  
+        <!-- Mood Feedback (from Coach CC) -->
+        <div class="coach-feedback" id="moodFeedbackBox" style="display: none;">
+          <h4><i class="fa-solid fa-comment-dots"></i> <span id="moodFeedbackTitle">Partner Mood Insight</span></h4>
+          <p id="moodFeedbackContent"></p>
+        </div>
+  
+        <!-- Optional Coach Diagnostic Question -->
+        <div class="coach-suggestion" id="diagnosticSuggestionBox" style="display: none;"></div>
+  
+        <!-- User Response Input -->
         <div class="response-section">
           <label for="userResponse">Your Response:</label>
           <div class="mic-row">
@@ -1117,36 +1183,58 @@
             </button>
             <span id="micStatusText">Click to speak</span>
           </div>
-          <textarea class="response-textarea" id="userResponse" placeholder="Type your response here..."></textarea>
           
-          <!-- Generate Response Button -->
+          <textarea class="response-textarea" id="userResponse" placeholder="Type your response here..."></textarea>
+  
+          <!-- Coach-Suggested Response Button -->
+          <div class="exercise-instructions">
+            <p>Writers block? No worries- just ask Coach CC to get your response started. You can keep your Coach's response or edit it to reflect exactly what you want to say.</p>
+          </div>
+
           <button class="generate-response-btn" id="generateResponseBtn">
             <i class="fa-solid fa-magic"></i> Generate Response
           </button>
-          
-          <p>Select which style you think your response matches:</p>
+  
+          <!-- Remix Strategy Section -->
+          <div class="remix-section">
+            <h4>Want to try a different persuasion strategy?</h4>
+            <div id="transformOptionsRow" class="style-selection-row"></div>
+          </div>
+  
+          <!-- Remix Preview Card -->
+          <div class="coach-feedback" id="previewResponseCard" style="display: none;">
+            <h4><i class="fa-solid fa-magic"></i> Coach Remix</h4>
+            <p id="previewResponseContent"></p>
+            <button class="btn btn-outline" id="useTransformedBtn">Use This</button>
+          </div>
+  
+          <!-- Strategy Self-Labeling -->
+          <p>Select which <strong>persuasion strategy</strong> you think your response reflects:</p>
           <div class="style-selection-row" id="responseStyleRow"></div>
-          
-          <!-- Coach Feedback for User's Response Style -->
+  
+          <!-- Coach Feedback on User's Strategy -->
           <div class="coach-feedback" id="coachFeedback">
-            <h4><i class="fa-solid fa-comment-dots"></i> <span>Style Analysis</span></h4>
+            <h4><i class="fa-solid fa-comment-dots"></i> <span>Strategy Feedback</span></h4>
             <p id="responseFeedbackContent"></p>
           </div>
-        </div>
 
-        <!-- Round Nav -->
+          <!-- Confirm Button -->
+          <div class="form-actions">
+            <button class="btn btn-primary" id="confirmResponseBtn">
+              Confirm Response & Continue
+            </button>
+          </div>
+        </div>
+  
+        <!-- Round Navigation -->
         <div class="round-nav">
           <button class="btn btn-outline" id="prevRoundBtn" disabled>← Previous</button>
           <button class="btn btn-primary" id="nextRoundBtn">Next →</button>
-          <!-- Partner Paragraph --> 
-        <div class="partner-paragraph" id="partnerParagraph"></div>
-
         </div>
       </div>
     </div>
   </section>
-
-
+  
   <!-- SUMMARY -->
   <section class="summary-section" id="summarySection">
     <div class="container">
@@ -1156,108 +1244,30 @@
           <p>You finished identifying styles and practicing your responses. 
              Here's a detailed reflection on your performance.</p>
         </div>
+        <div class="insights-container">
+          <div class="coach-summary">
+            <h4>Coach CC Summary</h4>
+            <p id="conversationSummary">(Summary will appear here)</p>
+          </div>
         
-        <div class="summary-insights" id="summaryInsights">
-          <!-- Summary sections will be inserted here -->
-          <div class="summary-section-title">
-            <i class="fa-solid fa-star"></i> Overall Performance
+          <div class="coach-strengths">
+            <h4>What You Did Well</h4>
+            <div id="persuasionStrengths"></div>
           </div>
-          <div class="summary-section-content" id="overallPerformance">
-            <!-- Overall performance content -->
-          </div>
-          
-          <div class="summary-section-title">
-            <i class="fa-solid fa-check-circle"></i> Style Recognition Strengths
-          </div>
-          <div class="summary-section-content" id="recognitionStrengths">
-            <!-- Recognition strengths content -->
-          </div>
-          
-          <div class="summary-section-title">
-            <i class="fa-solid fa-pen"></i> Style Expression Strengths
-          </div>
-          <div class="summary-section-content" id="expressionStrengths">
-            <!-- Expression strengths content -->
-          </div>
-          
-          <div class="summary-section-title">
-            <i class="fa-solid fa-arrow-trend-up"></i> Growth Opportunities
-          </div>
-          <div class="summary-section-content" id="growthOpportunities">
-            <!-- Growth opportunities content -->
-          </div>
-          
-          <div class="summary-section-title">
-            <i class="fa-solid fa-lightbulb"></i> Practical Tips
-          </div>
-          <div class="summary-section-content" id="practicalTips">
-            <!-- Practical tips content -->
-          </div>
-        </div>
         
-        <div class="back-toArena-btn">
-          <a class="btn btn-primary" href="action-arena.html">
-            Return to Action Arena
-          </a>
+          <div class="coach-growth">
+            <h4>Growth Opportunities</h4>
+            <div id="growthOpportunities"></div>
+          </div>
+        
+          <div class="coach-next-steps">
+            <h4>Next Step Tips</h4>
+            <p id="nextStepsTips"></p>
+          </div>
         </div>
       </div>
     </div>
   </section>
-<!-- Mini-Lesson Overlay -->
-<div class="modal-overlay" id="persuasionLessonOverlay">
-    <div class="lesson-modal">
-      <div class="modal-header">
-        <h2><i class="fa-solid fa-brain"></i> Mini Lesson: Persuasion Foundations</h2>
-        <button class="modal-close" onclick="closePersuasionLesson()">×</button>
-      </div>
-  
-      <!-- Expand/Collapse Cards -->
-      <div class="lesson-cards">
-        <div class="lesson-card" onclick="toggleLessonCard(this)">
-          <h3><i class="fa-solid fa-scale-balanced"></i> Logos (Logic)</h3>
-          <div class="lesson-card-content">
-            <p>Use facts, evidence, and structure to make your case. Logos persuades the mind. It’s powerful when the other person values clarity, data, or logical cause-and-effect. But too much logic can feel cold if not balanced.</p>
-          </div>
-        </div>
-  
-        <div class="lesson-card" onclick="toggleLessonCard(this)">
-          <h3><i class="fa-solid fa-heart"></i> Pathos (Emotion)</h3>
-          <div class="lesson-card-content">
-            <p>Appeal to emotions, values, and human truth. Pathos moves the heart and helps others feel your message. When used authentically, it connects deeply. When overdone, it can feel manipulative.</p>
-          </div>
-        </div>
-  
-        <div class="lesson-card" onclick="toggleLessonCard(this)">
-          <h3><i class="fa-solid fa-handshake"></i> Ethos (Credibility)</h3>
-          <div class="lesson-card-content">
-            <p>Build trust by showing you are credible, experienced, or aligned with their values. Ethos persuades through character. It’s especially important early in conversations or when trust is low.</p>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Additional Mini-Lesson Content -->
-      <div class="lesson-text-section">
-        <h4>Blending the Pieces</h4>
-        <p>Real persuasion is not one-note. It's a blend. Logos, Pathos, and Ethos work best when used together, depending on who you’re speaking to and how the conversation evolves.</p>
-  
-        <h4>Reading the Room</h4>
-        <p>Pay attention: Are they asking questions? Seeming emotional? Doubting your credibility? Their energy tells you what they need next—facts, reassurance, or connection.</p>
-  
-        <h4>Shifting Naturally</h4>
-        <p>Use smooth transitions to change tone. “Let me explain why...” ➔ Logos. “Here’s what really matters to me...” ➔ Pathos. “Based on what I’ve seen before...” ➔ Ethos.</p>
-  
-        <h4>Diagnostic Questions (Optional)</h4>
-        <p>Not sure what they need? Ask. “Would it help if I broke it down step-by-step?” or “Can I share why I’m suggesting this?” Great persuasion often begins with a great question.</p>
-      </div>
-  
-      <!-- Close Button -->
-      <div class="lesson-footer">
-        <button class="btn btn-primary" onclick="closePersuasionLesson()">Return to Setup</button>
-      </div>
-    </div>
-  </div>
-  
-
 
   <!-- FOOTER -->
   <footer class="footer-nav">
@@ -1266,399 +1276,410 @@
     <a href="#">Terms of Service</a>
   </footer>
 
-
-  <!-- ======= JS SCRIPT ======= -->
   <script>
-  /******************************************************
-   * style-awareness-exercise.js - Enhanced Version
-   ******************************************************/
+   // ===== STATE & CONFIGURATION =====
    const state = {
-  currentRound: 0,
-  maxRounds: 4,
-  refinedNarrative: localStorage.getItem('refinedNarrative') || '',
-  communicationGoal: localStorage.getItem('communicationGoal') || '',
-  persuasionGoal: localStorage.getItem('persuasionGoal') || '',
-  partnerName: localStorage.getItem('persuasionPartner') || '',
-  logosPrep: localStorage.getItem('logosPrep') || '',
-  pathosPrep: localStorage.getItem('pathosPrep') || '',
-  ethosPrep: localStorage.getItem('ethosPrep') || '',
-  conversationHistory: [], // { speaker, message, type, mood }
-  moodCorrectAnswer: '',   // what mood the partner was conveying this round
-  moodGuessedCorrectly: false
-};
-const moods = {
+      currentRound: 0,
+      maxRounds: 5,
+      refinedNarrative: localStorage.getItem('refinedNarrative') || '',
+      communicationGoal: localStorage.getItem('communicationGoal') || '',
+      persuasionGoal: localStorage.getItem('persuasionGoal') || '',
+      partnerName: localStorage.getItem('persuasionPartner') || '',
+      logosPrep: localStorage.getItem('logosPrep') || '',
+      pathosPrep: localStorage.getItem('pathosPrep') || '',
+      ethosPrep: localStorage.getItem('ethosPrep') || '',
+      conversationHistory: [],
+      partnerMoodHistory: [],
+      strategyAlignmentScore: 0,
+      strategyUsageHistory: [],
+
+    
+      
+
+      selectedRemixStyle: '',
+      moodGuess: '',
+      previewText: '',
+      isListening: false
+    
+    };
+
+    const persuasionMatrix = {
+      "Logical Appeal": {
+        bucket: "Rational",
+        description: "Uses reasoning, evidence, data, and clear explanation to persuade.",
+        characteristics: "Structured, fact-based, example-driven, step-by-step.",
+        impact: "Builds clarity, satisfies questions, and convinces through logic."
+      },
+      "Emotional Appeal": {
+        bucket: "Emotional",
+        description: "Connects by expressing feelings, values, and personal stakes.",
+        characteristics: "Heartfelt, empathetic, story-based, sincere.",
+        impact: "Builds trust and resonance; helps partner feel seen and emotionally engaged."
+      },
+      "Credibility Appeal": {
+        bucket: "Trust-Building",
+        description: "Draws on trust, experience, shared values, or moral authority.",
+        characteristics: "Grounded, aligned, ethically confident, calm.",
+        impact: "Establishes trustworthiness and strengthens relational alignment."
+      },
+      "Empathy & Validation": {
+        bucket: "Soothing",
+        description: "Soothes tension by acknowledging feelings and showing understanding.",
+        characteristics: "Soft, affirming, gentle, nonjudgmental.",
+        impact: "De-escalates resistance; invites openness and defuses defensiveness."
+      },
+      "Collaborative Appeal": {
+        bucket: "Relational",
+        description: "Frames the conversation as mutual problem-solving or teamwork.",
+        characteristics: "Inclusive, inviting, shared-language, co-creative.",
+        impact: "Dismantles power struggles and encourages joint investment in outcome."
+      },
+      "Encouragement & Empowerment": {
+        bucket: "Motivational",
+        description: "Lifts the partner's confidence and sense of possibility.",
+        characteristics: "Uplifting, affirming, future-facing, respectful.",
+        impact: "Inspires action and reframes resistance as personal potential."
+      },
+      "Social Proof": {
+        bucket: "Contextual Logic",
+        description: "Cites what others are doing or what's normal/expected.",
+        characteristics: "Referential, situationally aware, comparison-based.",
+        impact: "Reduces uncertainty by showing alignment with others."
+      },
+      "Assertiveness": {
+        bucket: "Boundary Setting",
+        description: "Communicates clear expectations or limits with firmness and respect.",
+        characteristics: "Direct, confident, non-apologetic, clear.",
+        impact: "Builds respect, clarifies needs, and stops over-accommodation."
+      }
+    };
+    
+    const persuasionMap = {
+      
   "Skeptical": {
-    persuasionTool: "Logos",
-    bucket: "neutral",
-    summary: "Doubts reasoning or decisions; often asks 'why' or pushes back on logic.",
-    coachTip: "Consider clarifying your reasoning or sharing data that supports your view."
+    approach: "Logical Appeal",
+    tool: "Logos",
+    description: "Acknowledge their concerns without defensiveness. Offer clear, structured reasoning and evidence to build credibility while respecting their critical thinking."
   },
-  "Emotionally Resistant": {
-    persuasionTool: "Pathos",
-    bucket: "counterproductive",
-    summary: "Appears guarded, hurt, or reactive; emotions are running high.",
-    coachTip: "Lead with empathy or acknowledgment before making a point."
-  },
-  "Curious": {
-    persuasionTool: "Logos + Ethos",
-    bucket: "productive",
-    summary: "Open to learning more; asks honest questions or explores ideas.",
-    coachTip: "Share structured reasoning or a credible experience to keep momentum."
-  },
-  "Distracted": {
-    persuasionTool: "Pathos (gentle)",
-    bucket: "neutral",
-    summary: "Seems uninvested or mentally elsewhere; energy is low.",
-    coachTip: "Use emotional resonance or vivid examples to regain attention."
-  },
+
   "Defensive": {
-    persuasionTool: "Pathos + Ethos",
-    bucket: "counterproductive",
-    summary: "Feels accused or misunderstood; may justify or deflect.",
-    coachTip: "Reassure, validate, or reframe rather than pressuring."
+    approach: "Credibility Appeal",
+    tool: "Ethos",
+    description: "Ease tension by showing empathy and shared intent. Emphasize mutual values and clarify that your goal is connection—not blame or control."
   },
-  "Challenging Authority": {
-    persuasionTool: "Ethos",
-    bucket: "counterproductive",
-    summary: "Questions your right to lead, decide, or be trusted.",
-    coachTip: "Rebuild trust by anchoring to shared values or relevant experience."
-  },
+
   "Overwhelmed": {
-    persuasionTool: "Simplified Logos",
-    bucket: "neutral",
-    summary: "Mentally overloaded; can’t take in much more.",
-    coachTip: "Break your message into smaller pieces and simplify the ask."
+    approach: "Empathy & Validation",
+    tool: "Pathos",
+    description: "Slow things down. Gently acknowledge their emotional load and offer space or a simple next step to prevent shutdown."
   },
+
+  "Indecisive": {
+    approach: "Social Proof",
+    tool: "Contextual Logos",
+    description: "Normalize the situation by referencing relatable examples or past patterns. Reduce decision pressure by making their options feel familiar and non-threatening."
+  },
+
+  "Teasing/Playful": {
+    approach: "Emotional Appeal",
+    tool: "Pathos",
+    description: "Match their tone with lightness, but guide the conversation back to substance. Use humor or warmth to keep them engaged without letting the message lose gravity."
+  },
+
+  "Supportive": {
+    approach: "Encouragement & Empowerment",
+    tool: "Pathos + Ethos",
+    description: "Acknowledge their openness and appreciation. Reinforce shared goals and invite them to help amplify the message or take a next step together."
+  },
+
+  "Pessimistic": {
+    approach: "Empathy & Reframing",
+    tool: "Pathos",
+    description: "Validate their view without sugarcoating. Reframe the moment by highlighting small possibilities, reframing setbacks as steps, or acknowledging resilience."
+  },
+
+  "Frustrated": {
+    approach: "Empathy & Validation",
+    tool: "Pathos",
+    description: "Start by truly listening and naming the frustration. Don’t try to fix it too fast—once heard, offer small solutions or collaborative framing."
+  },
+
+  "Confused": {
+    approach: "Clarity & Structure",
+    tool: "Logos",
+    description: "Break down your points into clear, manageable parts. Use examples, metaphors, or analogies to bridge the gap and rebuild mutual understanding."
+  },
+
+  "Dominating": {
+    approach: "Firm Assertiveness",
+    tool: "Ethos",
+    description: "Stand calmly in your own authority. Set boundaries without escalating power struggles—model clarity and mutual respect."
+  },
+
+  "Inquisitive": {
+    approach: "Guided Exploration",
+    tool: "Logos",
+    description: "Feed their curiosity with depth. Frame your points as open-ended insights they can explore—reward their engagement with intellectually honest responses."
+  },
+
+  "Cautious": {
+    approach: "Empathy & Reassurance",
+    tool: "Pathos",
+    description: "Acknowledge their hesitancy without pushing. Offer reassurance through transparency, low-stakes options, or gentle pacing to build safety."
+  },
+
   "Receptive": {
-    persuasionTool: "Ethos Reinforcement",
-    bucket: "productive",
-    summary: "Open, trusting, and positively engaged.",
-    coachTip: "Affirm what’s working and build gently toward your ask."
-  }
-};
+    approach: "Emotional Appeal",
+    tool: "Pathos",
+    description: "Lean into connection. Share something meaningful—emotion, story, vulnerability—that makes your point resonate personally and deepens rapport."
+  },
 
+  "Anxious": {
+    approach: "Empathy & Stability",
+    tool: "Pathos",
+    description: "Create a sense of emotional safety. Slow down, clarify intentions, and normalize their fear as a human response. Focus on support before persuasion."
+  },
 
-  // DOM Refs
-  // DOM Refs – Persuasion Puzzles
+  "Guarded": {
+    approach: "Trust Building",
+    tool: "Ethos",
+    description: "Avoid pressure. Use transparency, consistency, and low-stakes invitations to create space where they can let down their guard gradually."
+  },
 
-// UI Framework
-const progressBar = document.getElementById('progressBar');
-const navLinks = document.getElementById('navLinks');
-const darkModeToggle = document.getElementById('darkModeToggle');
+  "Competitive": {
+    approach: "Collaborative Reframing",
+    tool: "Ethos + Strategy",
+    description: "Avoid head-to-head energy. Position yourself as an ally on the same team. Appeal to their drive while inviting mutual wins."
+  },
 
-// Setup Phase
-const scenarioDisplay = document.getElementById('scenarioDisplay');
-const goalDisplay = document.getElementById('goalDisplay');
-const persuasionGoalInput = document.getElementById('persuasionGoalInput');
-const partnerNameInput = document.getElementById('partnerNameInput');
+  "Disengaged": {
+    approach: "Personal Reconnection",
+    tool: "Pathos",
+    description: "Resurface relevance. Make the conversation emotionally resonant, bring in values they care about, or ask a reflective question to reawaken interest."
+  },
 
-// Exercise Section
-const setupSection = document.getElementById('persuasionSetupSection');
-const exerciseSection = document.getElementById('persuasionExerciseSection');
-const roundNumberEl = document.getElementById('roundNumber');
-const partnerParagraphEl = document.getElementById('partnerParagraph');
+  "Dismissive": {
+    approach: "Respectful Assertiveness",
+    tool: "Ethos",
+    description: "Hold steady without overexplaining. Set boundaries while staying calm and grounded—signal that the conversation deserves mutual respect."
+  },
 
-// Mood Recognition
-const moodOptionsRow = document.getElementById('moodOptionsRow');
-const moodFeedbackBox = document.getElementById('moodFeedbackBox');
-const moodFeedbackTitle = document.getElementById('moodFeedbackTitle');
-const moodFeedbackContent = document.getElementById('moodFeedbackContent');
-const diagnosticSuggestionBox = document.getElementById('diagnosticSuggestionBox');
-
-// User Response Input
-const userResponseEl = document.getElementById('userResponse');
-const responseMicBtn = document.getElementById('responseMicBtn');
-const micStatusText = document.getElementById('micStatusText');
-const generateResponseBtn = document.getElementById('generateResponseBtn');
-const confirmResponseBtn = document.getElementById('confirmResponseBtn');
-
-// Persuasion Remix (Transform)
-const transformOptionsRow = document.getElementById('transformOptionsRow');
-const previewResponseCard = document.getElementById('previewResponseCard');
-const previewResponseContent = document.getElementById('previewResponseContent');
-const useTransformedBtn = document.getElementById('useTransformedBtn');
-
-// Final Insights
-const insightsSection = document.getElementById('insightsSection');
-const conversationSummary = document.getElementById('conversationSummary');
-const persuasionStrengths = document.getElementById('persuasionStrengths');
-const growthOpportunities = document.getElementById('growthOpportunities');
-const nextStepsTips = document.getElementById('nextStepsTips');
-
-// Speech Recognition Globals
-let recognition = null;
-let isListening = false;
-let recognitionTimeout = null;
-
-  
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    initDarkMode();
-    loadScenarioAndGoal();
-    initSpeechRecognition();
-
+  "Insecure": {
+    approach: "Uplift & Affirm",
+    tool: "Pathos + Ethos",
+    description: "Strengthen their sense of self. Affirm their strengths or value subtly while inviting agency and partnership in the conversation."
+  },
+}
     
-    prevRoundBtn.addEventListener('click', handlePrevRound);
-    nextRoundBtn.addEventListener('click', handleNextRound);
-    responseMicBtn.addEventListener('click', toggleMic);
-    generateResponseBtn.addEventListener('click', handleGenerateResponse);
-    // 🔜 Will re-enable this after user confirms their response
-// nextRoundBtn.disabled = !state.moodGuessedCorrectly;
 
-
-    exerciseSection.style.display = 'none';
-    summarySection.style.display = 'none';
-    setProgress(10);
-  });
-
-  function toggleMenu() {
-    navLinks.classList.toggle('active');
-  }
-
-  function initDarkMode() {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    if(savedTheme==='dark') {
-      document.documentElement.setAttribute('data-theme','dark');
-      darkModeToggle.checked = true;
+    function buildMoodToStrategyReference() {
+      return Object.entries(persuasionMap).map(([mood, entry]) => {
+        return `${mood} → ${entry.approach} (${entry.tool}) — ${entry.description}`;
+      }).join('\n');
     }
-    darkModeToggle.addEventListener('change', ()=>{
-      const isDark = darkModeToggle.checked;
-      document.documentElement.setAttribute('data-theme', isDark?'dark':'light');
-      localStorage.setItem('theme', isDark?'dark':'light');
-    });
-  }
 
-  function loadScenarioAndGoal() {
-    const refined = localStorage.getItem('refinedNarrative') || '(No scenario found)';
-    const goal = localStorage.getItem('communicationGoal') || '(No goal found)';
+    function buildPersuasionMatrixReference() {
+      return Object.entries(persuasionMatrix).map(([approach, entry]) => {
+        return `${approach} (${entry.bucket}) — ${entry.description}`;
+      }).join('\n');
+    }
+    
+    function formatHistory() {
+      return state.conversationHistory.map((entry, i) => {
+        return `${i + 1}. ${entry.speaker}: "${entry.message}"`;
+      }).join('\n');
+    }
+
+    // ===== DOM REFERENCES =====
+    const setupSection = document.getElementById('persuasionSetupSection');
+    const exerciseSection = document.getElementById('persuasionExerciseSection');
+    const scenarioDisplay = document.getElementById('scenarioDisplay');
+    const goalDisplay = document.getElementById('goalDisplay');
     const persuasionGoalInput = document.getElementById('persuasionGoalInput');
-const savedPersuasionGoal = localStorage.getItem('persuasionGoal');
-if (persuasionGoalInput && savedPersuasionGoal) {
-  persuasionGoalInput.value = savedPersuasionGoal;
-}
-const partnerNameInput = document.getElementById('partnerNameInput');
-const savedPartner = localStorage.getItem('persuasionPartner');
-if (partnerNameInput && savedPartner) {
-  partnerNameInput.value = savedPartner;
-}
+    const partnerNameInput = document.getElementById('partnerNameInput');
+    const roundNumberEl = document.getElementById('roundNumber');
+    const partnerParagraphEl = document.getElementById('partnerParagraph');
+    const moodOptionsRow = document.getElementById('moodOptionsRow');
+    const moodFeedbackBox = document.getElementById('moodFeedbackBox');
+    const moodFeedbackTitle = document.getElementById('moodFeedbackTitle');
+    const moodFeedbackContent = document.getElementById('moodFeedbackContent');
+    const diagnosticSuggestionBox = document.getElementById('diagnosticSuggestionBox');
+    const userResponseEl = document.getElementById('userResponse');
+    const responseMicBtn = document.getElementById('responseMicBtn');
+    const generateResponseBtn = document.getElementById('generateResponseBtn');
+    const transformOptionsRow = document.getElementById('transformOptionsRow');
+    const previewResponseCard = document.getElementById('previewResponseCard');
+    const previewResponseContent = document.getElementById('previewResponseContent');
+    const useTransformedBtn = document.getElementById('useTransformedBtn');
+    const confirmResponseBtn = document.getElementById('confirmResponseBtn');
+    const nextRoundBtn = document.getElementById('nextRoundBtn');
+    const summarySection = document.getElementById('summarySection');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const progressBar = document.getElementById('progressBar');
 
+    // Speech Recognition Globals
+    let recognition = null;
+    let isListening = false;
+    let recognitionTimeout = null;
 
-    
-    // Truncate if too long
-    const maxLength = 100;
-    const truncatedScenario = refined.length > maxLength ? 
-      refined.substring(0, maxLength) + '...' : refined;
-    const truncatedGoal = goal.length > maxLength ? 
-      goal.substring(0, maxLength) + '...' : goal;
-    
-    scenarioDisplay.value = truncatedScenario;
-    goalDisplay.value = truncatedGoal;
-    
-    // Save full versions to state
-    // Save full versions to state
-state.refinedNarrative = refined;
-state.communicationGoal = goal;
-  }
-  
+    document.addEventListener('DOMContentLoaded', () => {
+      initDarkMode();
+      loadScenarioAndGoal();
+      initSpeechRecognition();
+    });
 
+    // ===== DARK MODE INIT =====
+    function initDarkMode() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        darkModeToggle.checked = true;
+      }
+      darkModeToggle.addEventListener('change', () => {
+        const mode = darkModeToggle.checked ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', mode);
+        localStorage.setItem('theme', mode);
+      });
+    }
 
+    function loadScenarioAndGoal() {
+      const refined = localStorage.getItem('refinedNarrative') || '(No scenario found)';
+      const goal = localStorage.getItem('communicationGoal') || '(No goal found)';
+      const persGoal = localStorage.getItem('persuasionGoal') || '';
+      const partner = localStorage.getItem('persuasionPartner') || '';
 
+      scenarioDisplay.value = refined.length > 120 ? refined.slice(0, 120) + '...' : refined;
+      goalDisplay.value = goal.length > 120 ? goal.slice(0, 120) + '...' : goal;
+      persuasionGoalInput.value = persGoal;
+      partnerNameInput.value = partner;
+    }
 
-// Start Exercise
-function beginPersuasionExercise() {
-  const lp = document.getElementById('logosInput')?.value.trim() || '';
-  const pp = document.getElementById('pathosInput')?.value.trim() || '';
-  const ep = document.getElementById('ethosInput')?.value.trim() || '';
-  const specificGoal = document.getElementById('persuasionGoalInput')?.value.trim() || '';
-  const partnerName = document.getElementById('partnerNameInput')?.value.trim() || '';
+    // ===== SPEECH TO TEXT SETUP =====
+    function initSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return;
 
-  // Save to localStorage
-  localStorage.setItem('logosPrep', lp);
-  localStorage.setItem('pathosPrep', pp);
-  localStorage.setItem('ethosPrep', ep);
-  localStorage.setItem('persuasionGoal', specificGoal);
-  localStorage.setItem('persuasionPartner', partnerName);
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
 
-  setupSection.style.display = 'none';
-exerciseSection.style.display = 'block';
-setProgress(20); // optional visual update
-startRound(0);   // begins the first round
-}
-function startRound(idx) {
-  state.currentRound = idx;
-  roundNumberEl.textContent = (idx + 1).toString();
+      let transcript = '';
+      let isListening = false;
 
-  // Reset visible areas
-  partnerParagraphEl.textContent = 'Loading partner message...';
-  userResponseEl.value = '';
-  moodOptionsRow.innerHTML = '';
-  moodFeedbackBox.style.display = 'none';
-  diagnosticSuggestionBox.textContent = '';
-  previewResponseCard.style.display = 'none';
-  confirmResponseBtn.disabled = true;
-
-  // Navigation
-  prevRoundBtn.disabled = idx === 0;
-  nextRoundBtn.textContent = idx >= state.maxRounds - 1 ? 'Finish' : 'Next →';
-  nextRoundBtn.disabled = true;
-
-  // Generate the partner message
-  generatePartnerMessage(idx)
-    .then(({ message, mood }) => {
-      state.moodCorrectAnswer = mood;
-      partnerParagraphEl.textContent = message;
-
-      // Save to conversation
-      state.conversationHistory.push({
-        speaker: state.partnerName,
-        message,
-        type: 'partner',
-        mood: mood
+      responseMicBtn.addEventListener('click', () => {
+        if (isListening) {
+          recognition.stop();
+        } else {
+          recognition.start();
+        }
       });
 
-      renderMoodOptions();
-    })
-    .catch((error) => {
-      console.error('Error generating partner message:', error);
-    });
+      recognition.onstart = () => {
+        isListening = true;
+        responseMicBtn.classList.add('listening');
+      };
 
-  function renderMoodOptions() {
-    if (!moodOptionsRow) return;
-    moodOptionsRow.innerHTML = '';
+      recognition.onend = () => {
+        isListening = false;
+        responseMicBtn.classList.remove('listening');
+      };
 
-    Object.keys(moods).forEach((mood) => {
-      const btn = document.createElement('button');
-      btn.className = 'style-guess-button';
-      btn.textContent = mood;
-      btn.title = moods[mood].summary;
-
-      btn.addEventListener('click', () => checkMoodAnswer(mood, btn));
-      moodOptionsRow.appendChild(btn);
-    });
-  }
-
-  function checkMoodAnswer(selectedMood, clickedBtn) {
-    const correct = state.moodCorrectAnswer;
-    const isCorrect = selectedMood === correct;
-
-    if (isCorrect) {
-      // Highlight correct button
-      clickedBtn.classList.add('correct');
-      disableMoodButtons();
-      showMoodFeedback(true, selectedMood);
-      state.moodGuessedCorrectly = true;
-      generateDiagnosticQuestion(correct);
-      nextRoundBtn.disabled = false;
-    } else {
-      clickedBtn.classList.add('incorrect');
-      clickedBtn.disabled = true;
-      showMoodFeedback(false, selectedMood);
+      recognition.onresult = (event) => {
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            transcript += event.results[i][0].transcript + ' ';
+          } else {
+            userResponseEl.value = transcript + event.results[i][0].transcript;
+          }
+        }
+        userResponseEl.value = transcript.trim();
+      };
     }
-  }
 
-  function disableMoodButtons() {
-    const buttons = moodOptionsRow.querySelectorAll('button');
-    buttons.forEach((btn) => (btn.disabled = true));
-  }
+    // ===== EXERCISE FLOW =====
+    function beginPersuasionExercise() {
+      const lp = document.getElementById('logosInput')?.value.trim() || '';
+      const pp = document.getElementById('pathosInput')?.value.trim() || '';
+      const ep = document.getElementById('ethosInput')?.value.trim() || '';
+      const specificGoal = document.getElementById('persuasionGoalInput')?.value.trim() || '';
+      const partnerName = document.getElementById('partnerNameInput')?.value.trim() || '';
 
-  function showMoodFeedback(isCorrect, selectedMood) {
-    const correct = state.moodCorrectAnswer;
-    moodFeedbackBox.style.display = 'block';
-    moodFeedbackTitle.textContent = isCorrect ? 'Correct!' : 'Try Again';
-    moodFeedbackContent.textContent = isCorrect
-      ? `${correct} is correct. ${moods[correct].coachTip}`
-      : `That doesn’t seem quite right. Consider how the tone reflects ${selectedMood} vs. ${correct}.`;
-  }
-}
-function generateDiagnosticQuestion(mood) {
-  const { refinedNarrative, communicationGoal, persuasionGoal, partnerName } = state;
-  const history = formatHistory();
-  const suggestionBox = diagnosticSuggestionBox;
+      // Save all to localStorage
+      localStorage.setItem('logosPrep', lp);
+      localStorage.setItem('pathosPrep', pp);
+      localStorage.setItem('ethosPrep', ep);
+      localStorage.setItem('persuasionGoal', specificGoal);
+      localStorage.setItem('persuasionPartner', partnerName);
 
-  if (!suggestionBox) return;
+      // Load into state
+      state.logosPrep = lp;
+      state.pathosPrep = pp;
+      state.ethosPrep = ep;
+      state.persuasionGoal = specificGoal;
+      state.partnerName = partnerName;
 
-  suggestionBox.textContent = 'Analyzing…';
-  suggestionBox.style.display = 'block';
+      setupSection.style.display = 'none';
+      exerciseSection.style.display = 'block';
+      startRound(0);
+    }
 
-  const prompt = `
-You are CommuniCoach preparing a user for the next step in a real-life persuasive interaction.
+    function startRound(idx) {
+      state.currentRound = idx;
+      roundNumberEl.textContent = idx + 1;
+      userResponseEl.value = '';
+      partnerParagraphEl.textContent = 'Loading...';
+      moodOptionsRow.innerHTML = '';
+      moodFeedbackBox.style.display = 'none';
+      diagnosticSuggestionBox.textContent = '';
+      previewResponseCard.style.display = 'none';
 
-CONTEXT:
-• Their real-world narrative: "${refinedNarrative}"
-• Their communication goal: "${communicationGoal}"
-• Their specific persuasion goal: "${persuasionGoal}"
-• They are speaking to: ${partnerName}
-• The partner's current mood is: ${mood}
-• This is part of a realistic training exercise called Persuasion Puzzles.
-• The full conversation so far:
-${history}
+      generatePartnerMessage(idx).then(({ message }) => {
+  partnerParagraphEl.textContent = message;
+  state.conversationHistory.push({ speaker: state.partnerName, message });
 
-YOUR TASK:
-1. Based on the partner’s current mood, suggest one optional **diagnostic question** the user might ask.
-2. The goal of this question is to better understand the partner’s needs, hesitations, or perspective — **not** to persuade yet.
-3. The question should be natural, non-confrontational, emotionally intelligent, and ideally match the partner’s mood.
+  // Assign a mood label for tracking
+extractPartnerMood(message).then(mood => {
+  state.partnerMoodHistory.push(mood);
+});
 
-RETURN ONLY:
-A single persuasive-appropriate diagnostic question the user could say aloud next.
-Do NOT label it or add context — just return the text of the question.
-`;
+renderMoodOptions();
+});
 
-  fetch('http://localhost:5506/api/chatgpt', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt })
-  })
-    .then(res => {
-      if (!res.ok) throw new Error(res.statusText);
-      return res.json();
-    })
-    .then(data => {
-      suggestionBox.textContent = data.response.trim() || 'No suggestion generated.';
-    })
-    .catch(err => {
-      console.error('Diagnostic question error:', err);
-      suggestionBox.textContent = 'Coach unavailable at the moment.';
-    });
 }
 
-
-
-    // Get partner paragraph from API
-    async function generatePartnerMessage(roundIndex) {
-  const history = formatHistory();
-  const { refinedNarrative, communicationGoal, persuasionGoal, partnerName } = state;
-
+// Synced with final persuasionMap
+async function extractPartnerMood(partnerMessage) {
   const prompt = `
-You are CommuniCoach role-playing as ${partnerName} in a persuasive dialogue simulation.
+You are analyzing this message in a simulated persuasive conversation:
+"${partnerMessage}"
 
-The user’s real-life situation:
-"${refinedNarrative}"
+Your job is to assign a single mood or resistance stance label that best represents the partner’s tone.
 
-Their communication goal:
-"${communicationGoal}"
+Choose from:
+[
+  Skeptical,
+  Defensive,
+  Overwhelmed,
+  Indecisive,
+  Teasing/Playful,
+  Supportive,
+  Pessimistic,
+  Frustrated,
+  Confused,
+  Dominating,
+  Inquisitive,
+  Cautious,
+  Receptive,
+  Anxious,
+  Guarded,
+  Competitive,
+  Disengaged,
+  Dismissive,
+  Insecure
+]
 
-Their specific persuasion goal for this exercise:
-"${persuasionGoal}"
-
-This is round ${roundIndex + 1} of a 4-round practice.
-
-Here is the conversation so far:
-${history}
-
-TASK:
-Write a realistic 1–3 sentence message as the partner, continuing this conversation naturally.
-
-The tone should reflect the partner's current mood and resistance level. Choose one of the following partner moods and make it CLEAR in the tone and content of the message:
-Skeptical, Emotionally Resistant, Curious, Distracted, Defensive, Challenging Authority, Overwhelmed, Receptive
-
-Return your response using this format:
-MOOD: [one mood from the list above]  
-MESSAGE: [your actual message here]
-
-Guidelines:
-• You are not trying to be "nice" — be honest, realistic, even critical if appropriate.
-• Make persuasion feel earned. Do not give easy wins.
-• Write naturally — like someone would actually speak in this situation.
+Return only the label. No explanation.
 `;
 
   try {
@@ -1669,67 +1690,182 @@ Guidelines:
     });
 
     const data = await res.json();
-    const text = data.response.trim();
-
-    const moodMatch = text.match(/MOOD:\s*(.*?)(?:\n|$)/i);
-    const messageMatch = text.match(/MESSAGE:\s*([\s\S]*)/i);
-
-    return {
-      mood: moodMatch ? moodMatch[1].trim() : 'Skeptical',
-      message: messageMatch ? messageMatch[1].trim() : '[No partner message returned]'
-    };
+    if (!data || !data.response) throw new Error('Invalid response structure');
+    return data.response.trim();
   } catch (err) {
-    console.error('Partner API error:', err);
-    return {
-      mood: 'Skeptical',
-      message: '[Error retrieving message]'
-    };
+    console.error('Mood extraction error', err);
+    return 'Unknown';
   }
 }
 
-  
-  
 
-  function renderStyleGuessButtons(correctStyle, distractors) {
-    styleGuessRow.innerHTML = '';
-    const combined = [correctStyle, ...distractors];
-    shuffleArray(combined);
-
-    combined.forEach(st => {
-      const btn = document.createElement('button');
-      btn.className = 'style-guess-button';
-      btn.textContent = st;
-      btn.addEventListener('click', () => guessPartnerStyle(st, correctStyle, btn));
-      styleGuessRow.appendChild(btn);
-    });
-  }
-  
-  function guessPartnerStyle(chosen, correctStyle, btn) {
-    const isCorrect = chosen === correctStyle;
     
-    // Update UI based on result
-    if (isCorrect) {
-      btn.classList.add('correct');
-      // Disable all buttons after correct guess
-      styleGuessRow.querySelectorAll('button').forEach(b => b.disabled = true);
-      
-      // Store user's guess in state
-      exerciseState.rounds[roundIndex].userStyleGuess = chosen;
-      
-      // Generate and show coach feedback for correct guess
-      generateStyleFeedback(chosen, correctStyle, true);
-      
-      // Enable/render response style buttons after correct guess
-      renderResponseStyleButtons();
-      
-      showToast('Correct style identified!');
-    } else {
-      btn.classList.add('incorrect');
-      btn.disabled = true;
-      showToast('Not quite, try another.', 1500, true);
+function generatePartnerMessage(roundIndex) {
+  const lastPartnerLine = [...state.conversationHistory].reverse().find(entry => entry.speaker === state.partnerName)?.message || '';
+  const lastUserEntry = [...state.conversationHistory].reverse().find(entry => entry.speaker === 'You');
+  const lastPersuasionTool = lastUserEntry?.persuasionTool || 'Unknown';
+
+  const coachingMap = buildMoodToStrategyReference();
+  const persuasionStrategy = buildPersuasionMatrixReference();
+
+  const prompt = `
+You are CommuniCoach,  acting as the user's real-life conversation partner "${state.partnerName}" in a simulated persuasive training exercise called **Persuasion Puzzles**.
+
+You are simulating a character inside a live, emotionally charged interpersonal field. 
+The user is learning persuasion techniques and applying the lessons they are learning to practice influencing you in this simulation. The exercise should help them feel in alignment when they are using effective strategies and pushback when an ineffective strategy is used. 
+
+Here is what you know:
+- Situation: "${state.refinedNarrative}"
+- Communication goal: "${state.communicationGoal}"
+- Persuasion goal: "${state.persuasionGoal}"
+
+They may or may not have prepared persuasive material:
+• Logos: "${state.logosPrep}"
+• Pathos: "${state.pathosPrep}"
+• Ethos: "${state.ethosPrep}"
+
+Reference materials:
+- Mood-to-strategy coaching map:
+${coachingMap}
+
+- Persuasion style matrix:
+${persuasionStrategy}
+
+Conversation so far:
+${formatHistory()}
+
+Your emotional mood history over prior rounds:
+${JSON.stringify(state.partnerMoodHistory)}
+
+The user's persuasion strategies used each round:
+${JSON.stringify(state.strategyUsageHistory)}
+
+Their most recent strategy: "${lastPersuasionTool}"
+
+Let the user’s strategies affect you. Let emotional truth build across time.
+
+Sometimes you soften. Sometimes you guard. Sometimes you contradict yourself, because real people are inconsistent under pressure. That’s okay.
+
+Don’t just respond — reveal something.
+
+Reveal hesitation. Reveal why you're convinced or not. Reveal where something almost touched you.
+
+Reveal where you feel pressure or resistance. Reveal where you feel understood or seen.
+
+You are not just replying — you are evolving based on the relational pull of the conversation.
+
+Let the user's strategy impact your emotional trajectory. If they’ve built trust or momentum, let something soften. If they’ve misread your mood or applied pressure too early, reveal resistance — but realistically, not melodramatically.
+
+🔥 **Roleplay Instructions (Round ${roundIndex + 1} of 5):**
+
+
+
+
+1. Stay fully in character. Respond only as "${state.partnerName}". Do not narrate, summarize, or coach.
+stay true to the situation "${state.refinedNarrative}" and keep your responses relevant to the user's responses 
+
+2. React to their most recent message in a way that reflects **cumulative persuasion alignment**:
+   - If their strategy fits your current resistance type, show progress (emotional opening, curiosity, partial agreement).
+   - If it misaligns, deepen resistance (guarding, dismissing, shifting tone).
+
+3. Mirror symbolic movement: emotional disclosures, subtle tone shifts, slight concessions, or surprises.
+
+4. By round 3–4, let there be visible consequences: are you starting to trust them, or growing more defensive?
+
+5. In **round 5**, you must clearly indicate one of the following:
+   - The user has successfully moved you toward their persuasion goal.
+   - You feel heard but unconvinced — and the conversation ends at a thoughtful impasse.
+
+6. Speak like a real person under pressure — not a character in a script. 
+
+Return only your response as "${state.partnerName}". Do not prefix with names, labels, or explanations.
+`;
+
+  return fetch('http://localhost:5506/api/chatgpt', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  })
+    .then(res => res.json())
+    .then(data => ({ message: data.response.trim() }))
+    .catch(err => {
+      console.error('Partner generation error:', err);
+      return { message: '(Partner response unavailable)' };
+    });
+}
+
+
+    // ===== MOOD INTERACTION =====
+    function renderMoodOptions() {
+      moodOptionsRow.innerHTML = '';
+      Object.keys(persuasionMap).forEach(mood => {
+        const btn = document.createElement('button');
+        btn.className = 'style-guess-button';
+        btn.textContent = mood;
+        btn.title = persuasionMap[mood].description;
+
+        btn.addEventListener('click', () => {
+          explainMoodWithAPI(mood);
+          generateDiagnosticQuestion(mood);
+          state.moodGuess = mood;
+        });
+
+        moodOptionsRow.appendChild(btn);
+      });
     }
-  }
-  function askCoach(type) {
+
+    function explainMoodWithAPI(selectedMood) {
+      const lastPartnerLine = [...state.conversationHistory].reverse().find(entry => entry.speaker === state.partnerName)?.message || '';
+      const coachingMap = buildMoodToStrategyReference();
+      const persuasionStrategy = buildPersuasionMatrixReference();
+
+      const prompt = `
+      You are CommuniCoach — also known as Coach CC — an AI coach helping a user learn persuasive communication through an interactive training tool navigating the user through persuasion strategies- 
+      specifically which strategy to use based on a partner's mood or resistance type (communication challenge).
+
+      They just identified this partner communication challenge based on the partner's statement:
+      "${selectedMood}"
+
+      Their partner's most recent statement was:
+      "${lastPartnerLine}"
+
+      Here's your coaching map for reference:
+      ${coachingMap}
+
+      The user just read a message from their conversation partner and selected an option they think best identifies the partner's communication challenge from the list of possible moods (mood).
+      The user is trying to learn how to identify and respond to different moods in a persuasive conversation. 
+      
+      You are warm, grounded, and insightful. Speak directly and coach-style — not robotic.
+      Now coach the user on how to understand or refine their choice
+
+      Here's what to do:
+      1. Think about the partner's message and the selected mood
+      2. If the mood is correctly identified, affirm and explain why it fits - 
+         reference specific language, tone, or phrasing that signals this mood
+      3. If it doesn't quite match, offer a gentle correction and explain why a different mood might be more accurate
+      4. Always teach how this mood connects to a persuasion strategy based on the map, What the user should watch for when this 
+      mood shows up in real life, and how to begin responding to it (without giving a full reply)
+      5. Keep your response concise (2-3 sentences) and focused on the user's learning`;
+
+      fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      })
+        .then(res => res.json())
+        .then(data => {
+          moodFeedbackBox.style.display = 'block';
+          moodFeedbackTitle.textContent = `Challenge: ${selectedMood}`;
+          moodFeedbackContent.textContent = data.response.trim();
+        })
+        .catch(err => {
+          console.error('Mood feedback error:', err);
+          moodFeedbackBox.style.display = 'block';
+          moodFeedbackContent.textContent = '[Coach CC unavailable right now.]';
+        });
+    }
+
+    function askCoach(type) {
   const narrative = localStorage.getItem('refinedNarrative') || '';
   const goal = localStorage.getItem('communicationGoal') || '';
   const persuasionGoal = localStorage.getItem('persuasionGoal') || '';
@@ -1766,543 +1902,350 @@ If relevant, gently suggest details they might gather (like price comparisons, e
   })
     .then(res => res.json())
     .then(data => {
-      suggestionDiv.textContent = data.response || 'Unable to fetch coach suggestion.';
-    })
+  suggestionDiv.textContent = data.response || 'Coach suggestion unavailable.';
+  userResponseEl.value = data.response.trim(); // Pre-populates the input box
+})
+
+    
     .catch(err => {
       suggestionDiv.textContent = 'Coach unavailable at the moment.';
       console.error(err);
     });
 }
 
-  
-  function generateStyleFeedback(chosen, correctStyle, isCorrect) {
-    // Show loading in feedback area
-    styleGuessFeedback.style.display = 'block';
-    feedbackTitle.textContent = isCorrect ? 'Correct!' : 'Not Quite';
-    feedbackContent.textContent = 'Analyzing style characteristics...';
-    
-    // Generate detailed feedback through API
-    const prompt = `
-You are CommuniCoach, an expert communication coach.
+    function generateDiagnosticQuestion(mood) {
+      const { refinedNarrative, communicationGoal, persuasionGoal, partnerName } = state;
+      const history = formatHistory();
+      const suggestionBox = diagnosticSuggestionBox;
 
-CONVERSATION CONTEXT:
-- The user is learning about different communication styles
-- They were shown this statement: "${exerciseState.rounds[roundIndex].partnerParagraph}"
-- The statement was written in ${correctStyle} style
-- The user guessed it was in ${chosen} style
-- Their guess was ${isCorrect ? 'correct' : 'incorrect'}
+      if (!suggestionBox) return;
 
-TASK:
-Give brief feedback (2-3 sentences) explaining why this statement is an example of ${correctStyle} style.
-Point out 1-2 specific characteristics or phrases in the statement that exemplify this style.
-${!isCorrect ? `Briefly explain how this differs from ${chosen} style.` : ''}
+      suggestionBox.textContent = 'Analyzing…';
+      suggestionBox.style.display = 'block';
 
-IMPORTANT:
-- Keep your response concise and educational
-- Focus on specific language features in the statement
-- Be conversational and encouraging
-`;
+      const prompt = `
+    You are CommuniCoach preparing a user for the next step in a real-life persuasive interaction.
 
-    fetch('http://localhost:5506/api/chatgpt', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ prompt })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) throw new Error(data.error);
-      
-      // Update feedback content
-      feedbackContent.textContent = data.response.trim();
-      
-      // Store feedback in state
-      exerciseState.rounds[roundIndex].styleFeedback = data.response.trim();
-    })
-    .catch(err => {
-      console.error('Feedback generation error:', err);
-      feedbackContent.textContent = isCorrect ? 
-        `That's correct! This is a clear example of ${correctStyle} communication.` :
-        `This statement actually demonstrates ${correctStyle} communication, not ${chosen}.`;
-    });
-  }
+    CONTEXT:
+    • Their real-world narrative: "${refinedNarrative}"
+    • Their communication goal: "${communicationGoal}"
+    • Their specific persuasion goal: "${persuasionGoal}"
+    • They are speaking to: ${partnerName}
+    • The partner's current mood is: ${mood}
+    • This is part of a realistic training exercise called Persuasion Puzzles.
+    • The full conversation so far:
+    ${history}
 
-  function renderResponseStyleButtons() {
-    responseStyleRow.innerHTML = '';
-    
-    // Get a subset of styles for selection - include the correct answer from previous section
-    const correctStyle = exerciseState.rounds[roundIndex].correctStyle;
-    const allStyles = exerciseState.styleSubset;
-    
-    // Choose 3 additional random styles (different from correct style)
-    const otherStyles = allStyles.filter(s => s !== correctStyle);
-    shuffleArray(otherStyles);
-    const styleOptions = [correctStyle, ...otherStyles.slice(0, 3)];
-    
-    // Shuffle final array for display
-    shuffleArray(styleOptions);
-    
-    styleOptions.forEach(st => {
-      const btn = document.createElement('button');
-      btn.className = 'response-style-button';
-      btn.textContent = st;
-      btn.addEventListener('click', () => handleUserResponseStyle(st, btn));
-      responseStyleRow.appendChild(btn);
-    });
-  }
-  
-  function handleUserResponseStyle(selectedStyle, btn) {
-    // Highlight selected button
-    responseStyleRow.querySelectorAll('button').forEach(b => {
-      b.classList.remove('selected');
-    });
-    btn.classList.add('selected');
+    YOUR TASK:
+    1. Based on the partner's current mood, suggest one optional **diagnostic question** the user might ask.
+    2. The goal of this question is to uncover the partner's perspective.
+    3. The question should be natural, emotionally intelligent, and ideally match the partner's mood.
 
-    // Store user's selected style
-    exerciseState.rounds[roundIndex].userResponseStyle = selectedStyle;
+    RETURN ONLY:
+    A single persuasive-appropriate diagnostic question the user could say aloud next.
+    Do NOT label it or add context — just return the text of the question.
+    `;
 
-    const userText = userResponseEl.value.trim();
-    if (!userText) {
-      coachFeedback.style.display = 'none';
-      return;
-    }
-    
-    // Store user's response text
-    exerciseState.rounds[roundIndex].userResponseText = userText;
-    
-    // Generate feedback on response style
-    generateResponseFeedback(userText, selectedStyle);
-    
-    // Enable next button once user has selected a style
-    nextRoundBtn.disabled = false;
-  }
-  
-  function generateResponseFeedback(userText, selectedStyle) {
-    // Show loading in feedback area
-    coachFeedback.style.display = 'block';
-    responseFeedbackContent.textContent = 'Analyzing your response...';
-    
-    const prompt = `
-You are CommuniCoach, a communication styles expert.
-
-CONVERSATION CONTEXT:
-- User is practicing different communication styles
-- They're responding to: "${exerciseState.rounds[roundIndex].partnerParagraph}"
-- Their response: "${userText}"
-- They labeled their response as using a "${selectedStyle}" communication style
-
-TASK:
-Analyze whether their response matches their chosen style label.
-1. Identify if they accurately characterized their style (be honest but supportive)
-2. Point out 1-2 specific phrases or elements that support or contradict their style choice
-3. If their response better matches a different style, briefly suggest what style it actually demonstrates
-4. Provide one quick tip to strengthen the ${selectedStyle} style in their response
-
-Keep your response under 3 sentences. Be specific and constructive.
-`;
-
-    fetch('http://localhost:5506/api/chatgpt', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ prompt })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) throw new Error(data.error);
-      
-      // Update feedback content
-      responseFeedbackContent.textContent = data.response.trim();
-      
-      // Store feedback in state
-      exerciseState.rounds[roundIndex].responseFeedback = data.response.trim();
-    })
-    .catch(err => {
-      console.error('Response feedback error:', err);
-      responseFeedbackContent.textContent = `I can see elements of ${selectedStyle} style in your response. To strengthen this style further, consider being more explicit with your language choices.`;
-    });
-  }
-  function formatHistory() {
-  return state.conversationHistory
-    .map((entry, i) => `${i + 1}. ${entry.speaker} (${entry.type || 'neutral'}): "${entry.message}"`)
-    .join('\n');
-}
-
-  
-  function handleGenerateResponse() {
-    // Disable button during generation
-    generateResponseBtn.disabled = true;
-    generateResponseBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
-    
-    // Get current round data
-    const partnerMessage = exerciseState.rounds[roundIndex].partnerParagraph;
-    const correctStyle = exerciseState.rounds[roundIndex].correctStyle;
-    
-    // Determine which style to use for the response
-    // Pick a random style from user's selected styles
-    const allStyles = exerciseState.styleSubset;
-    const responseStyle = allStyles[Math.floor(Math.random() * allStyles.length)];
-    
-    const prompt = `
-You are CommuniCoach, helping a user practice communication styles.
-
-CONVERSATION CONTEXT:
-- User's scenario: ${exerciseState.scenario}
-- User's goal: ${exerciseState.goal}
-- Partner just said: "${partnerMessage}" (in ${correctStyle} style)
-
-TASK:
-Generate a brief response (2-3 sentences) that the user could give, using the "${responseStyle}" communication style.
-
-CHARACTERISTICS OF ${responseStyle.toUpperCase()} STYLE:
-${getStyleCharacteristics(responseStyle)}
-
-Write ONLY the response, nothing else. Do not label the style in your response.
-`;
-
-    fetch('http://localhost:5506/api/chatgpt', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ prompt })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) throw new Error(data.error);
-      
-      // Insert generated response in the textarea
-      userResponseEl.value = data.response.trim();
-      suggestionDiv.classList.add('loading');
-suggestionDiv.textContent = 'Processing...';
-
-
-  })
-
-  
-    // Highlight the corresponding style button if it exists
-    // const styleBtn = Array.from(responseStyleRow.querySelectorAll('button'))
-    //   .find(btn => btn.textContent === responseStyle);
-    
-    // if (styleBtn) {
-    //   styleBtn.click(); // Trigger the style selection
-    // }
-   
-    .catch(err => {
-
-
-      
-      showToast(`Generating a response`);
-    })
-    .catch(err => {
-      console.error('Response generation error:', err);
-      showToast('Error generating response', 2000, true);
-    })
-    .finally(() => {
-      // Re-enable button
-      generateResponseBtn.disabled = false;
-      generateResponseBtn.innerHTML = '<i class="fa-solid fa-magic"></i> Generate Response';
-    });
-  }
-
-  // Speech
-  function initSpeechRecognition(){
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) {
-      console.warn("Speech Recognition not supported");
-      return;
-    }
-    
-    recognition = new SR();
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    recognition.lang = 'en-US';
-
-    recognition.onstart = () => {
-      isListening = true;
-      responseMicBtn.classList.add('listening');
-      micStatusText.textContent = 'Listening...';
-    };
-    
-    recognition.onerror = (evt) => {
-      console.error('Speech rec error:', evt.error);
-      showToast('Mic error: ' + evt.error, 2000, true);
-      isListening = false;
-      responseMicBtn.classList.remove('listening');
-      micStatusText.textContent = 'Click to speak';
-    };
-    
-    recognition.onend = () => {
-      isListening = false;
-      responseMicBtn.classList.remove('listening');
-      micStatusText.textContent = 'Click to speak';
-    };
-    
-    recognition.onresult = (evt) => {
-      let finalText = '';
-      let interimText = '';
-      
-      for (let i = evt.resultIndex; i < evt.results.length; i++) {
-        const transcript = evt.results[i][0].transcript;
-        if (evt.results[i].isFinal) {
-          finalText += transcript;
-        } else {
-          interimText += transcript;
-        }
-      }
-      
-      // Update text area with final results
-      if (finalText) {
-        userResponseEl.value += finalText + ' ';
-      }
-      // Show interim results
-      else if (interimText) {
-        // Could show interim results in UI if desired
-      }
-    };
-  }
-
-  function toggleMic() {
-    if (!recognition) {
-      showToast('Speech recognition not supported in this browser', 2000, true);
-      return;
-    }
-    
-    if (isListening) {
-      recognition.stop();
-    } else {
-      try {
-        // Clear any previous transcription timeout
-        if (recognitionTimeout) {
-          clearTimeout(recognitionTimeout);
-          recognitionTimeout = null;
-        }
-        
-        recognition.start();
-        
-        // Set a longer timeout (30 seconds) to prevent cutoff
-        recognitionTimeout = setTimeout(() => {
-          if (isListening) {
-            recognition.stop();
-            showToast('Listening stopped automatically after 30 seconds.');
-          }
-        }, 90000);
-      } catch (e) {
-        console.error('mic start error:', e);
-        showToast('Mic error: ' + e.message, 2000, true);
-      }
-    }
-  }
-
-  // Round Nav
-  function handleNextRound() {
-    // Store current user inputs if not already stored
-    const userText = userResponseEl.value.trim();
-    const userStyle = exerciseState.rounds[roundIndex].userResponseStyle;
-    
-    if (userText && !exerciseState.rounds[roundIndex].userResponseText) {
-      exerciseState.rounds[roundIndex].userResponseText = userText;
-    }
-    
-    if (roundIndex < 4) {
-      startRound(roundIndex + 1);
-      setProgress(20 + (roundIndex + 1) * 15);
-    } else {
-      finishExercise();
-    }
-  }
-  
-  function handlePrevRound() {
-    if (roundIndex > 0) {
-      startRound(roundIndex - 1);
-      setProgress(20 + (roundIndex - 1) * 15);
-    }
-  }
-
-  function finishExercise() {
-    exerciseSection.style.display = 'none';
-    summarySection.style.display = 'block';
-    setProgress(100);
-    
-    // Generate structured summary
-    generateSummary()
-      .then(summaryData => {
-        // Populate summary sections
-        overallPerformance.innerHTML = summaryData.overall;
-        recognitionStrengths.innerHTML = formatStrengthsList(summaryData.recognitionStrengths);
-        expressionStrengths.innerHTML = formatStrengthsList(summaryData.expressionStrengths);
-        growthOpportunities.innerHTML = formatGrowthList(summaryData.growthOpportunities);
-        practicalTips.innerHTML = summaryData.practicalTips;
-      })
-      .catch(e => {
-        console.error('Error generating summary:', e);
-        
-        // Fallback content
-        overallPerformance.textContent = 'You completed 5 rounds of style awareness practice.';
-        recognitionStrengths.textContent = 'You demonstrated ability to identify different communication styles.';
-        expressionStrengths.textContent = 'You practiced expressing yourself in various styles.';
-        growthOpportunities.textContent = 'Continue practicing to distinguish between similar styles.';
-        practicalTips.textContent = 'Review the characteristics of each style and practice using them in your daily communications.';
-      });
-  }
-  
-  function formatStrengthsList(strengths) {
-    if (!strengths || !Array.isArray(strengths) || strengths.length === 0) {
-      return 'No specific strengths identified.';
-    }
-    
-    return strengths.map(strength => 
-      `<div class="strength-item">${strength}</div>`
-    ).join('');
-  }
-  
-  function formatGrowthList(opportunities) {
-    if (!opportunities || !Array.isArray(opportunities) || opportunities.length === 0) {
-      return 'No specific growth opportunities identified.';
-    }
-    
-    return opportunities.map(opportunity => 
-      `<div class="growth-item">${opportunity}</div>`
-    ).join('');
-  }
-  
-  async function generateSummary() {
-    showToast('Generating your personalized insights...');
-    
-    // Format rounds data for the prompt
-    const roundsData = exerciseState.rounds.map((r, i) => {
-      return `
-Round ${i + 1}:
-- Partner statement (${r.correctStyle} style): "${r.partnerParagraph}"
-- User's style guess: ${r.userStyleGuess || 'Not completed'}
-- User's response: "${r.userResponseText || 'Not provided'}"
-- User's style label: ${r.userResponseStyle || 'Not selected'}
-`;
-    }).join('\n');
-    
-    const prompt = `
-You are CommuniCoach, a communication styles expert providing personalized feedback after a 5-round style awareness exercise.
-
-EXERCISE CONTEXT:
-- User's scenario: ${exerciseState.scenario}
-- User's goal: ${exerciseState.goal}
-- Styles practiced: ${exerciseState.styleSubset.join(', ')}
-
-EXERCISE RESULTS:
-${roundsData}
-
-TASK:
-Provide a structured summary of the user's performance with these EXACT sections:
-
-1. OVERALL: A brief 2-3 sentence overview of their performance and key insights.
-
-2. RECOGNITION STRENGTHS: List 2-3 specific strengths in how they recognized communication styles. Format as an array of distinct points.
-
-3. EXPRESSION STRENGTHS: List 2-3 specific strengths in how they expressed different communication styles. Format as an array of distinct points.
-
-4. GROWTH OPPORTUNITIES: List 2-3 specific ways they could improve their style awareness. Format as an array of growth suggestions.
-
-5. PRACTICAL TIPS: 2-3 sentences with practical advice they can apply immediately to improve their communication style awareness.
-
-FORMAT YOUR RESPONSE AS A JSON OBJECT with these exact keys:
-{
-  "overall": "text here",
-  "recognitionStrengths": ["point 1", "point 2", "point 3"],
-  "expressionStrengths": ["point 1", "point 2", "point 3"],
-  "growthOpportunities": ["point 1", "point 2", "point 3"],
-  "practicalTips": "text here"
-}
-`;
-
-    try {
-      const resp = await fetch('http://localhost:5506/api/chatgpt', {
+      fetch('http://localhost:5506/api/chatgpt', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt })
+      })
+        .then(res => {
+          if (!res.ok) throw new Error(res.statusText);
+          return res.json();
+        })
+        .then(data => {
+          suggestionBox.textContent = data.response.trim() || 'No suggestion generated.';
+        })
+        .catch(err => {
+          console.error('Diagnostic question error:', err);
+          suggestionBox.textContent = 'Coach unavailable at the moment.';
+        });
+    }
+   // ===== COACH SUGGESTED RESPONSE =====
+generateResponseBtn.addEventListener('click', handleGenerateResponse);
+
+function handleGenerateResponse() {
+  const lastPartnerLine = [...state.conversationHistory].reverse().find(entry => entry.speaker === state.partnerName)?.message || '';
+      const coachingMap = buildMoodToStrategyReference();
+      const persuasionStrategy = buildPersuasionMatrixReference();
+      const { refinedNarrative, communicationGoal, persuasionGoal, partnerName } = state;
+      const history = formatHistory();
+
+      const prompt = `
+You are CommuniCoach — the user’s expert communication coach inside the Persuasion Puzzle exercise (an immersive module in the Action Arena of CommuniCoach).
+
+You have full context of the app’s timeline:
+- The user began by venting in Session Space.
+- Their story was refined into a cohesive, emotionally grounded narrative.
+- They selected a specific Persuasion Goal.
+- They prepared persuasive material using Logos, Pathos, and Ethos.
+- They are now engaging in a multi-round dialogue with a simulated partner.
+- After each partner message, the user selects the perceived mood of the partner, and you provide coaching insights about how to respond effectively to that mood.
+
+You are now generating a **persuasive first-draft sentence or two** in the user’s voice — something they might say next in this unfolding conversation.
+
+Here is the context:
+
+• Refined Narrative: "${state.refinedNarrative}"
+• Persuasion Goal: "${state.persuasionGoal}"
+• Current Partner Mood: "${state.moodGuess}"
+• Coaching Insight for that Mood: "${moodFeedbackContent?.textContent?.trim() || '(Not available)'}"
+
+PREP MATERIAL:
+• Logos: "${state.logosPrep}"
+• Pathos: "${state.pathosPrep}"
+• Ethos: "${state.ethosPrep}"
+
+Conversation so far:
+${formatHistory()}
+
+Avoid turning this into a conflict resolution script. Instead, focus on generating a persuasive response that:
+Shifts the power in favor of the user.
+advocates for the user in the user's voice and style, aligns with their persuasion goal, and feels natural in the context of the conversation.
+They don't need to be perfect or find common ground - they need to be persuasive. 
+Don't assume the partner has a valid point of view or that the user needs to concede anything. 
+The partner can be unreasonable while still using polite language- dont let that fool you into feeling pressure to concede- the user can still be persuasive without conceding and you must advocate for them.
+You can use an inquisitive strategy to help the partner understand the user's position by compelling them to answer a question that exposes the flaw in their reasoning in their own words -and other psychological tactics.
+Your task is to step in for the user and generate a realistic, and strategically persuasive message that:
+
+1. Responds to the partner’s mood by advocating for the user- persuade, don't offer consession.
+2. Feels sharp, insightful, and human — not robotic or scripted.
+3. Symbolically moves the conversation forward toward the persuasion goal.
+4. Uses a natural casual tone consistent with the user’s voice.
+
+Think like a magnetic communicator — this is persuasion with style.
+
+Return only the user’s next line, without framing, labels, or explanation.
+`;
+
+
+  fetch('http://localhost:5506/api/chatgpt', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  })
+    .then(res => res.json())
+    .then(data => {
+      userResponseEl.value = data.response.trim();
+    })
+    .catch(err => {
+      console.error('Coach response error:', err);
+    });
+}
+
+// ===== REMIX (TRANSFORM RESPONSE) =====
+function renderTransformButtons() {
+  transformOptionsRow.innerHTML = '';
+  Object.keys(persuasionMatrix).forEach(style => {
+    const btn = document.createElement('button');
+    btn.className = 'style-guess-button';
+    btn.textContent = style;
+
+    btn.addEventListener('click', () => {
+      handleResponseTransform(style);
+    });
+
+    transformOptionsRow.appendChild(btn);
+  });
+}
+
+function handleResponseTransform(style) {
+  const original = userResponseEl.value.trim();
+  const matrix = persuasionMatrix[style];
+
+  const prompt = `
+You are transforming the user's sentence into a persuasive version using this technique:
+"${style}" - ${matrix.description}
+
+Original user sentence:
+"${original}"
+
+Respond ONLY with the transformed sentence in the new style.
+`;
+
+  fetch('http://localhost:5506/api/chatgpt', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  })
+    .then(res => res.json())
+    .then(data => {
+      state.selectedRemixStyle = style;
+      state.previewText = data.response.trim();
+      previewResponseContent.textContent = data.response.trim();
+      previewResponseCard.style.display = 'block';
+    })
+    .catch(err => {
+      console.error('Remix error:', err);
+      previewResponseCard.style.display = 'none';
+    });
+}
+
+useTransformedBtn.addEventListener('click', () => {
+  userResponseEl.value = state.previewText;
+  previewResponseCard.style.display = 'none';
+});
+
+    // ===== CONFIRM & NEXT ROUND =====
+    confirmResponseBtn.addEventListener('click', handleConfirmResponse);
+
+    function handleConfirmResponse() {
+      const userMsg = userResponseEl.value.trim();
+      if (!userMsg) return;
+      state.strategyUsageHistory.push({
+  round: state.currentRound + 1,
+  tool: state.selectedRemixStyle || 'Natural'
+});
+
+
+      state.conversationHistory.push({
+        speaker: "You",
+        message: userMsg,
+        persuasionTool: state.selectedRemixStyle || 'Natural'
       });
-      
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      
-      const data = await resp.json();
-      
-      // Parse the JSON response
-      try {
-        return JSON.parse(data.response.trim());
-      } catch (parseError) {
-        console.error('Error parsing summary JSON:', parseError);
-        
-        // If JSON parsing fails, try to extract sections manually
-        const rawText = data.response.trim();
-        return {
-          overall: extractSection(rawText, 'OVERALL') || 'You completed the style awareness exercise.',
-          recognitionStrengths: [
-            extractSection(rawText, 'RECOGNITION STRENGTHS') || 'You practiced identifying different communication styles.'
-          ],
-          expressionStrengths: [
-            extractSection(rawText, 'EXPRESSION STRENGTHS') || 'You practiced expressing yourself in various styles.'
-          ],
-          growthOpportunities: [
-            extractSection(rawText, 'GROWTH OPPORTUNITIES') || 'Continue practicing to distinguish between similar styles.'
-          ],
-          practicalTips: extractSection(rawText, 'PRACTICAL TIPS') || 'Pay attention to the specific language patterns that define each communication style.'
-        };
+
+      if (state.currentRound < state.maxRounds - 1) {
+        startRound(state.currentRound + 1);
+      } else {
+        generateSummary();
       }
-    } catch (e) {
-      console.error('Summary generation error:', e);
-      return {
-        overall: 'You completed all 5 rounds of the style awareness exercise, practicing both recognition and expression of different communication styles.',
-        recognitionStrengths: [
-          'You successfully identified various communication styles in conversation.',
-          'You gained practice distinguishing between similar-seeming styles.',
-          'You developed awareness of style characteristics in real dialogue.'
-        ],
-        expressionStrengths: [
-          'You practiced adapting your communication style intentionally.',
-          'You experienced how different styles can achieve different outcomes.',
-          'You developed flexibility in your communication approach.'
-        ],
-        growthOpportunities: [
-          'Continue practicing identifying subtle style differences.',
-          'Experiment with styles that feel less natural to you.',
-          'Practice adapting your style based on your conversation partner.'
-        ],
-        practicalTips: 'Start noticing the communication styles of people around you in daily life. When preparing for important conversations, consider which style would be most effective for your goals.'
-      };
     }
-  }
-  
-  function extractSection(text, sectionName) {
-    const regex = new RegExp(`${sectionName}:\\s*(.+?)(?=\\w+:|$)`, 'is');
-    const match = text.match(regex);
-    return match ? match[1].trim() : null;
-  }
 
-  // Utility
-  function setProgress(percent) {
-    progressBar.style.width = percent + '%';
-  }
-  
-  function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+    // Initialize transform buttons
+    renderTransformButtons();
+
+    // ===== FINAL SUMMARY =====
+    function generateSummary() {
+      exerciseSection.style.display = 'none';
+      summarySection.style.display = 'block';
+
+      const conversationSummary = document.getElementById('conversationSummary');
+      const persuasionStrengths = document.getElementById('persuasionStrengths');
+      const growthOpportunities = document.getElementById('growthOpportunities');
+      const nextStepsTips = document.getElementById('nextStepsTips');
+
+      if (!conversationSummary || !persuasionStrengths || !growthOpportunities || !nextStepsTips) {
+        console.error('One or more summary elements not found.');
+        return;
+      }
+
+      conversationSummary.textContent = '';
+      persuasionStrengths.innerHTML = '';
+      growthOpportunities.innerHTML = '';
+      nextStepsTips.textContent = '';
+
+      const fullHistory = state.conversationHistory.map((entry, i) => {
+        return `${i + 1}. ${entry.speaker}: "${entry.message}" ${entry.persuasionTool ? `→ (${entry.persuasionTool})` : ''}`;
+      }).join('\n');
+
+      const prompt = `
+    You are a communication skills coach offering a closing reflection on the multi-round Persuasion Puzzles exercise.  
+    Reflect back what unfolded across the conversation in a way that helps the user recognize the persuasion matrix- specifically how maintaining focus on the conversation partner and recognizing their persuasion challenges can reveal effective persuasion strategies. 
+    Think of this persuasion conversation as a collaborative painting—each persuasion strategy choice adds color, shape, and motion to the shared canvas- motion leading the user toward or away from their persuasion goal. The most successful persuasion strategies are revealed when the user prioritizes focus on the partner helping to identify the persuasion challenges made evident in the partner's communication. 
+    Use a warm, conversational tone. Be specific and constructive. Don't evaluate—reflect.
+    speak directly and refer to the user as "you". Do not use "I" or speak from the user's perspective. Speak as an external coach analyzing from above.
+    Context:
+
+    The user's real narrative:
+    "${state.refinedNarrative}"
+
+    Their overall persuasion goal:
+    "${state.persuasionGoal}"
+
+    Conversation transcript:
+    ${fullHistory}
+
+    TASK: Return your insights in the following format:
+
+    1. Persuasion Dynamics
+    - [paragraph...]
+
+    2. Strengths
+    - [bullet item 1]
+    - [bullet item 2]
+
+    3. Growth Opportunities
+    - [bullet item 1]
+    - [bullet item 2]
+
+    4. Next Steps
+    [paragraph of practical suggestions]
+     
+    1. Persuasion Dynamics  
+    - Describe how the user's and partner's challenges and strategies interacted, noting where they harmonized or clashed.
+    - Express understanding of the user's experience and how the partner's challenges may have felt - How difficult was it to remain focused on uncovering the partner challenges and choose the correct wording to convey the persuasion strategy ?
+    - Point out the relational "pull" each challenge and strategy exerted 
+
+    2. Strengths
+    - Note where the user demonstrated insight, control, flexibility, or emotional intelligence.
+    - When possible List moments where the user's persuasion strategy helped neutralize the challenge.
+    - If no positive moments are present, note where the user's intent was good but the persuasion strategy was not effective.
+    - Reflect back to the user how their partner's challenges may have felt, how difficult it can be to retain focus, and how their strategy may have led toward successful persuasion.
+
+    Discuss the impact of the strategies on their goal.
+
+    3. Growth Opportunities  
+    - Mention where the user might explore a different strategies to better meet their goal, de-escalate tension, or guide the conversation more intentionally.
+    - Demonstrate understanding of why the user might want to react to a difficult challenge with a less productive strategy? Why isn't this usually effective? 
+    — Note moments where the user may have lost focus and missed an opportunity. Are they aware they lost focus? Was the distraction internal or external? Were they thinking of their own next words or focusing on their partner's words? 
+    - Note  moments where the user's persuasion strategy may have created friction, confusion, or emotional distance.
+
+    4. Next Steps  
+    - Offer  concrete, practice-focused suggestions for applying these insights in real future conversations.
+
+    Return only the full, structured insights text.`.trim();
+
+      fetch('http://localhost:5506/api/chatgpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      })
+        .then(res => res.json())
+        .then(data => {
+          const text = data.response.trim();
+          
+          conversationSummary.textContent = '';
+          persuasionStrengths.innerHTML = '';
+          growthOpportunities.innerHTML = '';
+          nextStepsTips.textContent = '';
+
+          const sections = text.split(/(?:^|\n)(?=\d\.|Persuasion Dynamics|Strengths|Growth Opportunities|Next Steps)/gi);
+
+          sections.forEach(section => {
+            const lower = section.toLowerCase();
+
+            if (lower.includes('persuasion dynamics')) {
+              conversationSummary.textContent = section.replace(/^\d?\.*\s*Persuasion Dynamics[:\-]?\s*/i, '').trim();
+            } else if (lower.includes('strengths')) {
+              section.split('\n').forEach(line => {
+                if (line.trim().startsWith('-')) {
+                  const item = document.createElement('div');
+                  item.className = 'strength-item';
+                  item.textContent = line.replace(/^[-–•]\s*/, '');
+                  persuasionStrengths.appendChild(item);
+                }
+              });
+            } else if (lower.includes('growth')) {
+              section.split('\n').forEach(line => {
+                if (line.trim().startsWith('-')) {
+                  const item = document.createElement('div');
+                  item.className = 'growth-item';
+                  item.textContent = line.replace(/^[-–•]\s*/, '');
+                  growthOpportunities.appendChild(item);
+                }
+              });
+            } else if (lower.includes('next step') || lower.includes('next steps')) {
+              nextStepsTips.textContent = section.replace(/^\d?\.*\s*Next Steps[:\-]?\s*/i, '').trim();
+            }
+          });
+        })
+        .catch(err => {
+          console.error('Summary generation error:', err);
+          conversationSummary.textContent = '[Error generating summary]';
+        });
     }
-  }
-
-  let toastCount = 0;
-  function showToast(msg, duration = 2000, isError = false) {
-    toastCount++;
-    const tid = 'toast-' + toastCount;
-    const el = document.createElement('div');
-    el.className = 'toast';
-    if (isError) el.classList.add('error');
-    el.id = tid;
-    el.textContent = msg;
-    document.body.appendChild(el);
-    setTimeout(() => hideToast(tid), duration);
-    return tid;
-  }
-  
-  function hideToast(id) {
-    const el = document.getElementById(id);
-    if (el) el.remove();
-  }
   </script>
 </body>
 </html>
