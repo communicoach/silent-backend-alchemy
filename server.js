@@ -84,12 +84,12 @@ The final result should feel like the same person speaking—but as if they had 
     const resp = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-4-turbo',
+        model: 'gpt-4.1',
         messages: [
           { role: 'system', content: systemMsg },
           { role: 'user', content: prompt }
         ],
-        max_tokens: 3000,
+        max_tokens: 4000,
         temperature: 0.8
       },
       {
@@ -131,7 +131,7 @@ app.post('/api/edit', async (req, res) => {
     const r = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-4-turbo',
+        model: 'gpt-4.1',
         messages: [
           { role: 'system', content: systemMsg },
           {
@@ -140,7 +140,7 @@ app.post('/api/edit', async (req, res) => {
           }
         ],
         temperature: 0.7,
-        max_tokens: 2000
+        max_tokens: 4000
       },
       {
         headers: {
@@ -162,31 +162,178 @@ app.post('/api/edit', async (req, res) => {
   }
 });
 
-
 /****************************************************
- * GET /session => ephemeral Realtime token
- * (for WebRTC + speech to speech)
+ * /api/osd => builds an Objective Scenario Dossier (JSON only)
  ****************************************************/
-app.get('/session', async (req, res) => {
-  console.log('[/session] ephemeral token request...');
+app.post('/api/osd', async (req, res) => {
   try {
-    // minimal body: { model: "gpt-4o-realtime-preview-2024-12-17", voice: "verse", etc. }
-    const openaiResp = await axios.post(
-      'https://api.openai.com/v1/realtime/sessions',
+    const {
+      rawNarrative = '',
+      refinedNarrative = '',
+      goal = '',
+      pastedText = ''
+    } = req.body || {};
+
+    const systemMsg = `You are an analyst generating a structured "Objective Scenario Dossier" (OSD).
+Return STRICT JSON only (no markdown fences, no prose outside the JSON). 
+Use keys exactly as provided. All confidence values are 0.0–1.0 numbers. 
+Only include followups if coverage is low.`;
+
+    const userMsg = `
+From the following inputs, create an OSD that matches this schema exactly:
+
+{
+  "summary": {
+    "situation": "",
+    "timeline": "",
+    "stakes": "",
+    "facts_vs_inferences": { "facts": [], "inferences": [] }
+  },
+  "actors": [
+    {
+      "name": "User",
+      "role": "self",
+      "goals": [],
+      "constraints": [],
+      "style_baseline": "",
+      "style_variants": [],
+      "boundaries": [],
+      "levers": [],
+      "triggers": [],
+      "confidence": 0.0
+    },
+    {
+      "name": "Other Party",
+      "role": "manager|client|partner|family|other",
+      "goals": [],
+      "constraints": [],
+      "style_baseline": "",
+      "style_variants": [],
+      "boundaries": [],
+      "levers": [],
+      "triggers": [],
+      "confidence": 0.0
+    }
+  ],
+  "dynamics": {
+    "power_balance": "",
+    "frictions": [],
+    "misalignments": [],
+    "trust_level": "",
+    "repair_paths": [],
+    "risk_map": [],
+    "opportunity_map": [],
+    "confidence": 0.0
+  },
+  "context": {
+    "setting": "",
+    "policies_or_rules": [],
+    "cultural_factors": [],
+    "constraints_global": [],
+    "confidence": 0.0
+  },
+  "goals": {
+    "user_goal": "",
+    "others_goals": [],
+    "alignment_window": "",
+    "confidence": 0.0
+  },
+  "evidence_digest": {
+    "key_quotes": [],
+    "contradiction_examples": [],
+    "omissions_or_unknowns": [],
+    "source_artifacts": { "has_pasted_text": false, "screenshot_count": 0 }
+  },
+  "coverage": {
+    "fields": {},
+    "overall": 0.0,
+    "followups": []
+  }
+}
+
+INPUTS:
+- RAW: ${rawNarrative}
+- REFINED: ${refinedNarrative}
+- GOAL: ${goal}
+- PASTED: ${pastedText}
+
+COVERAGE RULES:
+- Populate coverage.fields with ~5–10 salient keys (e.g., "actors.styles.baseline") each as:
+  { "score": 0..1, "gap": "", "priority": 1..4 }.
+- Compute "coverage.overall" as the weighted average (priority = weight).
+- Include "gap" when something is unknown/unclear (short and specific).
+- Add "followups" only if coverage.overall < 0.8 OR any priority-4 field < 0.7. Max 3 followups.
+- Keep questions short/specific with "field" and "expected_answer_type".
+`;
+
+    const r = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-4o-realtime-preview-2024-12-17',
-        voice: 'verse'
+        model: 'gpt-4.1',
+        temperature: 0.3,
+        max_tokens: 1400,
+        messages: [
+          { role: 'system', content: systemMsg },
+          { role: 'user', content: userMsg }
+        ]
       },
       {
         headers: {
-          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
           'Content-Type': 'application/json'
         }
       }
     );
-    // return the entire JSON so the client can extract client_secret.value
-    res.send(openaiResp.data);
 
+    let text = r.data?.choices?.[0]?.message?.content?.trim() || '{}';
+    // Strip markdown fences defensively
+    if (text.startsWith('```')) {
+      text = text.replace(/^```(?:json)?\s*/i, '').replace(/```$/,'').trim();
+    }
+
+    const osd = JSON.parse(text);
+    return res.json({ osd });
+
+  } catch (err) {
+    console.error('[/api/osd] error:', err.response?.data || err.message);
+    return res.status(500).json({
+      error: 'Failed to build OSD',
+      details: err.message
+    });
+  }
+});
+
+/****************************************************
+ * GET /session => ephemeral Realtime token (WebRTC)
+ ****************************************************/
+app.get('/session', async (req, res) => {
+  console.log('[/session] ephemeral token request...');
+  try {
+    const openaiResp = await axios.post(
+      'https://api.openai.com/v1/realtime/sessions',
+      {
+        model: 'gpt-4o-realtime-preview',   // ✅ Fixed model name
+        voice: 'verse',
+        modalities: ['audio', 'text']
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          'OpenAI-Beta': 'realtime=v1',
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const data = openaiResp.data || {};
+    return res.json({
+      model: data.model,  // This will now be the correct model name
+      client_secret: { 
+        value: data?.client_secret?.value,
+        expires_at: data?.client_secret?.expires_at,
+        expires_in: data?.client_secret?.expires_in
+      }
+    });
   } catch (err) {
     console.error('[/session] ephemeral error:', err.response?.data || err.message);
     return res.status(500).json({
@@ -203,4 +350,6 @@ app.get('/session', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`CommuniCoach server listening on http://localhost:${PORT}`);
 });
+
+
 
