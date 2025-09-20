@@ -1004,6 +1004,51 @@
       </div>
     </form>
   </div>
+  <!-- Objective Scenario Dossier (OSD) -->
+<section class="osd-section" id="osdSection">
+    <div class="container">
+      <div class="setup-card">
+        <h2><i class="fa-solid fa-clipboard-list"></i> Objective Scenario Dossier</h2>
+        <p>We’ll synthesize your raw vent, refined narrative, and any pasted conversation into an objective, coachable snapshot.</p>
+  
+        <div class="osd-actions" style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <button id="buildOsdBtn" class="btn btn-primary">
+            <span class="label">Build OSD</span>
+            <span class="spinner" style="display:none;"></span>
+          </button>
+          <button id="rebuildOsdBtn" class="btn btn-outline" style="display:none;">Rebuild</button>
+          <button id="viewOsdBtn" class="btn btn-accent" style="display:none;">View / Edit</button>
+        </div>
+  
+        <div id="osdMini" class="osd-mini" style="display:none; margin-top:1rem;">
+          <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+            <div><strong>Coverage:</strong> <span id="osdCoverageOverall">—</span></div>
+            <div id="osdGaps" style="display:flex; gap:0.5rem; flex-wrap:wrap;"></div>
+          </div>
+          <div id="osdFollowupsWrap" style="margin-top:0.75rem;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- OSD Modal (reuse coaching overlay styles) -->
+  <div class="coaching-mode-container" id="osdModal" style="display:none;">
+    <div class="coaching-card">
+      <div class="coaching-header">
+        <div class="coaching-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+        <h3>Objective Scenario Dossier</h3>
+        <p>Saved locally and available to all exercises.</p>
+      </div>
+      <div class="coaching-content" style="max-height:55vh; overflow:auto;">
+        <pre id="osdJson" style="white-space:pre-wrap; margin:0;"></pre>
+      </div>
+      <div class="coaching-actions">
+        <button id="saveOsdBtn" class="btn btn-primary"><i class="fa-solid fa-save"></i> Save</button>
+        <button id="closeOsdBtn" class="btn btn-outline"><i class="fa-solid fa-xmark"></i> Close</button>
+      </div>
+    </div>
+  </div>
+  
   
     </section>
 
