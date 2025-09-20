@@ -1,4 +1,3 @@
-// Store page-specific functionality in objects
 const pages = {
     toneSelection: {
         init: function() {
@@ -272,15 +271,293 @@ const pages = {
 // Initialize functionality based on current page
 document.addEventListener('DOMContentLoaded', () => {
     const currentPage = window.location.pathname;
-
+  
     if (currentPage.includes('tone-selection.html')) {
-        pages.toneSelection.init();
+      pages.toneSelection.init();
     } else if (currentPage.includes('situation-room.html')) {
-        pages.situationRoom.init();
+      pages.situationRoom.init();
     } else if (currentPage.includes('refined-narrative.html')) {
-        pages.refinedNarrative.init();
+      pages.refinedNarrative.init();
+    } else if (currentPage.includes('action-arena.html')) {
+      pages.actionArena.init(); // ✅ OSD here
     }
-});
+  });
+// ===== Action Arena: Objective Scenario Dossier (OSD) =====
+pages.actionArena = {
+    init() {
+      this.cache();
+      this.wire();
+      this.hydrate();
+    },
+  
+    cache() {
+      this.btnBuild = document.getElementById('buildOsdBtn');
+      this.btnRebuild = document.getElementById('rebuildOsdBtn');
+      this.btnView = document.getElementById('viewOsdBtn');
+      this.osdMini = document.getElementById('osdMini');
+      this.coverageOverall = document.getElementById('osdCoverageOverall');
+      this.gaps = document.getElementById('osdGaps');
+      this.followupsWrap = document.getElementById('osdFollowupsWrap');
+  
+      this.modal = document.getElementById('osdModal');
+      this.osdJson = document.getElementById('osdJson');
+      this.saveBtn = document.getElementById('saveOsdBtn');
+      this.closeBtn = document.getElementById('closeOsdBtn');
+    },
+  
+    wire() {
+      if (this.btnBuild) this.btnBuild.addEventListener('click', () => this.buildOsd());
+      if (this.btnRebuild) this.btnRebuild.addEventListener('click', () => this.buildOsd(true));
+      if (this.btnView) this.btnView.addEventListener('click', () => this.openModal());
+      if (this.saveBtn) this.saveBtn.addEventListener('click', () => this.saveManualOsd());
+      if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.closeModal());
+      // Close on backdrop click
+      if (this.modal) this.modal.addEventListener('click', (e) => {
+        if (e.target === this.modal) this.closeModal();
+      });
+    },
+  
+    hydrate() {
+      const osd = this.getOSD();
+      if (osd) {
+        this.btnBuild?.classList.remove('btn-primary');
+        this.btnBuild?.classList.add('btn-outline');
+        if (this.btnBuild?.querySelector('.label')) this.btnBuild.querySelector('.label').textContent = 'Build OSD';
+        this.btnRebuild?.setAttribute('style', '');
+        this.btnView?.setAttribute('style', '');
+  
+        this.renderMini(osd);
+      }
+    },
+  
+    getOSD() {
+      try {
+        return JSON.parse(localStorage.getItem('objectiveScenarioDossier') || 'null');
+      } catch { return null; }
+    },
+  
+    openModal() {
+      const osd = this.getOSD();
+      if (!osd) return;
+      this.osdJson.textContent = JSON.stringify(osd, null, 2);
+      this.modal.style.display = 'flex';
+    },
+  
+    closeModal() { this.modal.style.display = 'none'; },
+  
+    saveManualOsd() {
+      try {
+        const parsed = JSON.parse(this.osdJson.textContent);
+        localStorage.setItem('objectiveScenarioDossier', JSON.stringify(parsed));
+        this.renderMini(parsed);
+        this.toast('OSD saved.');
+      } catch (e) {
+        this.toast('Invalid JSON. Not saved.');
+      }
+    },
+  
+    async buildOsd(isRebuild = false) {
+      const btn = isRebuild ? this.btnRebuild : this.btnBuild;
+      const spinner = btn?.querySelector('.spinner');
+      const label = btn?.querySelector('.label');
+      if (spinner) spinner.style.display = 'inline-block';
+      if (label) label.textContent = isRebuild ? 'Rebuilding…' : 'Building…';
+  
+      try {
+        const refinedNarrative = localStorage.getItem('refinedNarrative') || '';
+        const communicationGoal = localStorage.getItem('communicationGoal') || '';
+        const rawVent = localStorage.getItem('rawNarrative') || '';      // optional, if you store it
+        const pasted = localStorage.getItem('pastedText') || '';         // optional, if you store it
+  
+        const prompt = `
+  You are building an Objective Scenario Dossier (OSD) from a user's inputs. 
+  Return **valid JSON only** that matches the schema exactly. Do not add explanations.
+  
+  INPUTS
+  - refinedNarrative (first-person): ${refinedNarrative}
+  - userGoal: ${communicationGoal}
+  - rawVent: ${rawVent}
+  - pastedText: ${pasted}
+  
+  REQUIREMENTS
+  - Separate facts vs inferences.
+  - Propose fields and coverage scores only if you have signal; otherwise leave gaps and lower scores.
+  - Generate up to 3 follow-up questions **only if** coverage is low and answers would materially improve plan quality.
+  - Be neutral, specific, and coachable—not clinical.
+  
+  SCHEMA (fill every key; empty strings/arrays allowed)
+  {
+    "ids": { "scenarioId": "", "createdAt": "" },
+    "summary": {
+      "situation": "",
+      "timeline": "",
+      "stakes": "",
+      "facts_vs_inferences": { "facts": [], "inferences": [] }
+    },
+    "actors": [
+      {
+        "name": "User",
+        "role": "self",
+        "goals": [],
+        "constraints": [],
+        "style_baseline": "",
+        "style_variants": [],
+        "boundaries": [],
+        "levers": [],
+        "triggers": [],
+        "confidence": 0.0
+      },
+      {
+        "name": "Other Party",
+        "role": "manager|client|partner|family|other",
+        "goals": [],
+        "constraints": [],
+        "style_baseline": "",
+        "style_variants": [],
+        "boundaries": [],
+        "levers": [],
+        "triggers": [],
+        "confidence": 0.0
+      }
+    ],
+    "dynamics": {
+      "power_balance": "",
+      "frictions": [],
+      "misalignments": [],
+      "trust_level": "",
+      "repair_paths": [],
+      "risk_map": [],
+      "opportunity_map": [],
+      "confidence": 0.0
+    },
+    "context": {
+      "setting": "",
+      "policies_or_rules": [],
+      "cultural_factors": [],
+      "constraints_global": [],
+      "confidence": 0.0
+    },
+    "goals": {
+      "user_goal": "",
+      "others_goals": [],
+      "alignment_window": "",
+      "confidence": 0.0
+    },
+    "evidence_digest": {
+      "key_quotes": [],
+      "contradiction_examples": [],
+      "omissions_or_unknowns": [],
+      "source_artifacts": { "has_pasted_text": false, "screenshot_count": 0 }
+    },
+    "go_no_go": "",        // optional boundary for "not today"
+    "cadence": "",         // next touchpoint/cadence guidance
+    "coverage": {
+      "fields": {},
+      "overall": 0.0,
+      "followups": []
+    }
+  }
+  
+  Return only JSON.
+        `;
+  
+        // Use your existing endpoint; keep server untouched
+        const r = await fetch('http://127.0.0.1:5506/api/chatgpt', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+        const data = await r.json();
+        if (!data || !data.response) throw new Error('No response');
+  
+        const osd = this.ensureJson(data.response);
+        // Compute/normalize overall coverage locally (non-intrusive)
+        osd.coverage = osd.coverage || { fields: {}, overall: 0, followups: [] };
+        osd.coverage.overall = this.computeOverall(osd.coverage.fields);
+  
+        // Stamp IDs if missing
+        const now = new Date().toISOString();
+        osd.ids = osd.ids || {};
+        osd.ids.scenarioId = osd.ids.scenarioId || crypto?.randomUUID?.() || ('scn_' + Date.now());
+        osd.ids.createdAt = osd.ids.createdAt || now;
+  
+        localStorage.setItem('objectiveScenarioDossier', JSON.stringify(osd));
+        this.renderMini(osd);
+        this.btnView?.setAttribute('style', '');
+        this.btnRebuild?.setAttribute('style', '');
+        this.toast('OSD built.');
+      } catch (e) {
+        console.error('[OSD] build error:', e);
+        this.toast('Could not build OSD.');
+      } finally {
+        if (spinner) spinner.style.display = 'none';
+        if (label) label.textContent = isRebuild ? 'Rebuild' : 'Build OSD';
+      }
+    },
+  
+    ensureJson(text) {
+      // Strict JSON parsing (strip accidental fences)
+      const start = text.indexOf('{');
+      const end = text.lastIndexOf('}');
+      const raw = (start >= 0 && end > start) ? text.slice(start, end + 1) : text;
+      return JSON.parse(raw);
+    },
+  
+    computeOverall(fieldsObj) {
+      const entries = Object.entries(fieldsObj || {});
+      if (!entries.length) return 0;
+      // Weighted by priority if provided; default weight 1
+      let num = 0, den = 0;
+      for (const [, v] of entries) {
+        const score = typeof v.score === 'number' ? v.score : 0;
+        const w = typeof v.priority === 'number' ? v.priority : 1;
+        num += score * w; den += w;
+      }
+      const overall = den ? num / den : 0;
+      return Math.max(0, Math.min(1, overall));
+    },
+  
+    renderMini(osd) {
+      if (!this.osdMini) return;
+      this.osdMini.style.display = '';
+      if (this.coverageOverall) this.coverageOverall.textContent = `${Math.round((osd.coverage?.overall || 0) * 100)}%`;
+      if (this.gaps) {
+        this.gaps.innerHTML = '';
+        const fields = osd.coverage?.fields || {};
+        Object.entries(fields)
+          .filter(([, v]) => (v?.gap || '') && (typeof v.score === 'number' && v.score < 0.7))
+          .sort((a, b) => (b[1].priority || 0) - (a[1].priority || 0))
+          .slice(0, 6)
+          .forEach(([k, v]) => {
+            const chip = document.createElement('span');
+            chip.className = 'style-tag'; // reuse tag style
+            chip.textContent = `${k.replace(/\./g, ' → ')}: ${v.gap}`;
+            this.gaps.appendChild(chip);
+          });
+      }
+      if (this.followupsWrap) {
+        const items = osd.coverage?.followups || [];
+        if (!items.length) {
+          this.followupsWrap.innerHTML = '';
+        } else {
+          this.followupsWrap.innerHTML = `
+            <div><strong>Follow‑ups (AI‑proposed):</strong></div>
+            <ul style="margin:0.25rem 0 0 1rem;">
+              ${items.slice(0,3).map(f => `<li>${f.question}</li>`).join('')}
+            </ul>
+          `;
+        }
+      }
+    },
+  
+    toast(msg, duration = 2200) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), duration);
+    }
+  };
+  
 
 // Export for use in other files if needed
 if (typeof module !== 'undefined' && module.exports) {
